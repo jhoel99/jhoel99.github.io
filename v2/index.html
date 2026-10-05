@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
 <meta http-equiv="Permissions-Policy" content="usb=(self)">
-<title>JHOELSOFT v6 — ADB Device Manager</title>
+<title>JHOELSOFT v6 â€” ADB Device Manager</title>
 <style>
 :root{--bg:#07111f;--card:#0d1a2b;--card2:#101f33;--line:#1d314a;--txt:#edf5ff;--muted:#8fa6bd;--accent:#5eead4;--accent2:#60a5fa;--danger:#fb7185;--warn:#fbbf24;--ok:#34d399}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#102b45 0,#07111f 45%,#050b14 100%);color:var(--txt);font:14px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
@@ -26,7 +26,7 @@ h1{font-size:21px;margin:0}.sub{color:var(--muted);margin-top:3px}.badge{padding
 <body>
 <div class="wrap">
 <header class="hero">
-  <div class="brand"><div class="logo">JS</div><div><h1>JHOELSOFT</h1><div class="sub">Android Pop-up Ads Cleaner • ADB Manager v6</div></div></div>
+  <div class="brand"><div class="logo">JS</div><div><h1>JHOELSOFT</h1><div class="sub">Android Pop-up Ads Cleaner â€¢ ADB Manager v6</div></div></div>
   <div class="badge">USB OTG + Wireless ADB</div>
 </header>
 
@@ -34,8 +34,8 @@ h1{font-size:21px;margin:0}.sub{color:var(--muted);margin-top:3px}.badge{padding
 <section class="card">
 <h2>Connection</h2>
 <div class="mode">
-  <button id="usbMode" class="active">🔌 USB OTG</button>
-  <button id="wifiMode">📶 Wireless</button>
+  <button id="usbMode" class="active">ðŸ”Œ USB OTG</button>
+  <button id="wifiMode">ðŸ“¶ Wireless</button>
 </div>
 
 <div id="usbPanel">
@@ -56,23 +56,23 @@ h1{font-size:21px;margin:0}.sub{color:var(--muted);margin-top:3px}.badge{padding
   <label class="small">6-digit pairing code</label>
   <input id="pairCode" class="field" inputmode="numeric" maxlength="6" placeholder="123456">
   <div class="row" style="margin-top:10px">
-    <button class="btn primary" id="wifiQr">📷 Pair via QR</button>
+    <button class="btn primary" id="wifiQr">ðŸ“· Pair via QR</button>
     <button class="btn" id="wifiPair">Pair via Code</button>
     <button class="btn" id="wifiConnect">Connect</button>
   </div>
   <div id="qrBox" class="hidden" style="margin-top:12px">
-    <div class="notice">I-scan ang QR mula sa <b>Wireless debugging → Pair device with QR code</b> gamit ang camera ng V27e.</div>
+    <div class="notice">I-scan ang QR mula sa <b>Wireless debugging â†’ Pair device with QR code</b> gamit ang camera ng V27e.</div>
     <video id="qrVideo" playsinline style="width:100%;max-height:260px;border-radius:12px;background:#02070d;margin-top:9px"></video>
     <canvas id="qrCanvas" class="hidden"></canvas>
     <div class="row" style="margin-top:8px"><button class="btn danger" id="stopQr">Stop camera</button></div>
   </div>
-  <div class="small" style="margin-top:8px">The target must have Developer options → Wireless debugging enabled and both devices must be on the same Wi‑Fi network.</div>
+  <div class="small" style="margin-top:8px">The target must have Developer options â†’ Wireless debugging enabled and both devices must be on the same Wiâ€‘Fi network.</div>
 </div>
 
 <div class="status"><span id="dot" class="dot"></span><span id="status">Not connected</span></div>
 <div class="kpis">
-  <div class="kpi"><b id="deviceName">—</b><span>DEVICE</span></div>
-  <div class="kpi"><b id="androidVer">—</b><span>ANDROID</span></div>
+  <div class="kpi"><b id="deviceName">â€”</b><span>DEVICE</span></div>
+  <div class="kpi"><b id="androidVer">â€”</b><span>ANDROID</span></div>
   <div class="kpi"><b id="appCount">0</b><span>APPS</span></div>
 </div>
 </section>
@@ -94,7 +94,7 @@ h1{font-size:21px;margin:0}.sub{color:var(--muted);margin-top:3px}.badge{padding
 
 <section class="card wide">
 <div class="toolbar"><h2 style="margin:0">Installed User Apps</h2><span class="small">Select carefully</span></div>
-<input id="search" class="field search" placeholder="Search package name / app info…">
+<input id="search" class="field search" placeholder="Search package name / app infoâ€¦">
 <div id="apps" class="apps"><div class="small" style="padding:14px">Connect a device, then tap Scan Apps.</div></div>
 </section>
 </div>
@@ -117,7 +117,7 @@ function setConnected(on){
 }
 async function loadModules(){
   if(modules)return modules;
-  log('Loading ADB modules…');
+  log('Loading ADB modulesâ€¦');
   const core=await import('https://esm.sh/@yume-chan/adb@2.6.4?bundle&target=es2022');
   const webusb=await import('https://esm.sh/@yume-chan/adb-daemon-webusb@2.3.2?bundle&target=es2022');
   const cred=await import('https://esm.sh/@yume-chan/adb-credential-web@2.1.0?bundle&target=es2022');
@@ -126,72 +126,68 @@ async function loadModules(){
 async function connectUSB(){
   try{
     
-let qrStream=null, qrTimer=null, qrDetector=null, qrBusy=false;
+let qrStream=null, qrTimer=null;
 async function startQrScanner(){
   try{
-    if(!window.isSecureContext) throw new Error('Camera/QR requires HTTPS. Open the GitHub Pages HTTPS URL.');
-    if(!navigator.mediaDevices?.getUserMedia) throw new Error('Camera API is unavailable in this browser.');
-    if(!('BarcodeDetector' in window)) throw new Error('Native QR scanner is not supported by this browser. Use the latest Chrome/Chromium.');
-    const formats=await BarcodeDetector.getSupportedFormats();
-    if(!formats.includes('qr_code')) throw new Error('This browser has BarcodeDetector but does not support QR codes.');
-    qrDetector=new BarcodeDetector({formats:['qr_code']});
-
+    if(!('mediaDevices' in navigator) || !navigator.mediaDevices.getUserMedia)
+      throw new Error('Camera access is not available in this browser.');
     $('qrBox').classList.remove('hidden');
-    log('Requesting camera permission…','info');
-    qrStream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},
-      audio:false
-    });
+    qrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
     $('qrVideo').srcObject=qrStream;
     await $('qrVideo').play();
-    log('Camera ready. I-point ang QR sa loob ng frame.','ok');
+    log('QR scanner started. Point the camera at the Android Wireless Debugging QR.','info');
 
-    const video=$('qrVideo');
-    const tick=async()=>{
+    if(!window.__jsqr){
+      await new Promise((resolve,reject)=>{
+        const sc=document.createElement('script');
+        sc.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+        sc.onload=resolve; sc.onerror=()=>reject(new Error('QR scanner library failed to load.'));
+        document.head.appendChild(sc);
+      });
+      window.__jsqr=true;
+    }
+    const video=$('qrVideo'), canvas=$('qrCanvas'), ctx=canvas.getContext('2d',{willReadFrequently:true});
+    const tick=()=>{
       if(!qrStream)return;
-      if(!qrBusy && video.readyState>=2){
-        qrBusy=true;
-        try{
-          const codes=await qrDetector.detect(video);
-          if(codes?.length){
-            const data=codes[0].rawValue;
-            log('QR CODE DETECTED ✓','ok');
-            log('QR data: '+data,'info');
-            parseAdbQr(data);
-            stopQrScanner();
-            qrBusy=false;
-            return;
-          }
-        }catch(e){
-          log('QR detection frame error: '+e.message,'warn');
+      if(video.readyState>=2){
+        canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+        ctx.drawImage(video,0,0,canvas.width,canvas.height);
+        const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+        const result=window.jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'});
+        if(result?.data){
+          log('QR detected: '+result.data,'ok');
+          parseAdbQr(result.data);
+          stopQrScanner();
+          return;
         }
-        qrBusy=false;
       }
-      qrTimer=setTimeout(()=>requestAnimationFrame(tick),220);
+      qrTimer=requestAnimationFrame(tick);
     };
     tick();
   }catch(e){
-    log('QR scanner failed: '+e.message,'err');
+    log('QR scanner error: '+e.message,'err');
     stopQrScanner();
   }
 }
 function stopQrScanner(){
-  if(qrTimer)clearTimeout(qrTimer); qrTimer=null; qrBusy=false;
+  if(qrTimer)cancelAnimationFrame(qrTimer); qrTimer=null;
   if(qrStream){qrStream.getTracks().forEach(t=>t.stop());qrStream=null}
-  if($('qrVideo'))$('qrVideo').srcObject=null;
+  $('qrVideo').srcObject=null;
   $('qrBox').classList.add('hidden');
-  log('QR camera stopped.','info');
 }
 function parseAdbQr(data){
-  log('Wireless debugging QR captured successfully.','ok');
-  log('The QR was decoded, but browser-only mode still needs an ADB bridge to execute adb pair.','warn');
-  // Android's QR payload is intentionally retained instead of guessing its fields.
+  // Android Wireless Debugging QR payloads can be encoded in the standard
+  // adb pairing payload format. Keep the raw payload visible for bridge use.
   $('wifiAddress').value='';
   $('pairAddress').value='';
+  log('Wireless ADB QR payload captured.','ok');
+  log('For browser-only mode, the captured QR still needs a native/local ADB bridge to execute adb pair.','warn');
+  log('Raw QR payload: '+data,'info');
 }
 $('wifiQr').onclick=startQrScanner;
 $('stopQr').onclick=stopQrScanner;
-setConnected(false);status('Opening USB device picker…','warn');
+
+setConnected(false);status('Opening USB device pickerâ€¦','warn');
     const {core,webusb,cred}=await loadModules();
     const Manager=webusb.AdbDaemonWebUsbDeviceManager;
     const manager=Manager.BROWSER;
@@ -203,18 +199,18 @@ setConnected(false);status('Opening USB device picker…','warn');
     const credentialManager=new cred.AdbWebCryptoCredentialManager(keyStorage,'JHOELSOFT');
     const adbDevice=await manager.connect(raw);
     device=adbDevice;
-    log('ADB transport opened. Authenticating…','warn');
+    log('ADB transport opened. Authenticatingâ€¦','warn');
     const serial=adbDevice.serial||'USB';
     transport=await core.adbDaemonAuthenticate({serial,connection:adbDevice,credentialManager});
     adb=new core.Adb(transport);
     log('ADB authorization successful.','ok');
     await refreshInfo();
-    setConnected(true);status('Connected • ADB ready','ok');
+    setConnected(true);status('Connected â€¢ ADB ready','ok');
   }catch(e){
     console.error(e); log(e?.stack||e?.message||String(e),'err');
     status('ADB connection failed','');
     if(String(e).includes('Permissions Policy')) log('WebUSB is blocked by the page/iframe policy. Open the GitHub Pages URL directly in Chrome.','err');
-    if(String(e).includes('authorize')||String(e).includes('authentication')) log('On TARGET: unlock phone → USB debugging ON → Revoke USB debugging authorizations → reconnect → tap Allow.','warn');
+    if(String(e).includes('authorize')||String(e).includes('authentication')) log('On TARGET: unlock phone â†’ USB debugging ON â†’ Revoke USB debugging authorizations â†’ reconnect â†’ tap Allow.','warn');
   }
 }
 async function runText(cmd){
@@ -230,12 +226,12 @@ async function refreshInfo(){
     const sdk=(await runText('getprop ro.build.version.sdk')).trim();
     $('deviceName').textContent=model||'Android';
     $('androidVer').textContent=(ver||'?')+' / '+(sdk||'?');
-    log('Device: '+model+' • Android '+ver+' (SDK '+sdk+')','ok');
+    log('Device: '+model+' â€¢ Android '+ver+' (SDK '+sdk+')','ok');
   }catch(e){log('Device info failed: '+e.message,'err')}
 }
 async function scanApps(){
   if(!adb)return status('Connect the target first','warn');
-  $('apps').innerHTML='<div class="small" style="padding:14px">Scanning…</div>';
+  $('apps').innerHTML='<div class="small" style="padding:14px">Scanningâ€¦</div>';
   try{
     const out=await runText('pm list packages -3');
     const pkgs=out.split(/\r?\n/).map(x=>x.replace(/^package:/,'').trim()).filter(Boolean);
@@ -253,7 +249,7 @@ async function scanApps(){
       if(/admob|adsdk|appodeal|applovin|unityads|ironsource|facebook.ads/.test(low)){risk+=3;reasons.push('ad SDK signal')}
       const el=document.createElement('div');el.className='app';el.dataset.search=(pkg+' '+reasons.join(' ')).toLowerCase();
       const level=risk>=5?'HIGH':risk>=3?'MED':'LOW';
-      el.innerHTML='<div><div class="pkg">'+pkg+'</div><div class="risk '+level.toLowerCase()+'">'+level+' risk • '+(reasons.join(', ')||'no obvious ad/overlay signal')+'</div></div><button class="btn danger" data-uninstall="'+pkg+'">Uninstall</button>';
+      el.innerHTML='<div><div class="pkg">'+pkg+'</div><div class="risk '+level.toLowerCase()+'">'+level+' risk â€¢ '+(reasons.join(', ')||'no obvious ad/overlay signal')+'</div></div><button class="btn danger" data-uninstall="'+pkg+'">Uninstall</button>';
       frag.appendChild(el);
     }
     $('apps').replaceChildren(frag);
@@ -264,10 +260,10 @@ async function uninstall(pkg){
   if(!adb)return;
   if(!confirm('Uninstall '+pkg+' for the current Android user?\\n\\nReview the package before continuing.'))return;
   try{
-    log('Uninstalling '+pkg+'…','warn');
+    log('Uninstalling '+pkg+'â€¦','warn');
     const r=(await runText('pm uninstall --user 0 '+pkg)).trim();
     if(/success/i.test(r)){log('Uninstalled: '+pkg,'ok');scanApps()}else log(pkg+': '+r,'err');
-  }catch(e){log('Uninstall failed: '+pkg+' • '+e.message,'err')}
+  }catch(e){log('Uninstall failed: '+pkg+' â€¢ '+e.message,'err')}
 }
 $('connectUsb').onclick=connectUSB;
 $('scan').onclick=scanApps;
@@ -334,10 +330,10 @@ function parseAdbQr(data){
 $('wifiQr').onclick=startQrScanner;
 $('stopQr').onclick=stopQrScanner;
 
-setConnected(false);status('Disconnected','warn');$('deviceName').textContent='—';$('androidVer').textContent='—'};
+setConnected(false);status('Disconnected','warn');$('deviceName').textContent='â€”';$('androidVer').textContent='â€”'};
 $('clearLogs').onclick=()=>$('logs').replaceChildren();
 $('usbMode').onclick=()=>{$('usbMode').classList.add('active');$('wifiMode').classList.remove('active');$('usbPanel').classList.remove('hidden');$('wifiPanel').classList.add('hidden')};
-$('wifiMode').onclick=()=>{$('wifiMode').classList.add('active');$('usbMode').classList.remove('active');$('wifiPanel').classList.remove('hidden');$('usbPanel').classList.add('hidden');log('Wireless mode selected. A local/native ADB bridge is required for browser-based Wi‑Fi ADB.','warn')};
+$('wifiMode').onclick=()=>{$('wifiMode').classList.add('active');$('usbMode').classList.remove('active');$('wifiPanel').classList.remove('hidden');$('usbPanel').classList.add('hidden');log('Wireless mode selected. A local/native ADB bridge is required for browser-based Wiâ€‘Fi ADB.','warn')};
 $('wifiPair').onclick=()=>log('Wireless pairing requested for '+$('pairAddress').value+' with code '+$('pairCode').value+'. Connect this UI to a native ADB bridge to perform adb pair.','warn');
 $('wifiConnect').onclick=()=>log('Wireless connect requested for '+$('wifiAddress').value+'. A browser cannot open the ADB TCP socket directly; use the bridge/native app.','warn');
 $('usbDiag').onclick=async()=>{
@@ -345,7 +341,7 @@ $('usbDiag').onclick=async()=>{
    if(!navigator.usb){return log('WebUSB is unavailable in this browser.','err')}
    const list=await navigator.usb.getDevices();
    log('Authorized WebUSB devices: '+list.length,'info');
-   list.forEach(x=>log('VID '+x.vendorId.toString(16)+' / PID '+x.productId.toString(16)+' • '+(x.productName||'Unknown'),'info'));
+   list.forEach(x=>log('VID '+x.vendorId.toString(16)+' / PID '+x.productId.toString(16)+' â€¢ '+(x.productName||'Unknown'),'info'));
  }catch(e){log('USB diagnostics failed: '+e.message,'err')}
 };
 $('search').oninput=e=>{
