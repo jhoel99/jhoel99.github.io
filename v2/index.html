@@ -161,26 +161,51 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
     if (!navigator.usb) {
       status('WebUSB is unavailable. Use Chrome/Chromium on the HOST phone.', 'bad'); return;
     }
-    if (!window.Adb || !Adb.open) {
+    if (!window.Adb || !Adb.open || !Adb.WebUSB || !Adb.WebUSB.Transport) {
       status('WebADB library failed to load. Check internet connection and reload.', 'bad'); return;
     }
 
     $('connect').disabled = true;
     let lastError = null;
+    let usbDevice = null;
 
-    // Vivo Y28 4G diagnostic: Chromium can reject transferOut while a
-    // configuration/claim/reset operation is still pending. We therefore
-    // serialize the whole WebADB open/connect sequence and retry from a
-    // completely closed transport.
+    // IMPORTANT: requestDevice() MUST be reached directly from this button
+    // click. Do not put a setTimeout()/sleep or another await before it.
+    // Chrome requires a transient user gesture for WebUSB's permission chooser.
+    // This was the cause of the screenshot error:
+    // "requestDevice ... Must be handling a user gesture".
+    try {
+      status(
+        '🔌 Opening USB chooser…\n\n' +
+        'Select the TARGET Android phone, then tap Connect.'
+      );
+
+      usbDevice = await navigator.usb.requestDevice({
+        filters: [
+          { classCode: 255, subclassCode: 66, protocolCode: 1 },
+          { classCode: 255, subclassCode: 66, protocolCode: 3 }
+        ]
+      });
+    } catch (e) {
+      $('connect').disabled = false;
+      const m = errText(e);
+      if (/cancel|abort|no device/i.test(m)) {
+        status('USB chooser cancelled. Tap CONNECT again and select the TARGET phone.', 'bad');
+      } else {
+        status('❌ USB PERMISSION FAILED\n\n' + m, 'bad');
+      }
+      return;
+    }
+
+    // From this point on we reuse the SAME selected USBDevice object.
+    // That means retries do not call requestDevice() again and do not need
+    // another permission gesture.
     for (let attempt = 1; attempt <= 4; attempt++) {
       try {
         status(
           `USB/ADB attempt ${attempt}/4…\n` +
-          `Please keep TARGET unlocked and do not change USB mode while connecting.`
+          `TARGET: keep the phone unlocked and do not change USB mode.`
         );
-
-        // Give Android's USB role/configuration change time to settle.
-        await new Promise(r => setTimeout(r, 650 + (attempt - 1) * 450));
 
         if (transport) {
           try { await transport.close(); } catch (_) {}
@@ -188,16 +213,25 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
         }
         adb = null;
 
-        status(
-          `Opening USB (attempt ${attempt}/4)…\n` +
-          `If the chooser appears, select the TARGET phone.`
-        );
+        // Small settle delay is safe HERE because the permission chooser has
+        // already completed during the user's click gesture.
+        await new Promise(r => setTimeout(r, 450 + (attempt - 1) * 350));
 
-        transport = await Adb.open('WebUSB');
+        status(`Opening selected USB device (attempt ${attempt}/4)…`);
+        try {
+          if (usbDevice.opened) {
+            try { await usbDevice.close(); } catch (_) {}
+          }
+          await usbDevice.open();
+        } catch (openErr) {
+          throw openErr;
+        }
 
-        // Critical for the Y28 error:
-        // wait after open() before the first ADB transfer.
-        await new Promise(r => setTimeout(r, 900 + (attempt - 1) * 350));
+        transport = new Adb.WebUSB.Transport(usbDevice);
+
+        // Let Vivo/Android finish its USB configuration before ADB claims
+        // the interface and starts the first transfer.
+        await new Promise(r => setTimeout(r, 700 + (attempt - 1) * 300));
 
         status(
           `USB interface ready. Starting ADB AUTH (attempt ${attempt}/4)…\n` +
@@ -218,9 +252,9 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
         status('✅ ADB CONNECTED', 'ok');
 
         let model = '', android = '', serial = '';
-        try { model = await shell('getprop ro.product.model'); } catch(_){}
-        try { android = await shell('getprop ro.build.version.release'); } catch(_){}
-        try { serial = await shell('getprop ro.serialno'); } catch(_){}
+        try { model = await shell('getprop ro.product.model'); } catch(_){ }
+        try { android = await shell('getprop ro.build.version.release'); } catch(_){ }
+        try { serial = await shell('getprop ro.serialno'); } catch(_){ }
         $('deviceInfo').innerHTML =
           '<b>Model:</b> '+escapeHtml(model||'—')+
           '<br><b>Android:</b> '+escapeHtml(android||'—')+
@@ -237,16 +271,15 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
         adb = null;
         connected = false;
 
-        const stateBusy = /operation that changes the device state is in progress|InvalidStateError|transferOut/i.test(m);
+        const stateBusy = /operation that changes the device state is in progress|InvalidStateError|transferOut|claimInterface|selectConfiguration|selectAlternateInterface/i.test(m);
 
         if (stateBusy && attempt < 4) {
           status(
-            `⚠️ USB STATE BUSY — retrying…\n\n` +
+            `⚠️ USB STATE BUSY — retrying ${attempt + 1}/4…\n\n` +
             `${m}\n\n` +
-            `The browser reported that the USB state was still changing.\n` +
-            `JHOELSOFT will close the transport, wait, then start a fresh ADB handshake.`
+            `Reusing the already-authorized USB device; no new chooser is needed.`
           );
-          await new Promise(r => setTimeout(r, 1200 + attempt * 500));
+          await new Promise(r => setTimeout(r, 900 + attempt * 500));
           continue;
         }
 
@@ -261,8 +294,7 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
           status(
             '❌ ADB CONNECTION FAILED\n\n' + m +
             (stateBusy
-              ? '\n\nThis is a Chromium WebUSB state-race. If all 4 retries fail, send this screenshot/log; ' +
-                'we will switch the Y28 to a lower-level USB sequencing mode.'
+              ? '\n\nVivo Y28 USB sequencing is still busy. Tap CONNECT again after reconnecting OTG.'
               : ''),
             'bad'
           );
