@@ -298,10 +298,42 @@ async function connectADB(){
     const connection=await adbDevice.connect();
 
     $('status').textContent='Authenticating ADB…';
-    credentialManager=new cred.AdbWebCryptoCredentialManager(
-      new cred.TangoIndexedDbStorage({databaseName:'JHOELSOFT-ADB',storeName:'Keys'}),
-      'JHOELSOFT'
-    );
+    // Credential storage compatibility:
+    // Some published @yume-chan/adb-credential-web builds expose
+    // AdbWebCryptoCredentialManager but don't expose TangoIndexedDbStorage
+    // as a constructible export. Use a tiny same-origin Web Storage adapter
+    // so authentication can proceed without depending on that export.
+    const keyStorage={
+      save(privateKey,name){
+        const bytes=privateKey instanceof Uint8Array ? privateKey : new Uint8Array(privateKey);
+        let binary='';
+        const chunk=0x8000;
+        for(let i=0;i<bytes.length;i+=chunk){
+          binary+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunk,bytes.length)));
+        }
+        localStorage.setItem('JHOELSOFT_ADB_KEY',JSON.stringify({
+          privateKey:btoa(binary),
+          name:name||'JHOELSOFT'
+        }));
+      },
+      async *load(){
+        const raw=localStorage.getItem('JHOELSOFT_ADB_KEY');
+        if(!raw) return;
+        const item=JSON.parse(raw);
+        const binary=atob(item.privateKey);
+        const bytes=new Uint8Array(binary.length);
+        for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+        yield {privateKey:bytes,name:item.name};
+      }
+    };
+
+    if(!cred.AdbWebCryptoCredentialManager){
+      throw new Error('ADB credential manager is unavailable in the loaded Tango package.');
+    }
+    credentialManager=new cred.AdbWebCryptoCredentialManager(keyStorage,'JHOELSOFT');
+
+    $('status').textContent='Waiting for ADB authorization…';
+    $('desc').textContent='Unlock TARGET phone and accept “Allow USB debugging?” if Android shows the RSA prompt.';
 
     const transport=await core.adbDaemonAuthenticate({
       serial:adbDevice.serial || 'USB',
@@ -345,8 +377,10 @@ async function connectADB(){
       msg='No ADB device was selected/found. Make sure USB debugging is ON, the phone is unlocked, use a DATA cable, then accept the “Allow USB debugging?” RSA prompt.';
     }else if(/busy|claim|interface/i.test(msg)){
       msg='The USB ADB interface is busy. Close other ADB/scrcpy tools, unplug/replug the cable, then try again.';
-    }else if(/auth|credential|unauthorized|public key/i.test(msg)){
-      msg='ADB authorization failed. Unlock the phone and accept the RSA “Allow USB debugging?” prompt, then reconnect.';
+    }else if(/auth|credential|unauthorized|public key|authentication/i.test(msg)){
+      msg='ADB authorization is waiting/failed. Unlock TARGET phone and accept the RSA “Allow USB debugging?” prompt. If no prompt appears, open Developer options → Revoke USB debugging authorizations, reconnect the cable, then try again.';
+    }else if(/indexeddb|localstorage|storage|constructor/i.test(msg)){
+      msg='ADB credential storage failed. This version uses a browser-compatible local credential store; reload the page and try CONNECT ADB / OTG again.';
     }
     showModal('ADB CONNECTION FAILED','Android phone not connected',escapeHtml(msg));
   }finally{
