@@ -3,439 +3,419 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
 <meta http-equiv="Permissions-Policy" content="usb=(self)">
-<title>JHOELSOFT v9 — Pop-up Ads Cleaner</title>
+<title>JHOELSOFT v6 — ADB Device Manager</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#08111f;color:#eef5ff}
-.wrap{max-width:760px;margin:auto;padding:18px}.card{background:#101c2d;border:1px solid #263a55;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 8px 30px #0005}
-h1{font-size:24px;margin:0 0 6px}.sub{color:#9eb1c9;font-size:13px}.row{display:flex;gap:8px;flex-wrap:wrap}
-button{border:0;border-radius:12px;padding:12px 14px;background:#1d6cff;color:white;font-weight:700;font-size:14px}
-button.secondary{background:#26374e}button.danger{background:#b8324b}button:disabled{opacity:.45}
-.status{padding:12px;border-radius:12px;background:#0a1422;color:#bcd0e8;font-size:13px;white-space:pre-wrap}
-.badge{display:inline-block;padding:4px 8px;border-radius:99px;background:#223750;font-size:11px;margin:2px}
-input{width:100%;padding:12px;border-radius:10px;border:1px solid #304661;background:#0a1422;color:white}
-.app{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #203148}
-.app .name{font-weight:700}.pkg{font-size:11px;color:#8fa5bf;word-break:break-all}.risk{margin-left:auto}
-pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:330px;font-size:12px}
-.small{font-size:12px;color:#91a5bc;line-height:1.5}
-.ok{color:#73e2a4}.warn{color:#ffd27a}.bad{color:#ff8796}
+:root{--bg:#07111f;--card:#0d1a2b;--card2:#101f33;--line:#1d314a;--txt:#edf5ff;--muted:#8fa6bd;--accent:#5eead4;--accent2:#60a5fa;--danger:#fb7185;--warn:#fbbf24;--ok:#34d399}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#102b45 0,#07111f 45%,#050b14 100%);color:var(--txt);font:14px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:1050px;margin:auto;padding:18px}.hero{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:16px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--accent2),var(--accent));display:grid;place-items:center;color:#06101c;font-weight:900;font-size:18px;box-shadow:0 8px 30px #0005}
+h1{font-size:21px;margin:0}.sub{color:var(--muted);margin-top:3px}.badge{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:#0b1727}
+.grid{display:grid;grid-template-columns:1fr 1.25fr;gap:14px}.card{background:linear-gradient(180deg,#0e1c2e,#0a1625);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:0 12px 35px #0004}.wide{grid-column:1/-1}
+.card h2{font-size:15px;margin:0 0 12px}.mode{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}.mode button{padding:12px;border-radius:12px;border:1px solid var(--line);background:#0a1524;color:var(--muted);font-weight:700}.mode button.active{border-color:#4ccfc0;background:#0e2a31;color:var(--accent)}
+.row{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:11px;padding:11px 14px;background:#19304a;color:#eaf5ff;font-weight:750;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#2563eb,#14b8a6)}.btn.danger{background:#4a1824;color:#fecdd3}.btn:disabled{opacity:.45;cursor:not-allowed}.field{width:100%;padding:11px;border:1px solid var(--line);background:#071321;color:var(--txt);border-radius:10px;outline:none}.field:focus{border-color:var(--accent2)}
+.status{display:flex;align-items:center;gap:9px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#081423;margin:10px 0}.dot{width:9px;height:9px;border-radius:50%;background:var(--danger);box-shadow:0 0 12px currentColor}.dot.ok{background:var(--ok)}.dot.warn{background:var(--warn)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.kpi{padding:12px;border:1px solid var(--line);border-radius:12px;background:#091625}.kpi b{display:block;font-size:20px}.kpi span{font-size:11px;color:var(--muted)}
+.logs{height:310px;overflow:auto;background:#030912;border:1px solid #17263a;border-radius:13px;padding:10px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace}.log{padding:5px 4px;border-bottom:1px solid #0c1725;white-space:pre-wrap;word-break:break-word}.log .time{color:#58718b}.log.ok{color:#9cf4ce}.log.err{color:#ff9aac}.log.warn{color:#f9d67a}.log.info{color:#b7d8ff}
+.toolbar{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-bottom:9px}.small{font-size:12px;color:var(--muted)}.notice{padding:11px;border-left:3px solid var(--accent2);background:#091a2b;color:#b9cee3;border-radius:8px;line-height:1.5}.hidden{display:none!important}
+.apps{max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:12px}.app{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px;border-bottom:1px solid var(--line)}.app:last-child{border-bottom:0}.pkg{font-weight:700}.risk{font-size:11px;color:var(--muted);margin-top:3px}.risk.high{color:#ff9aaa}.risk.med{color:#f9d67a}.search{margin-bottom:9px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero{align-items:flex-start}.badge{display:none}.kpis{grid-template-columns:repeat(3,1fr)}}
 </style>
-<!-- Direct WebADB implementation. This is the older one-file ADB/WebUSB client used by many browser ADB projects. -->
-<script src="https://cdn.jsdelivr.net/gh/webadb/webadb.js@master/webadb.js"></script>
 </head>
 <body>
 <div class="wrap">
-  <div class="card">
-    <h1>🧹 JHOELSOFT v9</h1>
-    <div class="sub">Android Pop-up Ads Cleaner • direct WebUSB ADB • OTG phone-to-phone</div>
-  </div>
+<header class="hero">
+  <div class="brand"><div class="logo">JS</div><div><h1>JHOELSOFT</h1><div class="sub">Android Pop-up Ads Cleaner • ADB Manager v6</div></div></div>
+  <div class="badge">USB OTG + Wireless ADB</div>
+</header>
 
-  <div class="card">
-    <div class="row">
-      <button id="connect">🔌 CONNECT ADB / OTG</button>
-      <button id="diag" class="secondary">USB DIAGNOSTICS</button>
-      <button id="disconnect" class="secondary" disabled>DISCONNECT</button>
-    </div>
-    <div id="status" class="status" style="margin-top:10px">Ready. Use Chrome on the HOST phone, connect the TARGET phone by OTG/data cable, unlock TARGET, and enable USB debugging.</div>
-  </div>
+<div class="grid">
+<section class="card">
+<h2>Connection</h2>
+<div class="mode">
+  <button id="usbMode" class="active">🔌 USB OTG</button>
+  <button id="wifiMode">📶 Wireless</button>
+</div>
 
-  <div class="card">
-    <div><b>Connection</b></div>
-    <div id="deviceInfo" class="small" style="margin-top:8px">Not connected.</div>
-  </div>
-
-  <div class="card">
-    <div class="row">
-      <button id="scan" disabled>🔍 SCAN APPS</button>
-      <button id="selectRisk" class="secondary" disabled>SELECT ADS / BLOAT</button>
-      <button id="uninstall" class="danger" disabled>🗑 UNINSTALL SELECTED</button>
-    </div>
-    <div style="margin-top:10px"><input id="filter" placeholder="Filter package/app name…"></div>
-    <div id="apps" style="margin-top:8px"></div>
-  </div>
-
-  <div class="card">
-    <b>ADB console</b>
-    <pre id="console">No ADB commands yet.</pre>
-  </div>
-
-  <div class="card small">
-    <b>Kung walang “Allow USB debugging?”</b><br>
-    1) Unlock TARGET phone.<br>
-    2) Developer options → USB debugging ON.<br>
-    3) Developer options → Revoke USB debugging authorizations.<br>
-    4) Turn USB debugging OFF, wait a few seconds, then ON again.<br>
-    5) Unplug/replug OTG and press CONNECT again.<br>
-    6) If Android asks USB mode, choose <b>File transfer</b>.<br><br>
-    The browser USB chooser and the Android RSA authorization are two separate permissions. Chrome Android supports WebUSB, but the TARGET must still authorize the ADB key.
+<div id="usbPanel">
+  <div class="notice">Use <b>V27e as HOST</b> and Vivo Y28 4G as TARGET. Open this page directly in Chrome/Chromium, not inside an iframe or preview.</div>
+  <div class="row" style="margin-top:10px">
+    <button class="btn primary" id="connectUsb">Connect USB ADB</button>
+    <button class="btn" id="usbDiag">USB Diagnostics</button>
+    <button class="btn danger" id="disconnect">Disconnect</button>
   </div>
 </div>
 
-<script>
-(() => {
-  let adb = null;
-  let transport = null;
-  let connected = false;
-  let packages = [];
-  const $ = id => document.getElementById(id);
+<div id="wifiPanel" class="hidden">
+  <div class="notice"><b>Important:</b> a normal browser cannot open raw TCP ADB sockets directly. Wireless ADB in this HTML is prepared for a local/native ADB bridge. Android 11+ supports Wireless debugging and pairing.</div>
+  <label class="small">Target IP:port</label>
+  <input id="wifiAddress" class="field" placeholder="192.168.1.25:37099" autocomplete="off">
+  <label class="small">Pairing port (first-time pairing)</label>
+  <input id="pairAddress" class="field" placeholder="192.168.1.25:42001" autocomplete="off">
+  <label class="small">6-digit pairing code</label>
+  <input id="pairCode" class="field" inputmode="numeric" maxlength="6" placeholder="123456">
+  <div class="row" style="margin-top:10px">
+    <button class="btn primary" id="wifiQr">📷 Pair via QR</button>
+    <button class="btn" id="wifiPair">Pair via Code</button>
+    <button class="btn" id="wifiConnect">Connect</button>
+  </div>
+  <div id="qrBox" class="hidden" style="margin-top:12px">
+    <div class="notice">I-scan ang QR mula sa <b>Wireless debugging → Pair device with QR code</b> gamit ang camera ng V27e.</div>
+    <video id="qrVideo" playsinline style="width:100%;max-height:260px;border-radius:12px;background:#02070d;margin-top:9px"></video>
+    <canvas id="qrCanvas" class="hidden"></canvas>
+    <div class="row" style="margin-top:8px"><button class="btn danger" id="stopQr">Stop camera</button></div>
+  </div>
+  <div class="small" style="margin-top:8px">The target must have Developer options → Wireless debugging enabled and both devices must be on the same Wi‑Fi network.</div>
+</div>
 
-  function status(s, cls='') {
-    $('status').className = 'status ' + cls;
-    $('status').textContent = s;
-  }
-  function log(s) {
-    const p = $('console');
-    p.textContent = (p.textContent === 'No ADB commands yet.' ? '' : p.textContent) + s + '\n';
-    p.scrollTop = p.scrollHeight;
-  }
-  function errText(e) {
-    return e && (e.message || e.name || String(e)) || 'Unknown error';
-  }
+<div class="status"><span id="dot" class="dot"></span><span id="status">Not connected</span></div>
+<div class="kpis">
+  <div class="kpi"><b id="deviceName">—</b><span>DEVICE</span></div>
+  <div class="kpi"><b id="androidVer">—</b><span>ANDROID</span></div>
+  <div class="kpi"><b id="appCount">0</b><span>APPS</span></div>
+</div>
+</section>
 
-  async function shell(command) {
-    if (!adb) throw new Error('ADB is not connected');
-    log('$ ' + command);
-    const stream = await adb.shell(command);
-    let out = '';
-    while (true) {
-      const r = await stream.receive();
-      if (r.cmd === 'WRTE') {
-        if (r.data) out += new TextDecoder().decode(r.data);
-        await stream.send('OKAY');
-      } else if (r.cmd === 'CLSE') {
-        break;
-      }
-    }
-    try { await stream.send('OKAY'); } catch (_) {}
-    return out.trim();
-  }
+<section class="card">
+<h2>ADB Actions</h2>
+<div class="row">
+  <button class="btn primary" id="scan">Scan Apps</button>
+  <button class="btn" id="refresh">Refresh Device Info</button>
+  <button class="btn" id="settings">Open Developer Options</button>
+</div>
+<div class="notice" style="margin-top:12px">App risk detection is heuristic only. Review an app before uninstalling or disabling it.</div>
+</section>
 
-  function classify(pkg, raw='') {
-    const s = (pkg + ' ' + raw).toLowerCase();
-    let score = 0, tags = [];
-    if (s.includes('admob') || s.includes('adsdk') || s.includes('applovin') || s.includes('appodeal') || s.includes('unityads') || s.includes('facebook.ads')) {score+=3;tags.push('ADS-SDK')}
-    if (s.includes('overlay') || s.includes('draw_over') || s.includes('system_alert_window')) {score+=3;tags.push('OVERLAY')}
-    if (s.includes('cleaner') || s.includes('booster') || s.includes('launcher') || s.includes('wallpaper') || s.includes('lockscreen')) {score+=1;tags.push('HEURISTIC')}
-    if (s.includes('adware') || s.includes('popup') || s.includes('pop-up')) {score+=4;tags.push('ADWARE-NAME')}
-    return {score,tags};
-  }
+<section class="card wide">
+<div class="toolbar"><h2 style="margin:0">Live Logs</h2><div><button class="btn" id="clearLogs">Clear</button></div></div>
+<div id="logs" class="logs"></div>
+</section>
 
-  function renderApps() {
-    const q = $('filter').value.toLowerCase().trim();
-    const list = packages.filter(x => !q || x.pkg.toLowerCase().includes(q) || x.label.toLowerCase().includes(q));
-    $('apps').innerHTML = list.map((x,i) => {
-      const r = classify(x.pkg, x.raw);
-      return `<div class="app">
-        <input type="checkbox" data-pkg="${x.pkg}" style="width:auto" ${x.selected?'checked':''}>
-        <div style="flex:1"><div class="name">${escapeHtml(x.label || x.pkg)}</div>
-        <div class="pkg">${escapeHtml(x.pkg)}</div>
-        ${r.tags.map(t=>`<span class="badge">${t}</span>`).join('')}</div>
-        <div class="risk ${r.score>=3?'warn':''}">risk ${r.score}</div>
-      </div>`;
-    }).join('') || '<div class="small">No apps found.</div>';
+<section class="card wide">
+<div class="toolbar"><h2 style="margin:0">Installed User Apps</h2><span class="small">Select carefully</span></div>
+<input id="search" class="field search" placeholder="Search package name / app info…">
+<div id="apps" class="apps"><div class="small" style="padding:14px">Connect a device, then tap Scan Apps.</div></div>
+</section>
+</div>
+</div>
 
-    $('apps').querySelectorAll('input[type=checkbox]').forEach(cb => {
-      cb.addEventListener('change', () => {
-        const x = packages.find(p => p.pkg === cb.dataset.pkg);
-        if (x) x.selected = cb.checked;
-        updateButtons();
-      });
+<script type="module">
+const $=id=>document.getElementById(id);
+let adb=null, transport=null, device=null, modules=null, usbRaw=null;
+
+function log(msg,type='info'){
+  const d=document.createElement('div'); d.className='log '+type;
+  d.innerHTML='<span class="time">'+new Date().toLocaleTimeString()+'</span>  '+String(msg).replace(/[<>&]/g,m=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[m]));
+  $('logs').appendChild(d); $('logs').scrollTop=$('logs').scrollHeight;
+}
+function status(msg,kind=''){
+  $('status').textContent=msg;$('dot').className='dot '+kind;log(msg,kind==='ok'?'ok':kind==='warn'?'warn':'info')
+}
+function setConnected(on){
+  $('disconnect').disabled=!on;$('scan').disabled=!on;$('refresh').disabled=!on;
+}
+async function loadModules(){
+  if(modules)return modules;
+  log('Loading ADB modules…');
+  const core=await import('https://esm.sh/@yume-chan/adb@2.6.4?bundle&target=es2022');
+  const webusb=await import('https://esm.sh/@yume-chan/adb-daemon-webusb@2.3.2?bundle&target=es2022');
+  const cred=await import('https://esm.sh/@yume-chan/adb-credential-web@2.1.0?bundle&target=es2022');
+  modules={core,webusb,cred}; return modules;
+}
+async function connectUSB(){
+  try{
+    
+let qrStream=null, qrTimer=null, qrDetector=null, qrBusy=false;
+async function startQrScanner(){
+  try{
+    if(!window.isSecureContext) throw new Error('Camera/QR requires HTTPS. Open the GitHub Pages HTTPS URL.');
+    if(!navigator.mediaDevices?.getUserMedia) throw new Error('Camera API is unavailable in this browser.');
+    if(!('BarcodeDetector' in window)) throw new Error('Native QR scanner is not supported by this browser. Use the latest Chrome/Chromium.');
+    const formats=await BarcodeDetector.getSupportedFormats();
+    if(!formats.includes('qr_code')) throw new Error('This browser has BarcodeDetector but does not support QR codes.');
+    qrDetector=new BarcodeDetector({formats:['qr_code']});
+
+    $('qrBox').classList.remove('hidden');
+    log('Requesting camera permission…','info');
+    qrStream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},
+      audio:false
     });
-    updateButtons();
-  }
+    $('qrVideo').srcObject=qrStream;
+    await $('qrVideo').play();
+    log('Camera ready. I-point ang QR sa loob ng frame.','ok');
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-
-  function updateButtons() {
-    const any = packages.some(x => x.selected);
-    $('uninstall').disabled = !connected || !any;
-    $('selectRisk').disabled = !connected || !packages.length;
-  }
-
-  async function connect() {
-    if (!window.isSecureContext) {
-      status('WebUSB needs HTTPS (GitHub Pages is OK) or localhost.', 'bad'); return;
-    }
-    if (!navigator.usb) {
-      status('WebUSB is unavailable. Use Chrome/Chromium on the HOST phone.', 'bad'); return;
-    }
-    if (!window.Adb || !Adb.open || !Adb.WebUSB || !Adb.WebUSB.Transport) {
-      status('WebADB library failed to load. Check internet connection and reload.', 'bad'); return;
-    }
-
-    $('connect').disabled = true;
-    let lastError = null;
-    let usbDevice = null;
-
-    // IMPORTANT: requestDevice() MUST be reached directly from this button
-    // click. Do not put a setTimeout()/sleep or another await before it.
-    // Chrome requires a transient user gesture for WebUSB's permission chooser.
-    // This was the cause of the screenshot error:
-    // "requestDevice ... Must be handling a user gesture".
-    try {
-      status(
-        '🔌 Opening USB chooser…\n\n' +
-        'Select the TARGET Android phone, then tap Connect.'
-      );
-
-      usbDevice = await navigator.usb.requestDevice({
-        filters: [
-          { classCode: 255, subclassCode: 66, protocolCode: 1 },
-          { classCode: 255, subclassCode: 66, protocolCode: 3 }
-        ]
-      });
-    } catch (e) {
-      $('connect').disabled = false;
-      const m = errText(e);
-      if (/cancel|abort|no device/i.test(m)) {
-        status('USB chooser cancelled. Tap CONNECT again and select the TARGET phone.', 'bad');
-      } else {
-        status('❌ USB PERMISSION FAILED\n\n' + m, 'bad');
-      }
-      return;
-    }
-
-    // From this point on we reuse the SAME selected USBDevice object.
-    // That means retries do not call requestDevice() again and do not need
-    // another permission gesture.
-    for (let attempt = 1; attempt <= 4; attempt++) {
-      try {
-        status(
-          `USB/ADB attempt ${attempt}/4…\n` +
-          `TARGET: keep the phone unlocked and do not change USB mode.`
-        );
-
-        if (transport) {
-          try { await transport.close(); } catch (_) {}
-          transport = null;
-        }
-        adb = null;
-
-        // Small settle delay is safe HERE because the permission chooser has
-        // already completed during the user's click gesture.
-        await new Promise(r => setTimeout(r, 450 + (attempt - 1) * 350));
-
-        status(`Opening selected USB device (attempt ${attempt}/4)…`);
-        try {
-          if (usbDevice.opened) {
-            try { await usbDevice.close(); } catch (_) {}
+    const video=$('qrVideo');
+    const tick=async()=>{
+      if(!qrStream)return;
+      if(!qrBusy && video.readyState>=2){
+        qrBusy=true;
+        try{
+          const codes=await qrDetector.detect(video);
+          if(codes?.length){
+            const data=codes[0].rawValue;
+            log('QR CODE DETECTED ✓','ok');
+            log('QR data: '+data,'info');
+            parseAdbQr(data);
+            stopQrScanner();
+            qrBusy=false;
+            return;
           }
-          await usbDevice.open();
-        } catch (openErr) {
-          throw openErr;
+        }catch(e){
+          log('QR detection frame error: '+e.message,'warn');
         }
-
-        transport = new Adb.WebUSB.Transport(usbDevice);
-
-        // Let Vivo/Android finish its USB configuration before ADB claims
-        // the interface and starts the first transfer.
-        await new Promise(r => setTimeout(r, 700 + (attempt - 1) * 300));
-
-        status(
-          `USB interface ready. Starting ADB AUTH (attempt ${attempt}/4)…\n` +
-          `Watch TARGET for “Allow USB debugging?”.`
-        );
-
-        adb = await transport.connectAdb('host::', () => {
-          status(
-            '⏳ ADB AUTHORIZATION WAITING\n\n' +
-            'Unlock TARGET phone and accept “Allow USB debugging?”.\n' +
-            'If “Always allow from this computer” appears, you may enable it.'
-          );
-        });
-
-        connected = true;
-        $('disconnect').disabled = false;
-        $('scan').disabled = false;
-        status('✅ ADB CONNECTED', 'ok');
-
-        let model = '', android = '', serial = '';
-        try { model = await shell('getprop ro.product.model'); } catch(_){ }
-        try { android = await shell('getprop ro.build.version.release'); } catch(_){ }
-        try { serial = await shell('getprop ro.serialno'); } catch(_){ }
-        $('deviceInfo').innerHTML =
-          '<b>Model:</b> '+escapeHtml(model||'—')+
-          '<br><b>Android:</b> '+escapeHtml(android||'—')+
-          '<br><b>Serial:</b> '+escapeHtml(serial||'—');
-
-        return;
-      } catch(e) {
-        lastError = e;
-        const m = errText(e);
-        log(`ATTEMPT ${attempt} FAILED: ${m}`);
-
-        try { if (transport) await transport.close(); } catch (_) {}
-        transport = null;
-        adb = null;
-        connected = false;
-
-        const stateBusy = /operation that changes the device state is in progress|InvalidStateError|transferOut|claimInterface|selectConfiguration|selectAlternateInterface/i.test(m);
-
-        if (stateBusy && attempt < 4) {
-          status(
-            `⚠️ USB STATE BUSY — retrying ${attempt + 1}/4…\n\n` +
-            `${m}\n\n` +
-            `Reusing the already-authorized USB device; no new chooser is needed.`
-          );
-          await new Promise(r => setTimeout(r, 900 + attempt * 500));
-          continue;
-        }
-
-        if (/Failed to connect|AUTH|authentication|host::/i.test(m)) {
-          status(
-            '❌ ADB AUTH FAILED\n\n' + m +
-            '\n\nTARGET: unlock → USB debugging ON → Revoke USB debugging authorizations → ' +
-            'USB debugging OFF/ON → reconnect OTG → CONNECT again.',
-            'bad'
-          );
-        } else {
-          status(
-            '❌ ADB CONNECTION FAILED\n\n' + m +
-            (stateBusy
-              ? '\n\nVivo Y28 USB sequencing is still busy. Tap CONNECT again after reconnecting OTG.'
-              : ''),
-            'bad'
-          );
-        }
-        break;
+        qrBusy=false;
       }
+      qrTimer=setTimeout(()=>requestAnimationFrame(tick),220);
+    };
+    tick();
+  }catch(e){
+    log('QR scanner failed: '+e.message,'err');
+    stopQrScanner();
+  }
+}
+function stopQrScanner(){
+  if(qrTimer)clearTimeout(qrTimer); qrTimer=null; qrBusy=false;
+  if(qrStream){qrStream.getTracks().forEach(t=>t.stop());qrStream=null}
+  if($('qrVideo'))$('qrVideo').srcObject=null;
+  $('qrBox').classList.add('hidden');
+  log('QR camera stopped.','info');
+}
+function parseAdbQr(data){
+  log('Wireless debugging QR captured successfully.','ok');
+  log('The QR was decoded, but browser-only mode still needs an ADB bridge to execute adb pair.','warn');
+  // Android's QR payload is intentionally retained instead of guessing its fields.
+  $('wifiAddress').value='';
+  $('pairAddress').value='';
+}
+$('wifiQr').onclick=startQrScanner;
+$('stopQr').onclick=stopQrScanner;
+setConnected(false);status('Opening USB device picker…','warn');
+    const {core,webusb,cred}=await loadModules();
+    const Manager=webusb.AdbDaemonWebUsbDeviceManager;
+    const manager=Manager.BROWSER;
+    const raw=await manager.requestDevice();
+    if(!raw){throw new Error('No USB device selected.');}
+    usbRaw=raw;
+    log('USB device selected: '+(raw.device?.productName||'Android device'));
+    const keyStorage=new cred.TangoLocalStorage('JHOELSOFT_ADB_KEY_V6');
+    const credentialManager=new cred.AdbWebCryptoCredentialManager(keyStorage,'JHOELSOFT');
+    const adbDevice=await manager.connect(raw);
+    device=adbDevice;
+    log('ADB transport opened. Authenticating…','warn');
+    const serial=adbDevice.serial||'USB';
+    transport=await core.adbDaemonAuthenticate({serial,connection:adbDevice,credentialManager});
+    adb=new core.Adb(transport);
+    log('ADB authorization successful.','ok');
+    await refreshInfo();
+    setConnected(true);status('Connected • ADB ready','ok');
+  }catch(e){
+    console.error(e); log(e?.stack||e?.message||String(e),'err');
+    status('ADB connection failed','');
+    if(String(e).includes('Permissions Policy')) log('WebUSB is blocked by the page/iframe policy. Open the GitHub Pages URL directly in Chrome.','err');
+    if(String(e).includes('authorize')||String(e).includes('authentication')) log('On TARGET: unlock phone → USB debugging ON → Revoke USB debugging authorizations → reconnect → tap Allow.','warn');
+  }
+}
+async function runText(cmd){
+  if(!adb)throw new Error('No ADB connection');
+  const p=await adb.subprocess.noneProtocol.spawnWaitText(cmd);
+  return p.output||p;
+}
+async function refreshInfo(){
+  if(!adb)return;
+  try{
+    const model=(await runText('getprop ro.product.model')).trim();
+    const ver=(await runText('getprop ro.build.version.release')).trim();
+    const sdk=(await runText('getprop ro.build.version.sdk')).trim();
+    $('deviceName').textContent=model||'Android';
+    $('androidVer').textContent=(ver||'?')+' / '+(sdk||'?');
+    log('Device: '+model+' • Android '+ver+' (SDK '+sdk+')','ok');
+  }catch(e){log('Device info failed: '+e.message,'err')}
+}
+async function scanApps(){
+  if(!adb)return status('Connect the target first','warn');
+  $('apps').innerHTML='<div class="small" style="padding:14px">Scanning…</div>';
+  try{
+    const out=await runText('pm list packages -3');
+    const pkgs=out.split(/\r?\n/).map(x=>x.replace(/^package:/,'').trim()).filter(Boolean);
+    $('appCount').textContent=pkgs.length;
+    log('Found '+pkgs.length+' third-party packages.','ok');
+    const frag=document.createDocumentFragment();
+    for(const pkg of pkgs){
+      let dump='';
+      try{dump=await runText('dumpsys package '+pkg)}catch{}
+      const low=(pkg+' '+dump).toLowerCase();
+      let risk=0, reasons=[];
+      if(/system_alert_window|draw_over_other_apps/.test(low)){risk+=3;reasons.push('overlay')}
+      if(/accessibilityservice|bind_accessibility_service/.test(low)){risk+=2;reasons.push('accessibility')}
+      if(/receive_boot_completed/.test(low)){risk+=1;reasons.push('auto-start')}
+      if(/admob|adsdk|appodeal|applovin|unityads|ironsource|facebook.ads/.test(low)){risk+=3;reasons.push('ad SDK signal')}
+      const el=document.createElement('div');el.className='app';el.dataset.search=(pkg+' '+reasons.join(' ')).toLowerCase();
+      const level=risk>=5?'HIGH':risk>=3?'MED':'LOW';
+      el.innerHTML='<div><div class="pkg">'+pkg+'</div><div class="risk '+level.toLowerCase()+'">'+level+' risk • '+(reasons.join(', ')||'no obvious ad/overlay signal')+'</div></div><button class="btn danger" data-uninstall="'+pkg+'">Uninstall</button>';
+      frag.appendChild(el);
     }
+    $('apps').replaceChildren(frag);
+    $('apps').querySelectorAll('[data-uninstall]').forEach(b=>b.onclick=()=>uninstall(b.dataset.uninstall));
+  }catch(e){log('App scan failed: '+e.message,'err');$('apps').innerHTML='<div class="small" style="padding:14px">Scan failed. Check ADB authorization.</div>'}
+}
+async function uninstall(pkg){
+  if(!adb)return;
+  if(!confirm('Uninstall '+pkg+' for the current Android user?\\n\\nReview the package before continuing.'))return;
+  try{
+    log('Uninstalling '+pkg+'…','warn');
+    const r=(await runText('pm uninstall --user 0 '+pkg)).trim();
+    if(/success/i.test(r)){log('Uninstalled: '+pkg,'ok');scanApps()}else log(pkg+': '+r,'err');
+  }catch(e){log('Uninstall failed: '+pkg+' • '+e.message,'err')}
+}
+$('connectUsb').onclick=connectUSB;
+$('scan').onclick=scanApps;
+$('refresh').onclick=refreshInfo;
+$('disconnect').onclick=()=>{adb=null;transport=null;device=null;
+let qrStream=null, qrTimer=null;
+async function startQrScanner(){
+  try{
+    if(!('mediaDevices' in navigator) || !navigator.mediaDevices.getUserMedia)
+      throw new Error('Camera access is not available in this browser.');
+    $('qrBox').classList.remove('hidden');
+    qrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
+    $('qrVideo').srcObject=qrStream;
+    await $('qrVideo').play();
+    log('QR scanner started. Point the camera at the Android Wireless Debugging QR.','info');
 
-    $('connect').disabled = false;
-    updateButtons();
-  }
-
-  async function disconnect() {
-    connected = false;
-    adb = null;
-    try { if (transport) await transport.close(); } catch(_){}
-    transport = null;
-    $('disconnect').disabled = true;
-    $('scan').disabled = true;
-    packages = [];
-    $('apps').innerHTML = '';
-    $('deviceInfo').textContent = 'Not connected.';
-    updateButtons();
-    status('Disconnected.');
-  }
-
-  async function scan() {
-    if (!adb) return;
-    $('scan').disabled = true;
-    try {
-      status('Scanning installed user apps…');
-      const raw = await shell('pm list packages -3');
-      const lines = raw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-      packages = lines.map(line => {
-        const pkg = line.replace(/^package:/,'').trim();
-        return {pkg,label:pkg,raw:'',selected:false};
+    if(!window.__jsqr){
+      await new Promise((resolve,reject)=>{
+        const sc=document.createElement('script');
+        sc.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+        sc.onload=resolve; sc.onerror=()=>reject(new Error('QR scanner library failed to load.'));
+        document.head.appendChild(sc);
       });
-      // Get labels cheaply where available. If a package has no label, keep package name.
-      for (const x of packages) {
-        try {
-          const p = await shell(`cmd package resolve-activity --brief ${x.pkg} 2>/dev/null | head -n 1`);
-          x.raw = p;
-        } catch (_) {}
-      }
-      renderApps();
-      status(`✅ Scan complete: ${packages.length} user-installed packages.\nRisk labels are heuristics, not proof of malware.`);
-    } catch(e) {
-      status('Scan failed: '+errText(e), 'bad');
-    } finally {
-      $('scan').disabled = false;
+      window.__jsqr=true;
     }
+    const video=$('qrVideo'), canvas=$('qrCanvas'), ctx=canvas.getContext('2d',{willReadFrequently:true});
+    const tick=()=>{
+      if(!qrStream)return;
+      if(video.readyState>=2){
+        canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+        ctx.drawImage(video,0,0,canvas.width,canvas.height);
+        const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+        const result=window.jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'});
+        if(result?.data){
+          log('QR detected: '+result.data,'ok');
+          parseAdbQr(result.data);
+          stopQrScanner();
+          return;
+        }
+      }
+      qrTimer=requestAnimationFrame(tick);
+    };
+    tick();
+  }catch(e){
+    log('QR scanner error: '+e.message,'err');
+    stopQrScanner();
   }
+}
+function stopQrScanner(){
+  if(qrTimer)cancelAnimationFrame(qrTimer); qrTimer=null;
+  if(qrStream){qrStream.getTracks().forEach(t=>t.stop());qrStream=null}
+  $('qrVideo').srcObject=null;
+  $('qrBox').classList.add('hidden');
+}
+function parseAdbQr(data){
+  // Android Wireless Debugging QR payloads can be encoded in the standard
+  // adb pairing payload format. Keep the raw payload visible for bridge use.
+  $('wifiAddress').value='';
+  $('pairAddress').value='';
+  log('Wireless ADB QR payload captured.','ok');
+  log('For browser-only mode, the captured QR still needs a native/local ADB bridge to execute adb pair.','warn');
+  log('Raw QR payload: '+data,'info');
+}
+$('wifiQr').onclick=startQrScanner;
+$('stopQr').onclick=stopQrScanner;
 
-  async function uninstallSelected() {
-    const chosen = packages.filter(x=>x.selected);
-    if (!chosen.length) return;
-    const protectedGuess = chosen.filter(x => /^(com\.android\.|com\.google\.android\.|com\.samsung\.android\.|com\.xiaomi\.|com\.miui\.|com\.oppo\.|com\.vivo\.|com\.oneplus\.)/i.test(x.pkg));
-    if (protectedGuess.length) {
-      alert('May system/vendor packages ang napili. Alisin muna ang mga iyon sa selection. JHOELSOFT will not bulk-remove protected-looking packages.');
-      return;
+setConnected(false);status('Disconnected','warn');$('deviceName').textContent='—';$('androidVer').textContent='—'};
+$('clearLogs').onclick=()=>$('logs').replaceChildren();
+$('usbMode').onclick=()=>{$('usbMode').classList.add('active');$('wifiMode').classList.remove('active');$('usbPanel').classList.remove('hidden');$('wifiPanel').classList.add('hidden')};
+$('wifiMode').onclick=()=>{$('wifiMode').classList.add('active');$('usbMode').classList.remove('active');$('wifiPanel').classList.remove('hidden');$('usbPanel').classList.add('hidden');log('Wireless mode selected. A local/native ADB bridge is required for browser-based Wi‑Fi ADB.','warn')};
+$('wifiPair').onclick=()=>log('Wireless pairing requested for '+$('pairAddress').value+' with code '+$('pairCode').value+'. Connect this UI to a native ADB bridge to perform adb pair.','warn');
+$('wifiConnect').onclick=()=>log('Wireless connect requested for '+$('wifiAddress').value+'. A browser cannot open the ADB TCP socket directly; use the bridge/native app.','warn');
+$('usbDiag').onclick=async()=>{
+ try{
+   if(!navigator.usb){return log('WebUSB is unavailable in this browser.','err')}
+   const list=await navigator.usb.getDevices();
+   log('Authorized WebUSB devices: '+list.length,'info');
+   list.forEach(x=>log('VID '+x.vendorId.toString(16)+' / PID '+x.productId.toString(16)+' • '+(x.productName||'Unknown'),'info'));
+ }catch(e){log('USB diagnostics failed: '+e.message,'err')}
+};
+$('search').oninput=e=>{
+ const q=e.target.value.toLowerCase();
+ $('apps').querySelectorAll('.app').forEach(x=>x.style.display=x.dataset.search.includes(q)?'grid':'none');
+};
+
+let qrStream=null, qrTimer=null;
+async function startQrScanner(){
+  try{
+    if(!('mediaDevices' in navigator) || !navigator.mediaDevices.getUserMedia)
+      throw new Error('Camera access is not available in this browser.');
+    $('qrBox').classList.remove('hidden');
+    qrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
+    $('qrVideo').srcObject=qrStream;
+    await $('qrVideo').play();
+    log('QR scanner started. Point the camera at the Android Wireless Debugging QR.','info');
+
+    if(!window.__jsqr){
+      await new Promise((resolve,reject)=>{
+        const sc=document.createElement('script');
+        sc.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+        sc.onload=resolve; sc.onerror=()=>reject(new Error('QR scanner library failed to load.'));
+        document.head.appendChild(sc);
+      });
+      window.__jsqr=true;
     }
-    if (!confirm(`Uninstall ${chosen.length} selected app(s) for the current Android user?\n\nReview the package names first.`)) return;
-
-    for (const x of chosen) {
-      try {
-        status('Uninstalling '+x.pkg+'…');
-        const r = await shell(`pm uninstall --user 0 ${x.pkg}`);
-        log(r);
-        x.selected = false;
-      } catch(e) {
-        log('ERROR '+x.pkg+': '+errText(e));
+    const video=$('qrVideo'), canvas=$('qrCanvas'), ctx=canvas.getContext('2d',{willReadFrequently:true});
+    const tick=()=>{
+      if(!qrStream)return;
+      if(video.readyState>=2){
+        canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+        ctx.drawImage(video,0,0,canvas.width,canvas.height);
+        const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+        const result=window.jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'});
+        if(result?.data){
+          log('QR detected: '+result.data,'ok');
+          parseAdbQr(result.data);
+          stopQrScanner();
+          return;
+        }
       }
-    }
-    await scan();
+      qrTimer=requestAnimationFrame(tick);
+    };
+    tick();
+  }catch(e){
+    log('QR scanner error: '+e.message,'err');
+    stopQrScanner();
   }
+}
+function stopQrScanner(){
+  if(qrTimer)cancelAnimationFrame(qrTimer); qrTimer=null;
+  if(qrStream){qrStream.getTracks().forEach(t=>t.stop());qrStream=null}
+  $('qrVideo').srcObject=null;
+  $('qrBox').classList.add('hidden');
+}
+function parseAdbQr(data){
+  // Android Wireless Debugging QR payloads can be encoded in the standard
+  // adb pairing payload format. Keep the raw payload visible for bridge use.
+  $('wifiAddress').value='';
+  $('pairAddress').value='';
+  log('Wireless ADB QR payload captured.','ok');
+  log('For browser-only mode, the captured QR still needs a native/local ADB bridge to execute adb pair.','warn');
+  log('Raw QR payload: '+data,'info');
+}
+$('wifiQr').onclick=startQrScanner;
+$('stopQr').onclick=stopQrScanner;
 
-  async function diagnostics() {
-    try {
-      if (!navigator.usb) { status('WebUSB unavailable in this browser.', 'bad'); return; }
-      const devs = await navigator.usb.getDevices();
-      if (!devs.length) {
-        status('No previously-authorized WebUSB devices. Press CONNECT to open the chooser.');
-        return;
-      }
-      status('Authorized WebUSB devices:\n' + devs.map(d =>
-        `${d.productName||'Unknown'} • VID ${d.vendorId.toString(16)} • PID ${d.productId.toString(16)}`
-      ).join('\n'));
-    } catch(e) {
-      status('USB diagnostics blocked: '+errText(e)+'\n\nIf this page is inside an app preview/iframe, open the GitHub Pages URL directly in Chrome.', 'bad');
-    }
-  }
-
-  // Show USB device state without starting ADB.
-  // Useful on Vivo Y28 when the OS is switching USB role/configuration.
-  $('diag').onclick = async () => {
-    try {
-      if (!navigator.usb) {
-        status('WebUSB unavailable in this browser.', 'bad');
-        return;
-      }
-      const devs = await navigator.usb.getDevices();
-      if (!devs.length) {
-        status(
-          'No previously-authorized WebUSB devices.\n\n' +
-          'Press CONNECT and choose the TARGET phone from the Chrome USB chooser.'
-        );
-        return;
-      }
-      status(
-        'Authorized WebUSB device(s):\n\n' +
-        devs.map((d, i) =>
-          `${i+1}. ${d.productName || 'Unknown'}\n` +
-          `   VID ${d.vendorId.toString(16)} / PID ${d.productId.toString(16)}\n` +
-          `   opened=${d.opened}`
-        ).join('\n\n') +
-        '\n\nNo ADB transfer was started.'
-      );
-    } catch(e) {
-      status(
-        'USB diagnostics failed: '+errText(e)+
-        '\n\nOpen the GitHub Pages URL directly in Chrome, not inside an iframe/preview.',
-        'bad'
-      );
-    }
-  };
-
-  $('connect').onclick = connect;
-  $('disconnect').onclick = disconnect;
-  $('scan').onclick = scan;
-  $('uninstall').onclick = uninstallSelected;
-  $('diag').onclick = diagnostics;
-  $('filter').oninput = renderApps;
-  $('selectRisk').onclick = () => {
-    packages.forEach(x => x.selected = classify(x.pkg,x.raw).score >= 3);
-    renderApps();
-  };
-
-  window.addEventListener('error', e => {
-    if (e.message) log('[JS] '+e.message);
-  });
-})();
+setConnected(false);
+log('JHOELSOFT v6 ready. USB OTG is direct browser ADB; Wireless mode is bridge-ready.','ok');
 </script>
 </body>
 </html>
