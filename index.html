@@ -1,554 +1,306 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#0b0f19">
-<meta name="mobile-web-app-capable" content="yes">
-<title>JHOELSOFT - Android Pop-up Ads Cleaner</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Permissions-Policy" content="usb=(self)">
+<title>JHOELSOFT v6 — Pop-up Ads Cleaner</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0b0f19;--card:#131b2e;--card2:#19233a;--line:#263451;--blue:#1399ec;--purple:#7c3aed;--green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--text:#f8fafc;--muted:#94a3b8}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Roboto,Arial,sans-serif}
-.app{width:100%;max-width:520px;min-height:100vh;margin:auto;padding:20px 16px 28px}
-.header{display:flex;align-items:center;gap:13px;margin-bottom:18px}
-.logo{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--purple));font-size:27px;box-shadow:0 8px 30px #1399ec30}
-.brand{font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--blue)}
-.title{font-size:24px;font-weight:800;line-height:1.1;margin-top:2px}
-.subtitle{font-size:12px;color:var(--muted);margin-top:4px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:13px;box-shadow:0 10px 35px #00000020}
-.label{font-size:10px;font-weight:800;letter-spacing:1.4px;color:var(--muted)}
-.status{font-size:21px;font-weight:800;margin-top:7px}
-.desc{font-size:12px;color:var(--muted);line-height:1.5;margin-top:5px}
-.progress{height:7px;background:#202b43;border-radius:99px;overflow:hidden;margin-top:15px;display:none}
-.bar{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .25s}
-button{width:100%;border:0;border-radius:16px;padding:16px;margin-top:14px;background:linear-gradient(135deg,var(--blue),#1676ff);color:white;font-size:14px;font-weight:800;letter-spacing:.4px;cursor:pointer}
-button:active{transform:scale(.985)}
-button.secondary{background:var(--card2);border:1px solid var(--line);color:var(--text)}
-button.danger{background:linear-gradient(135deg,#ef4444,#dc2626)}
-button:disabled{opacity:.5;cursor:not-allowed}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px}
-.stat b{font-size:20px;display:block}.stat span{font-size:10px;color:var(--muted)}
-.section{font-size:10px;letter-spacing:1.5px;font-weight:800;color:var(--muted);margin:21px 2px 9px}
-.result{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:14px;margin-bottom:10px}
-.row{display:flex;align-items:center;gap:12px}
-.icon{width:47px;height:47px;border-radius:14px;background:var(--card2);display:grid;place-items:center;font-size:22px;flex:none}
-.name{font-size:14px;font-weight:800}.pkg{font-size:10px;color:var(--muted);margin-top:3px;word-break:break-all}
-.badge{margin-left:auto;padding:5px 8px;border-radius:8px;font-size:9px;font-weight:800;white-space:nowrap}
-.high{background:#ef444420;color:#f87171}.medium{background:#f59e0b20;color:#fbbf24}.safe{background:#22c55e20;color:#4ade80}
-.reason{font-size:11px;color:var(--muted);line-height:1.5;margin:11px 0}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions button{margin:0;padding:11px;font-size:11px}
-.empty{text-align:center;color:var(--muted);padding:22px 10px;font-size:13px}
-.scanCircle{width:112px;height:112px;border-radius:50%;margin:3px auto 8px;display:grid;place-items:center;border:1px solid #1399ec55;background:radial-gradient(circle,#1399ec22,transparent 68%);font-size:48px;position:relative}
-.scanning .scanCircle{animation:pulse 1.15s infinite}@keyframes pulse{50%{transform:scale(1.06);box-shadow:0 0 35px #1399ec35}}
-.notice{font-size:10px;color:var(--muted);line-height:1.55;text-align:center;margin-top:16px}.footer{text-align:center;color:#64748b;font-size:10px;padding:10px}
-.hidden{display:none!important}
-.modal{position:fixed;inset:0;background:#000b;display:none;align-items:flex-end;justify-content:center;padding:12px;z-index:10}.modal.show{display:flex}
-.sheet{width:100%;max-width:520px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:20px;animation:up .2s ease}
-@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
-.close{background:var(--card2);margin-top:8px}small{color:var(--muted)}
-.search{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:#0e1525;color:var(--text);outline:none;font-size:13px}
-.chips{display:flex;gap:7px;overflow:auto;padding-top:10px}.chip{white-space:nowrap;padding:7px 10px;border:1px solid var(--line);border-radius:99px;background:var(--card2);font-size:10px;color:var(--muted)}
-.chip.active{color:#fff;border-color:#1399ec}
-.good{color:#4ade80}.warn{color:#fbbf24}.bad{color:#f87171}
-.deviceLine{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-top:9px}
-.deviceLine b{color:var(--text)}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#08111f;color:#eef5ff}
+.wrap{max-width:760px;margin:auto;padding:18px}.card{background:#101c2d;border:1px solid #263a55;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 8px 30px #0005}
+h1{font-size:24px;margin:0 0 6px}.sub{color:#9eb1c9;font-size:13px}.row{display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;border-radius:12px;padding:12px 14px;background:#1d6cff;color:white;font-weight:700;font-size:14px}
+button.secondary{background:#26374e}button.danger{background:#b8324b}button:disabled{opacity:.45}
+.status{padding:12px;border-radius:12px;background:#0a1422;color:#bcd0e8;font-size:13px;white-space:pre-wrap}
+.badge{display:inline-block;padding:4px 8px;border-radius:99px;background:#223750;font-size:11px;margin:2px}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #304661;background:#0a1422;color:white}
+.app{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #203148}
+.app .name{font-weight:700}.pkg{font-size:11px;color:#8fa5bf;word-break:break-all}.risk{margin-left:auto}
+pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:330px;font-size:12px}
+.small{font-size:12px;color:#91a5bc;line-height:1.5}
+.ok{color:#73e2a4}.warn{color:#ffd27a}.bad{color:#ff8796}
 </style>
-<!-- ADB is loaded dynamically from the maintained Tango/yume-chan packages when Connect is pressed. -->
+<!-- Direct WebADB implementation. This is the older one-file ADB/WebUSB client used by many browser ADB projects. -->
+<script src="https://cdn.jsdelivr.net/gh/webadb/webadb.js@master/webadb.js"></script>
 </head>
 <body>
-<div class="app">
-  <div class="header">
-    <div class="logo">🛡️</div>
-    <div>
-      <div class="brand">JHOELSOFT</div>
-      <div class="title">Pop-up Ads Cleaner</div>
-      <div class="subtitle">ADB / OTG app detector & remover</div>
-    </div>
-  </div>
-
-  <div class="card" id="scanCard">
-    <div class="scanCircle" id="scanCircle">🛡️</div>
-    <div class="label">DEVICE STATUS</div>
-    <div class="status" id="status">No Android device connected</div>
-    <div class="desc" id="desc">Connect an Android phone with USB debugging enabled, then use ADB over OTG.</div>
-    <div class="deviceLine"><span>Browser</span><b id="browserStatus">Checking…</b></div>
-    <div class="deviceLine"><span>ADB / WebUSB</span><b id="adbStatus">Not connected</b></div>
-    <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
-    <button id="connectBtn" onclick="connectADB()">CONNECT ADB / OTG</button>
-    <button id="scanBtn" class="secondary" onclick="startScan()" disabled>SCAN INSTALLED APPS</button>
-    <button class="secondary" onclick="usbDiagnostics()">USB DIAGNOSTICS</button>
-  </div>
-
-  <div class="stats">
-    <div class="stat"><b id="appCount">—</b><span>Apps scanned</span></div>
-    <div class="stat"><b id="riskCount">—</b><span>Potential ad apps</span></div>
-    <div class="stat"><b id="removedCount">0</b><span>Removed</span></div>
-  </div>
-
-  <div class="section">APP FILTER</div>
+<div class="wrap">
   <div class="card">
-    <input id="search" class="search" placeholder="Search package name…" oninput="renderResults()">
-    <div class="chips">
-      <button class="chip active" id="chipRisk" onclick="setFilter('risk')">Potential ads</button>
-      <button class="chip" id="chipAll" onclick="setFilter('all')">All third-party</button>
-    </div>
+    <h1>🧹 JHOELSOFT v6</h1>
+    <div class="sub">Android Pop-up Ads Cleaner • direct WebUSB ADB • OTG phone-to-phone</div>
   </div>
-
-  <div class="section">SCAN RESULTS</div>
-  <div id="results"><div class="card empty">Connect ADB first. The page will not invent app detections.</div></div>
 
   <div class="card">
-    <div class="label">WHAT THE ADB SCAN CHECKS</div>
-    <div class="desc">
-      Third-party packages are read through Android's Package Manager. A risk score is based on signals such as
-      overlay permission, accessibility services, install-package permission, boot persistence and ad/overlay-related
-      strings in package metadata. These are <b>signals only</b>, not proof that an app is malicious.
+    <div class="row">
+      <button id="connect">🔌 CONNECT ADB / OTG</button>
+      <button id="diag" class="secondary">USB DIAGNOSTICS</button>
+      <button id="disconnect" class="secondary" disabled>DISCONNECT</button>
     </div>
-    <button class="secondary" onclick="showHelp()">OTG / ADB SETUP</button>
+    <div id="status" class="status" style="margin-top:10px">Ready. Use Chrome on the HOST phone, connect the TARGET phone by OTG/data cable, unlock TARGET, and enable USB debugging.</div>
   </div>
 
-  <div class="notice">
-    Uninstall requires an explicit tap for each package. The app uses <b>pm uninstall --user 0</b>, so some
-    preinstalled/system packages cannot be removed and may only be disabled by the device owner/manufacturer.
+  <div class="card">
+    <div><b>Connection</b></div>
+    <div id="deviceInfo" class="small" style="margin-top:8px">Not connected.</div>
   </div>
-  <div class="footer">Popup Ads Cleaner • JHOELSOFT</div>
-</div>
 
-<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="sheet">
-    <div class="label" id="modalLabel">APP DETAILS</div>
-    <h2 id="modalTitle" style="margin:6px 0 5px;font-size:21px"></h2>
-    <div id="modalBody" class="desc"></div>
-    <button id="modalAction">UNINSTALL</button>
-    <button class="close" onclick="closeModal()">CLOSE</button>
+  <div class="card">
+    <div class="row">
+      <button id="scan" disabled>🔍 SCAN APPS</button>
+      <button id="selectRisk" class="secondary" disabled>SELECT ADS / BLOAT</button>
+      <button id="uninstall" class="danger" disabled>🗑 UNINSTALL SELECTED</button>
+    </div>
+    <div style="margin-top:10px"><input id="filter" placeholder="Filter package/app name…"></div>
+    <div id="apps" style="margin-top:8px"></div>
+  </div>
+
+  <div class="card">
+    <b>ADB console</b>
+    <pre id="console">No ADB commands yet.</pre>
+  </div>
+
+  <div class="card small">
+    <b>Kung walang “Allow USB debugging?”</b><br>
+    1) Unlock TARGET phone.<br>
+    2) Developer options → USB debugging ON.<br>
+    3) Developer options → Revoke USB debugging authorizations.<br>
+    4) Turn USB debugging OFF, wait a few seconds, then ON again.<br>
+    5) Unplug/replug OTG and press CONNECT again.<br>
+    6) If Android asks USB mode, choose <b>File transfer</b>.<br><br>
+    The browser USB chooser and the Android RSA authorization are two separate permissions. Chrome Android supports WebUSB, but the TARGET must still authorize the ADB key.
   </div>
 </div>
 
 <script>
-let adbTransport=null, adb=null, adbDevice=null, adbManager=null, credentialManager=null;
-let adbModulesLoaded=false, results=[], filterMode='risk', removedCount=0;
+(() => {
+  let adb = null;
+  let transport = null;
+  let connected = false;
+  let packages = [];
+  const $ = id => document.getElementById(id);
 
-const $=id=>document.getElementById(id);
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-
-function usbPolicyStatus(){
-  try{
-    const pp=document.permissionsPolicy || document.featurePolicy;
-    if(pp && typeof pp.allowsFeature==='function') return pp.allowsFeature('usb');
-  }catch(_){}
-  return null;
-}
-
-function usbPolicyMessage(){
-  return "WebUSB is blocked by this page's Permissions Policy. This usually happens when the HTML is opened inside an app preview or iframe. JavaScript cannot override a policy imposed by the parent page. Open JHOELSOFT as a top-level HTTPS page in Chrome/Chromium, not inside a preview or iframe.";
-}
-
-async function browserInfo(){
-  const hasUsb=!!navigator.usb;
-  const secure=!!window.isSecureContext;
-  const policy=usbPolicyStatus();
-
-  if(!hasUsb || !secure){
-    $('browserStatus').textContent=hasUsb?'WebUSB needs HTTPS/localhost':'WebUSB unavailable';
-    $('browserStatus').className='warn';
-    $('desc').textContent='Direct OTG/ADB needs WebUSB in a Chromium browser and a secure top-level page.';
-    return;
+  function status(s, cls='') {
+    $('status').className = 'status ' + cls;
+    $('status').textContent = s;
+  }
+  function log(s) {
+    const p = $('console');
+    p.textContent = (p.textContent === 'No ADB commands yet.' ? '' : p.textContent) + s + '\n';
+    p.scrollTop = p.scrollHeight;
+  }
+  function errText(e) {
+    return e && (e.message || e.name || String(e)) || 'Unknown error';
   }
 
-  if(policy===false){
-    $('browserStatus').textContent='WebUSB blocked by Permissions Policy';
-    $('browserStatus').className='bad';
-    $('desc').textContent=usbPolicyMessage();
-    $('connectBtn').disabled=true;
-    return;
-  }
-
-  $('browserStatus').textContent='WebUSB available';
-  $('browserStatus').className='good';
-  try{
-    const devices=await navigator.usb.getDevices();
-    const adbLike=devices.filter(d=>d.productName || d.serialNumber);
-    if(adbLike.length){
-      $('desc').textContent='USB permission already exists for '+adbLike.length+' device(s). Tap CONNECT ADB / OTG.';
+  async function shell(command) {
+    if (!adb) throw new Error('ADB is not connected');
+    log('$ ' + command);
+    const stream = await adb.shell(command);
+    let out = '';
+    while (true) {
+      const r = await stream.receive();
+      if (r.cmd === 'WRTE') {
+        if (r.data) out += new TextDecoder().decode(r.data);
+        await stream.send('OKAY');
+      } else if (r.cmd === 'CLSE') {
+        break;
+      }
     }
-  }catch(e){
-    if(/permissions policy|disallowed|not allowed/i.test(String(e?.message||e))){
-      $('browserStatus').textContent='WebUSB blocked by Permissions Policy';
-      $('browserStatus').className='bad';
-      $('desc').textContent=usbPolicyMessage();
-      $('connectBtn').disabled=true;
+    try { await stream.send('OKAY'); } catch (_) {}
+    return out.trim();
+  }
+
+  function classify(pkg, raw='') {
+    const s = (pkg + ' ' + raw).toLowerCase();
+    let score = 0, tags = [];
+    if (s.includes('admob') || s.includes('adsdk') || s.includes('applovin') || s.includes('appodeal') || s.includes('unityads') || s.includes('facebook.ads')) {score+=3;tags.push('ADS-SDK')}
+    if (s.includes('overlay') || s.includes('draw_over') || s.includes('system_alert_window')) {score+=3;tags.push('OVERLAY')}
+    if (s.includes('cleaner') || s.includes('booster') || s.includes('launcher') || s.includes('wallpaper') || s.includes('lockscreen')) {score+=1;tags.push('HEURISTIC')}
+    if (s.includes('adware') || s.includes('popup') || s.includes('pop-up')) {score+=4;tags.push('ADWARE-NAME')}
+    return {score,tags};
+  }
+
+  function renderApps() {
+    const q = $('filter').value.toLowerCase().trim();
+    const list = packages.filter(x => !q || x.pkg.toLowerCase().includes(q) || x.label.toLowerCase().includes(q));
+    $('apps').innerHTML = list.map((x,i) => {
+      const r = classify(x.pkg, x.raw);
+      return `<div class="app">
+        <input type="checkbox" data-pkg="${x.pkg}" style="width:auto" ${x.selected?'checked':''}>
+        <div style="flex:1"><div class="name">${escapeHtml(x.label || x.pkg)}</div>
+        <div class="pkg">${escapeHtml(x.pkg)}</div>
+        ${r.tags.map(t=>`<span class="badge">${t}</span>`).join('')}</div>
+        <div class="risk ${r.score>=3?'warn':''}">risk ${r.score}</div>
+      </div>`;
+    }).join('') || '<div class="small">No apps found.</div>';
+
+    $('apps').querySelectorAll('input[type=checkbox]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const x = packages.find(p => p.pkg === cb.dataset.pkg);
+        if (x) x.selected = cb.checked;
+        updateButtons();
+      });
+    });
+    updateButtons();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function updateButtons() {
+    const any = packages.some(x => x.selected);
+    $('uninstall').disabled = !connected || !any;
+    $('selectRisk').disabled = !connected || !packages.length;
+  }
+
+  async function connect() {
+    if (!window.isSecureContext) {
+      status('WebUSB needs HTTPS (GitHub Pages is OK) or localhost.', 'bad'); return;
+    }
+    if (!navigator.usb) {
+      status('WebUSB is unavailable. Use Chrome/Chromium on the HOST phone.', 'bad'); return;
+    }
+    if (!window.Adb || !Adb.open) {
+      status('WebADB library failed to load. Check internet connection and reload.', 'bad'); return;
+    }
+
+    $('connect').disabled = true;
+    try {
+      status('Opening USB chooser… Select the TARGET Android phone.');
+      // IMPORTANT: requestDevice() and open() are handled by the proven one-file WebADB transport.
+      transport = await Adb.open('WebUSB');
+
+      status('USB selected. Starting ADB authentication…\nWatch TARGET for “Allow USB debugging?”.');
+      adb = await transport.connectAdb('host::', () => {
+        status('⏳ ADB AUTHORIZATION WAITING\n\nUnlock TARGET phone and accept “Allow USB debugging?”.\nTick “Always allow from this computer” if shown.');
+      });
+
+      connected = true;
+      $('disconnect').disabled = false;
+      $('scan').disabled = false;
+      status('✅ ADB CONNECTED', 'ok');
+
+      let model = '', android = '', serial = '';
+      try { model = await shell('getprop ro.product.model'); } catch(_){}
+      try { android = await shell('getprop ro.build.version.release'); } catch(_){}
+      try { serial = await shell('getprop ro.serialno'); } catch(_){}
+      $('deviceInfo').innerHTML =
+        '<b>Model:</b> '+escapeHtml(model||'—')+
+        '<br><b>Android:</b> '+escapeHtml(android||'—')+
+        '<br><b>Serial:</b> '+escapeHtml(serial||'—');
+    } catch(e) {
+      connected = false;
+      adb = null;
+      try { if (transport) transport.close(); } catch(_){}
+      transport = null;
+      const m = errText(e);
+      if (/Failed to connect|AUTH|authentication|host::/i.test(m)) {
+        status('❌ ADB AUTH FAILED\n\n'+m+'\n\nTARGET: unlock → USB debugging ON → Revoke USB debugging authorizations → USB debugging OFF/ON → reconnect OTG → CONNECT again.', 'bad');
+      } else {
+        status('❌ ADB CONNECTION FAILED\n\n'+m, 'bad');
+      }
+    } finally {
+      $('connect').disabled = false;
+      updateButtons();
     }
   }
-}
-browserInfo();
 
-async function usbDiagnostics(){
-  if(!window.isSecureContext){
-    showModal('USB DIAGNOSTICS','Not a secure context',
-      'This page must be served over HTTPS (or localhost). A Library/file preview may show WebUSB but still prevent the ADB module from loading.');
-    return;
+  async function disconnect() {
+    connected = false;
+    adb = null;
+    try { if (transport) await transport.close(); } catch(_){}
+    transport = null;
+    $('disconnect').disabled = true;
+    $('scan').disabled = true;
+    packages = [];
+    $('apps').innerHTML = '';
+    $('deviceInfo').textContent = 'Not connected.';
+    updateButtons();
+    status('Disconnected.');
   }
-  if(!navigator.usb){
-    showModal('USB DIAGNOSTICS','WebUSB unavailable',
-      'This browser does not expose navigator.usb. Use current Chrome/Chromium on the USB-host phone.');
-    return;
+
+  async function scan() {
+    if (!adb) return;
+    $('scan').disabled = true;
+    try {
+      status('Scanning installed user apps…');
+      const raw = await shell('pm list packages -3');
+      const lines = raw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+      packages = lines.map(line => {
+        const pkg = line.replace(/^package:/,'').trim();
+        return {pkg,label:pkg,raw:'',selected:false};
+      });
+      // Get labels cheaply where available. If a package has no label, keep package name.
+      for (const x of packages) {
+        try {
+          const p = await shell(`cmd package resolve-activity --brief ${x.pkg} 2>/dev/null | head -n 1`);
+          x.raw = p;
+        } catch (_) {}
+      }
+      renderApps();
+      status(`✅ Scan complete: ${packages.length} user-installed packages.\nRisk labels are heuristics, not proof of malware.`);
+    } catch(e) {
+      status('Scan failed: '+errText(e), 'bad');
+    } finally {
+      $('scan').disabled = false;
+    }
   }
-  if(usbPolicyStatus()===false){
-    showModal('USB DIAGNOSTICS','USB blocked by Permissions Policy',usbPolicyMessage());
-    return;
-  }
-  try{
-    const devices=await navigator.usb.getDevices();
-    if(!devices.length){
-      showModal('USB DIAGNOSTICS','No previously authorized USB devices',
-        'That does not mean the cable is bad. Tap CONNECT ADB / OTG to open the Chrome USB picker. The target phone should be unlocked and USB debugging enabled.');
+
+  async function uninstallSelected() {
+    const chosen = packages.filter(x=>x.selected);
+    if (!chosen.length) return;
+    const protectedGuess = chosen.filter(x => /^(com\.android\.|com\.google\.android\.|com\.samsung\.android\.|com\.xiaomi\.|com\.miui\.|com\.oppo\.|com\.vivo\.|com\.oneplus\.)/i.test(x.pkg));
+    if (protectedGuess.length) {
+      alert('May system/vendor packages ang napili. Alisin muna ang mga iyon sa selection. JHOELSOFT will not bulk-remove protected-looking packages.');
       return;
     }
-    const rows=devices.map(d=>
-      '<b>'+escapeHtml(d.productName||'Unknown USB device')+'</b>'+
-      '<br>VID:PID '+Number(d.vendorId||0).toString(16).padStart(4,'0')+':'+
-      Number(d.productId||0).toString(16).padStart(4,'0')+
-      '<br>Serial: '+escapeHtml(d.serialNumber||'not exposed')
-    ).join('<hr>');
-    showModal('USB DIAGNOSTICS','Authorized USB devices',rows);
-  }catch(e){
-    showModal('USB DIAGNOSTICS','USB API error',escapeHtml(e?.message||String(e)));
-  }
-}
+    if (!confirm(`Uninstall ${chosen.length} selected app(s) for the current Android user?\n\nReview the package names first.`)) return;
 
-async function connectADB(){
-  if(!navigator.usb || !window.isSecureContext){
-    showModal('BROWSER LIMITATION','WebUSB is unavailable here.',
-      'Direct OTG/ADB needs a Chromium-based browser and a secure top-level page (HTTPS or localhost). Firefox/Safari need a separate native ADB bridge.');
-    return;
-  }
-
-  if(usbPolicyStatus()===false){
-    showModal('USB BLOCKED BY PAGE POLICY','Android phone cannot be accessed from this preview.',
-      usbPolicyMessage()+'<br><br><b>Do this:</b> host the HTML on an HTTPS site, open that URL directly in Chrome, then press CONNECT ADB / OTG.');
-    return;
-  }
-
-  const btn=$('connectBtn');
-  btn.disabled=true;
-  $('status').textContent='Loading ADB engine…';
-  $('adbStatus').textContent='Starting…';
-  $('adbStatus').className='warn';
-
-  try{
-    /*
-      Maintained Tango packages:
-      - @yume-chan/adb
-      - @yume-chan/adb-daemon-webusb
-      - @yume-chan/adb-credential-web
-
-      These replace the old archived webadb.js implementation.
-    */
-    if(!adbModulesLoaded){
-      const [core,usb,cred]=await Promise.all([
-        import('https://esm.sh/@yume-chan/adb@2.6.2?bundle&target=es2022'),
-        import('https://esm.sh/@yume-chan/adb-daemon-webusb@2.3.2?bundle&target=es2022'),
-        import('https://esm.sh/@yume-chan/adb-credential-web@2.1.0?bundle&target=es2022')
-      ]);
-      window.__TANGO_ADB__={core,usb,cred};
-      adbModulesLoaded=true;
-    }
-
-    const {core,usb,cred}=window.__TANGO_ADB__;
-    const Manager=usb.AdbDaemonWebUsbDeviceManager.BROWSER;
-    if(!Manager) throw new Error('WebUSB manager is unavailable in this browser.');
-
-    adbManager=Manager;
-
-    // First use previously authorized ADB devices.
-    let devices;
-    try{
-      devices=await adbManager.getDevices();
-    }catch(e){
-      if(/permissions policy|disallowed|not allowed/i.test(String(e?.message||e))){
-        throw new Error('USB access is blocked by Permissions Policy. Open this HTML as a top-level HTTPS page in Chrome, not inside ChatGPT/file preview or an iframe.');
+    for (const x of chosen) {
+      try {
+        status('Uninstalling '+x.pkg+'…');
+        const r = await shell(`pm uninstall --user 0 ${x.pkg}`);
+        log(r);
+        x.selected = false;
+      } catch(e) {
+        log('ERROR '+x.pkg+': '+errText(e));
       }
-      throw e;
     }
+    await scan();
+  }
 
-    // If none are authorized, explicitly open the WebUSB device picker.
-    if(!devices.length){
-      $('status').textContent='Choose the TARGET Android phone in the USB picker…';
-      const selected=await adbManager.requestDevice();
-      if(!selected){
-        throw new Error('No Android ADB device was selected. If the target phone does not appear, verify that USB debugging is enabled and that this phone is the USB host.');
+  async function diagnostics() {
+    try {
+      if (!navigator.usb) { status('WebUSB unavailable in this browser.', 'bad'); return; }
+      const devs = await navigator.usb.getDevices();
+      if (!devs.length) {
+        status('No previously-authorized WebUSB devices. Press CONNECT to open the chooser.');
+        return;
       }
-      devices=[selected];
+      status('Authorized WebUSB devices:\n' + devs.map(d =>
+        `${d.productName||'Unknown'} • VID ${d.vendorId.toString(16)} • PID ${d.productId.toString(16)}`
+      ).join('\n'));
+    } catch(e) {
+      status('USB diagnostics blocked: '+errText(e)+'\n\nIf this page is inside an app preview/iframe, open the GitHub Pages URL directly in Chrome.', 'bad');
     }
-
-    // Connect to the selected ADB interface.
-    adbDevice=devices[0];
-    if(!adbDevice){
-      throw new Error('No ADB device handle was returned by Chrome.');
-    }
-    const usbInfo=adbDevice.raw;
-    $('desc').textContent='Selected: '+(usbInfo?.productName||'Android USB device')+
-      ' • VID '+Number(usbInfo?.vendorId||0).toString(16).padStart(4,'0')+
-      ':PID '+Number(usbInfo?.productId||0).toString(16).padStart(4,'0');
-    $('status').textContent='Opening USB ADB interface…';
-    // Do NOT call raw.open() here. The Tango ADB device wrapper opens,
-    // selects and claims the correct ADB interface itself.
-    const connection=await adbDevice.connect();
-
-    $('status').textContent='Authenticating ADB…';
-    // Credential storage compatibility:
-    // Some published @yume-chan/adb-credential-web builds expose
-    // AdbWebCryptoCredentialManager but don't expose TangoIndexedDbStorage
-    // as a constructible export. Use a tiny same-origin Web Storage adapter
-    // so authentication can proceed without depending on that export.
-    const keyStorage={
-      save(privateKey,name){
-        const bytes=privateKey instanceof Uint8Array ? privateKey : new Uint8Array(privateKey);
-        let binary='';
-        const chunk=0x8000;
-        for(let i=0;i<bytes.length;i+=chunk){
-          binary+=String.fromCharCode(...bytes.subarray(i,Math.min(i+chunk,bytes.length)));
-        }
-        localStorage.setItem('JHOELSOFT_ADB_KEY',JSON.stringify({
-          privateKey:btoa(binary),
-          name:name||'JHOELSOFT'
-        }));
-      },
-      async *load(){
-        const raw=localStorage.getItem('JHOELSOFT_ADB_KEY');
-        if(!raw) return;
-        const item=JSON.parse(raw);
-        const binary=atob(item.privateKey);
-        const bytes=new Uint8Array(binary.length);
-        for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
-        yield {privateKey:bytes,name:item.name};
-      }
-    };
-
-    if(!cred.AdbWebCryptoCredentialManager){
-      throw new Error('ADB credential manager is unavailable in the loaded Tango package.');
-    }
-    credentialManager=new cred.AdbWebCryptoCredentialManager(keyStorage,'JHOELSOFT');
-
-    $('status').textContent='Waiting for ADB authorization…';
-    $('desc').textContent='Unlock TARGET phone and accept “Allow USB debugging?” if Android shows the RSA prompt.';
-
-    const transport=await core.adbDaemonAuthenticate({
-      serial:adbDevice.serial || 'USB',
-      connection,
-      credentialManager
-    });
-
-    adbTransport=transport;
-    adb=new core.Adb(transport);
-
-    // A real command proves that authentication completed.
-    const identity=await runAdbText('getprop ro.product.model');
-    const manufacturer=await runAdbText('getprop ro.product.manufacturer');
-    const android=await runAdbText('getprop ro.build.version.release');
-
-    $('adbStatus').textContent='Connected';
-    $('adbStatus').className='good';
-    $('status').textContent=(identity||'Android device')+' connected';
-    $('desc').textContent=(manufacturer||'Android')+' • Android '+(android||'?')+
-      ' • USB debugging authenticated.';
-    $('scanBtn').disabled=false;
-    $('connectBtn').textContent='RECONNECT ADB / OTG';
-
-    showModal('ADB CONNECTED',
-      escapeHtml(identity||'Android device'),
-      '<b>Manufacturer:</b> '+escapeHtml(manufacturer||'Unknown')+
-      '<br><b>Android:</b> '+escapeHtml(android||'Unknown')+
-      '<br><b>ADB serial:</b> '+escapeHtml(adbDevice.serial||'Unknown')+
-      '<br><br>USB debugging is authenticated. You can now scan the installed apps.');
-  }catch(e){
-    adb=null; adbTransport=null; adbDevice=null;
-    $('adbStatus').textContent='Not connected';
-    $('adbStatus').className='bad';
-    $('scanBtn').disabled=true;
-    $('status').textContent='ADB connection failed';
-
-    let msg=e?.message||String(e);
-    if(/Failed to fetch dynamically imported module|ERR_MODULE_NOT_FOUND/i.test(msg)){
-      msg='The ADB library could not be downloaded by this browser. This version now uses the correct stable package versions. Reload the page from a normal HTTPS website (not a file preview) and try again.';
-    }else if(/NotFoundError|no device|No Android/i.test(msg)){
-      msg='No ADB device was selected/found. Make sure USB debugging is ON, the phone is unlocked, use a DATA cable, then accept the “Allow USB debugging?” RSA prompt.';
-    }else if(/busy|claim|interface/i.test(msg)){
-      msg='The USB ADB interface is busy. Close other ADB/scrcpy tools, unplug/replug the cable, then try again.';
-    }else if(/auth|credential|unauthorized|public key|authentication/i.test(msg)){
-      msg='ADB authorization is waiting/failed. Unlock TARGET phone and accept the RSA “Allow USB debugging?” prompt. If no prompt appears, open Developer options → Revoke USB debugging authorizations, reconnect the cable, then try again.';
-    }else if(/indexeddb|localstorage|storage|constructor/i.test(msg)){
-      msg='ADB credential storage failed. This version uses a browser-compatible local credential store; reload the page and try CONNECT ADB / OTG again.';
-    }
-    showModal('ADB CONNECTION FAILED','Android phone not connected',escapeHtml(msg));
-  }finally{
-    btn.disabled=false;
   }
-}
 
-async function runAdbText(command){
-  if(!adb) throw new Error('ADB is not connected.');
-  const result=await adb.subprocess.noneProtocol.spawnWaitText(command);
-  return String(result||'').replace(/\0/g,'').trim();
-}
-async function shell(command){
-  return await runAdbText(command);
-}
-
-async function startScan(){
-  if(!adb){showModal('ADB REQUIRED','Connect ADB first.','No package data is available to a normal HTML page without Android access.');return}
-  const btn=$('scanBtn'), progress=$('progress'), bar=$('bar'), status=$('status'), out=$('results');
-  btn.disabled=true; progress.style.display='block'; $('scanCircle').parentElement.classList.add('scanning');
-  out.innerHTML=''; results=[]; $('appCount').textContent='—'; $('riskCount').textContent='—';
-  try{
-    status.textContent='Reading third-party packages…'; bar.style.width='25%';
-    const raw=await shell('pm list packages -3');
-    const pkgs=[...new Set(raw.split(/\\r?\\n/).map(x=>x.replace(/^package:/,'').trim()).filter(x=>/^[A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)+$/.test(x)))];
-    if(!pkgs.length) throw new Error('No third-party packages were returned.');
-    bar.style.width='40%';
-    for(let i=0;i<pkgs.length;i++){
-      const pkg=pkgs[i];
-      status.textContent='Inspecting '+(i+1)+' / '+pkgs.length+'…';
-      const dump=await shell('dumpsys package '+pkg);
-      results.push(analyzePackage(pkg,dump));
-      bar.style.width=(40+Math.round((i+1)/pkgs.length*55))+'%';
-    }
-    results.sort((a,b)=>b.score-a.score || a.pkg.localeCompare(b.pkg));
-    $('appCount').textContent=results.length;
-    $('riskCount').textContent=results.filter(x=>x.score>=3).length;
-    status.textContent='Scan complete';
-    $('desc').textContent='ADB package scan complete. Review the signals before uninstalling anything.';
-    renderResults();
-  }catch(e){
-    status.textContent='Scan failed';
-    out.innerHTML='<div class="card empty">'+escapeHtml(e?.message||String(e))+'</div>';
-  }finally{
-    $('scanCircle').parentElement.classList.remove('scanning'); progress.style.display='none'; bar.style.width='0'; btn.disabled=false;
-  }
-}
-
-function analyzePackage(pkg,dump){
-  const d=dump.toLowerCase();
-  let score=0, reasons=[];
-  const signals=[
-    ['android.permission.system_alert_window','overlay permission',2],
-    ['android.permission.request_install_packages','can request APK installs',2],
-    ['bind_accessibility_service','accessibility service',2],
-    ['android.permission.receive_boot_completed','starts after boot',1],
-    ['android.permission.internet','internet access',1],
-    ['admob','AdMob string',1],
-    ['adsdk','ad SDK string',1],
-    ['appodeal','ad SDK string',1],
-    ['applovin','ad SDK string',1],
-    ['unityads','ad SDK string',1],
-    ['facebook.ads','ad SDK string',1],
-    ['com.google.android.gms.ads','Google ads SDK',1],
-    ['overlay','overlay-related metadata',1]
-  ];
-  for(const [needle,label,points] of signals){
-    if(d.includes(needle)){score+=points;if(!reasons.includes(label))reasons.push(label)}
-  }
-  if(/receiver.*boot|boot.*receiver/.test(d)){score++;if(!reasons.includes('boot receiver'))reasons.push('boot receiver')}
-  const level=score>=5?'high':score>=3?'medium':'safe';
-  return {
-    name:pkg.split('.').slice(-1)[0]||pkg,pkg,score,level,icon:score>=5?'🚨':score>=3?'⚠️':'📦',
-    reason:score?reasons.join(' • '):'No strong ad/overlay signal found in package metadata.'
+  $('connect').onclick = connect;
+  $('disconnect').onclick = disconnect;
+  $('scan').onclick = scan;
+  $('uninstall').onclick = uninstallSelected;
+  $('diag').onclick = diagnostics;
+  $('filter').oninput = renderApps;
+  $('selectRisk').onclick = () => {
+    packages.forEach(x => x.selected = classify(x.pkg,x.raw).score >= 3);
+    renderApps();
   };
-}
 
-function setFilter(mode){
-  filterMode=mode;
-  $('chipRisk').classList.toggle('active',mode==='risk');
-  $('chipAll').classList.toggle('active',mode==='all');
-  renderResults();
-}
-
-function renderResults(){
-  const out=$('results'), q=$('search').value.trim().toLowerCase();
-  out.innerHTML='';
-  const list=results.filter(r=>(filterMode==='all'||r.score>=3)&&(!q||r.pkg.toLowerCase().includes(q)));
-  if(!list.length){out.innerHTML='<div class="card empty">'+(results.length?'No matching apps.':'No scan results yet.')+'</div>';return}
-  list.forEach((r)=>{
-    const i=results.indexOf(r), cls=r.level==='high'?'high':r.level==='medium'?'medium':'safe';
-    const label=r.level==='safe'?'LOW':r.level.toUpperCase();
-    const el=document.createElement('div'); el.className='result';
-    el.innerHTML=`<div class="row">
-      <div class="icon">${r.icon}</div>
-      <div style="min-width:0;flex:1"><div class="name">${escapeHtml(r.name)}</div><div class="pkg">${escapeHtml(r.pkg)}</div></div>
-      <div class="badge ${cls}">${label}</div>
-    </div>
-    <div class="reason"><b>Score ${r.score}</b> — ${escapeHtml(r.reason)}</div>
-    <div class="actions">
-      <button class="secondary" onclick="showDetails(${i})">DETAILS</button>
-      <button class="danger" onclick="confirmUninstall(${i})">UNINSTALL</button>
-    </div>`;
-    out.appendChild(el);
+  window.addEventListener('error', e => {
+    if (e.message) log('[JS] '+e.message);
   });
-}
-
-function showDetails(i){
-  const r=results[i];
-  showModal('APP DETAILS',r.name,
-    '<b>Package:</b> '+escapeHtml(r.pkg)+
-    '<br><b>Risk score:</b> '+r.score+
-    '<br><b>Signals:</b> '+escapeHtml(r.reason)+
-    '<br><br><small>Heuristic only. A score does not prove that an app is malicious or responsible for pop-up ads.</small>',
-    ()=>confirmUninstall(i),'UNINSTALL');
-}
-
-function confirmUninstall(i){
-  const r=results[i];
-  showModal('CONFIRM UNINSTALL','Remove '+escapeHtml(r.name)+'?',
-    '<b>Package:</b> '+escapeHtml(r.pkg)+
-    '<br><br>This will run <code>pm uninstall --user 0 '+escapeHtml(r.pkg)+'</code> through the connected ADB device.',
-    async ()=>{
-      closeModal();
-      try{
-        if(!/^[A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)+$/.test(r.pkg)) throw new Error('Invalid package name.');
-        const result=await shell('pm uninstall --user 0 '+r.pkg);
-        if(/success/i.test(result)){
-          removedCount++; $('removedCount').textContent=removedCount;
-          results=results.filter(x=>x.pkg!==r.pkg);
-          $('appCount').textContent=results.length;
-          $('riskCount').textContent=results.filter(x=>x.score>=3).length;
-          renderResults();
-          showModal('UNINSTALLED',r.name,'Package <b>'+escapeHtml(r.pkg)+'</b> was removed for user 0.');
-        }else{
-          showModal('UNINSTALL FAILED',r.name,escapeHtml(result||'Android did not report a successful uninstall.')+
-            '<br><br>System/preinstalled packages, device-owner restrictions, or protected packages may refuse removal.');
-        }
-      }catch(e){
-        showModal('UNINSTALL FAILED',r.name,escapeHtml(e?.message||String(e)));
-      }
-    },'UNINSTALL');
-}
-
-function showHelp(){
-  showModal('OTG / ADB SETUP','Connect Android',
-    '<ol style="padding-left:20px;line-height:1.7">'+
-    '<li>On the <b>TARGET phone</b>, enable Developer Options → <b>USB debugging</b> and keep the screen unlocked.</li>'+
-    '<li>The phone running Chrome is the <b>USB HOST</b>. Connect the <b>TARGET Android phone</b> through OTG with a USB data cable.</li>'+
-    '<li>Open this page in a Chromium browser with WebUSB and HTTPS/localhost.</li>'+
-    '<li>Tap <b>CONNECT ADB / OTG</b>.</li>'+
-    '<li>Accept the RSA “Allow USB debugging?” prompt on the phone.</li>'+
-    '<li>Tap <b>SCAN INSTALLED APPS</b>, review the signals, then uninstall one app at a time.</li>'+
-    '</ol>'+
-    '<small>Firefox/Safari can use the UI, but direct WebUSB ADB is not available there. A separate ADB bridge is required for those browsers.</small>');
-}
-
-function showModal(label,title,body,action=null,actionText='OK'){
-  $('modalLabel').textContent=label;
-  $('modalTitle').innerHTML=title;
-  $('modalBody').innerHTML=body;
-  const b=$('modalAction');
-  if(action){b.style.display='block';b.textContent=actionText;b.onclick=action}
-  else{b.style.display='none';b.onclick=null}
-  $('modal').classList.add('show');
-}
-function closeModal(){$('modal').classList.remove('show')}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+})();
 </script>
 </body>
 </html>
