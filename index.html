@@ -21,6 +21,67 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
 .ok{color:#73e2a4}.warn{color:#ffd27a}.bad{color:#ff8796}
 
 /* App manager reference layout */
+
+.select-page-control{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:40px;
+  padding:7px 12px;
+  border:1px solid #d2d5d9;
+  border-radius:12px;
+  background:#fff;
+  color:#626870;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:3px 3px 8px rgba(0,0,0,.08),-2px -2px 5px rgba(255,255,255,.95);
+  user-select:none;
+}
+
+.select-page-control input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.page-check{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1.5px solid #aeb4bb;
+  border-radius:5px;
+  background:#fff;
+  box-shadow:inset 1px 1px 3px rgba(0,0,0,.08);
+  transition:all .16s ease;
+}
+
+.select-page-control input:checked + .page-check{
+  background:#2f3439;
+  border-color:#2f3439;
+  box-shadow:none;
+}
+
+.select-page-control input:checked + .page-check::after{
+  content:"✓";
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+}
+
+.select-page-control:hover{
+  border-color:#b8bdc3;
+  background:#fafafa;
+}
+
+.select-page-control input:disabled + .page-check{
+  opacity:.45;
+}
+
+
 .app-manager{padding:0!important;overflow:hidden;background:#0b1424}
 .app-toolbar{padding:16px 16px 12px;border-bottom:1px solid #20334d;background:#111d31}
 .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
@@ -38,6 +99,70 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
 @media(max-width:680px){.manager-bottom{width:calc(100vw - 12px);bottom:0;border-radius:12px 12px 0 0}.toolbar-row{flex-direction:column;align-items:stretch}.category{width:100%}.manager-bottom{justify-content:stretch}.manager-bottom button{flex:1;padding:8px 6px;font-size:10px}.app{gap:8px!important;padding:10px 8px!important}.app-icon{width:32px;height:32px;min-width:32px}.selection-row{gap:7px}.help-link{display:none}}
 
 .storage-dialog{width:min(720px,calc(100vw - 24px));max-height:min(82vh,760px);padding:0;border:1px solid #2b415e;border-radius:20px;background:#0d1828;color:#eef5ff;box-shadow:0 24px 80px #0009}.storage-dialog::backdrop{background:#020812b8;backdrop-filter:blur(3px)}.storage-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #243750}.storage-head b{font-size:17px}.storage-toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #1e3048}.storage-toolbar button{padding:9px 11px;font-size:12px}.storage-toolbar .small{margin-left:auto}.storage-note{margin:10px 14px;padding:9px 11px;border-radius:10px;background:#12243a;color:#9fb4cd;font-size:11px;line-height:1.45}.storage-list{margin:0 14px 10px;border:1px solid #223750;border-radius:13px;overflow:auto;max-height:52vh;background:#091321}.storage-item{display:flex;align-items:center;gap:10px;padding:10px 11px;border-bottom:1px solid #182a40}.storage-item:last-child{border-bottom:0}.storage-item input{width:17px;height:17px;flex:0 0 auto}.storage-open{flex:1;min-width:0;background:transparent;padding:5px 4px;text-align:left;color:#eef5ff;border-radius:8px}.storage-open:hover{background:#14253b}.storage-icon{font-size:22px;width:28px;text-align:center}.storage-name{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.storage-meta{font-size:10px;color:#8398b1;margin-top:2px}.storage-empty{padding:28px 15px;text-align:center;color:#8095ad}.storage-foot{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid #243750}.storage-foot .small{flex:1}.storage-foot button{padding:10px 12px;font-size:12px}.storage-dialog button:disabled{opacity:.45}@media(max-width:560px){.storage-dialog{width:calc(100vw - 12px)}.storage-list{max-height:48vh}.storage-toolbar .small{width:100%;margin-left:0}.storage-foot{align-items:stretch;flex-direction:column}.storage-foot button{width:100%}}
+
+/* ===== V2 LICENSE ACTIVATION ===== */
+.license-status{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;font-size:11px;font-weight:800;background:linear-gradient(145deg,#ffffff,#d9dce1);color:#20242a;border:1px solid #c5c8cd;box-shadow:6px 6px 12px #0002,-5px -5px 10px #fff}
+.license-status.active{background:linear-gradient(145deg,#f5f5f5,#d2d4d8);color:#111}
+.license-overlay{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,22,26,.42);backdrop-filter:blur(8px)}
+.license-overlay.show{display:flex}
+.license-card{width:min(440px,94vw);background:linear-gradient(145deg,#fdfdfd,#e6e7e9);color:#17191d;border:1px solid #c7c9cd;border-radius:24px;padding:22px;box-shadow:18px 18px 42px #0003,-10px -10px 28px #fff;}
+.license-card h2{margin:0 0 6px;font-size:21px}.license-card p{margin:7px 0;color:#555b64;font-size:12px;line-height:1.5}.license-device{margin:14px 0;padding:12px 14px;border-radius:15px;background:#eef0f2;border:1px solid #d1d4d8;box-shadow:inset 2px 2px 5px #0001,inset -2px -2px 5px #fff}.license-device b{font-family:ui-monospace,monospace;font-size:12px;word-break:break-all}.license-input{width:100%;box-sizing:border-box;padding:13px 14px;border-radius:14px;border:1px solid #c3c6cb;background:#f8f8f9;color:#17191d;outline:none;box-shadow:inset 3px 3px 7px #0001,inset -3px -3px 7px #fff;font-family:ui-monospace,monospace;font-size:12px}.license-input:focus{border-color:#777}.license-actions{display:flex;gap:9px;margin-top:13px}.license-actions button{flex:1;padding:11px 13px;border-radius:13px;border:1px solid #bfc2c7;background:linear-gradient(145deg,#fff,#d9dbe0);color:#181a1e;font-weight:900;box-shadow:6px 6px 12px #0002,-5px -5px 10px #fff;cursor:pointer}.license-actions button:active{box-shadow:inset 4px 4px 8px #0002,inset -3px -3px 7px #fff;transform:translateY(1px)}.license-actions .primary{background:linear-gradient(145deg,#34373d,#111317);color:#fff;border-color:#111}.license-error{min-height:17px;margin-top:9px;color:#b3263e;font-size:11px;font-weight:800}.license-note{font-size:10px!important;color:#73777e!important}
+
+</style>
+
+<style id="white-black-gray-3d-theme">
+:root{
+  --bg:#f3f4f6;--surface:#ffffff;--surface2:#f8f8f8;--line:#d5d7db;--line2:#b9bcc2;
+  --text:#111318;--muted:#666b73;--soft:#eceef1;--black:#17191d;--gray:#777c84;
+  --shadow-dark:rgba(0,0,0,.16);--shadow-light:rgba(255,255,255,.95)
+}
+html,body{background:var(--bg)!important;color:var(--text)!important}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:980px;padding:22px}
+.card{background:linear-gradient(145deg,#fff,#f1f2f4)!important;border:1px solid #d2d4d8!important;border-radius:22px!important;box-shadow:10px 10px 24px var(--shadow-dark),-7px -7px 18px var(--shadow-light)!important}
+h1{color:#111;font-weight:900;letter-spacing:-.03em}.sub,.small{color:#666d76!important}
+button{color:#fff!important;background:linear-gradient(145deg,#30343a,#111317)!important;border:1px solid #0c0d0f!important;border-radius:13px!important;box-shadow:4px 4px 8px rgba(0,0,0,.22),-2px -2px 6px rgba(255,255,255,.8),inset 0 1px 0 rgba(255,255,255,.15)!important;transition:transform .14s ease,box-shadow .14s ease,filter .14s ease!important}
+button:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px);box-shadow:5px 6px 11px rgba(0,0,0,.24),-2px -2px 7px #fff,inset 0 1px 0 rgba(255,255,255,.18)!important}
+button:active:not(:disabled){transform:translateY(1px);box-shadow:inset 3px 3px 7px rgba(0,0,0,.38),inset -2px -2px 5px rgba(255,255,255,.12)!important}
+button.secondary{background:linear-gradient(145deg,#f7f7f8,#dfe1e5)!important;color:#17191d!important;border-color:#c5c7cb!important;box-shadow:4px 4px 8px rgba(0,0,0,.16),-3px -3px 7px #fff,inset 0 1px 0 #fff!important}
+button.danger,.btn-uninstall{background:linear-gradient(145deg,#3a3d43,#17191d)!important;color:#fff!important}
+button:disabled{opacity:.42!important;filter:none!important;transform:none!important}
+input,.category{background:#fff!important;color:#17191d!important;border:1px solid #c9ccd1!important;box-shadow:inset 3px 3px 7px rgba(0,0,0,.09),inset -2px -2px 5px #fff!important}
+.status{background:#f0f1f3!important;color:#555b64!important;border:1px solid #d1d3d7;box-shadow:inset 2px 2px 5px rgba(0,0,0,.08),inset -2px -2px 5px #fff}
+.app-manager{background:#f6f7f8!important;border:1px solid #d0d3d7!important}
+.app-toolbar{background:linear-gradient(145deg,#fff,#eceef1)!important;border-bottom:1px solid #d2d4d8!important}
+.pills{gap:9px}.pill{background:linear-gradient(145deg,#fff,#e9eaed)!important;color:#4f555d!important;border:1px solid #cfd2d7!important;box-shadow:3px 3px 7px rgba(0,0,0,.12),-2px -2px 5px #fff!important}.pill:hover{background:#fff!important;border-color:#9da2a9!important}.pill.active{background:linear-gradient(145deg,#2c3035,#121418)!important;color:#fff!important;border-color:#111!important;box-shadow:inset 2px 2px 5px rgba(0,0,0,.35),3px 3px 8px rgba(0,0,0,.2)!important}
+.dot{box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.selection-row{background:#f7f7f8!important;color:#666d76!important;border-bottom:1px solid #d7d9dc!important}.selection-count{background:linear-gradient(145deg,#fff,#e8e9ec)!important;color:#24272c!important;border-color:#c8cbd0!important;box-shadow:3px 3px 7px rgba(0,0,0,.13),-2px -2px 5px #fff!important}.selection-count.active{background:#202328!important;color:#fff!important;border-color:#111!important}
+.select-link{background:linear-gradient(145deg,#30343a,#111317)!important;color:#fff!important;border-color:#0d0e10!important;box-shadow:4px 4px 8px rgba(0,0,0,.22),-2px -2px 5px #fff!important}.help-link{color:#555b63!important}
+.app-sections{background:#f6f7f8}.section-title h3{color:#22262b}.section-title .count{background:#e7e9ec!important;color:#4f555d!important;border:1px solid #d0d2d6}
+.app-list{background:#fff!important;border-color:#d3d5d9!important;box-shadow:5px 5px 13px rgba(0,0,0,.10),-3px -3px 8px #fff}
+.approw{background:linear-gradient(145deg,#fff,#f0f1f3)!important;color:#17191d!important;border-bottom:1px solid #dadcdf!important}.approw:hover{background:#f8f8f8!important}.approw.selected{background:linear-gradient(145deg,#eceef1,#fff)!important;box-shadow:inset 3px 3px 7px rgba(0,0,0,.08),inset -2px -2px 5px #fff!important}
+.approw .name{color:#15171b}.pkg{color:#777d86!important}.appicon{background:linear-gradient(145deg,#f5f6f7,#dfe1e5)!important;border-color:#c6c9ce!important;box-shadow:3px 3px 7px rgba(0,0,0,.13),-2px -2px 5px #fff!important}.app-lock{color:#17191d}.state{background:#e5e7ea!important;color:#4c525a!important;border:1px solid #d0d2d6}.state.system{background:#e3e5e8!important;color:#444a51!important}.state.user{background:#dedfe2!important;color:#25282d!important}
+.manager-bottom{background:rgba(246,247,248,.96)!important;border:1px solid #d0d3d7!important;box-shadow:0 -7px 20px rgba(0,0,0,.12),-4px -4px 10px rgba(255,255,255,.8)!important;backdrop-filter:blur(10px)}
+.btn-recover,.btn-disable,.btn-uninstall,.btn-block,.btn-enable{background:linear-gradient(145deg,#f7f7f8,#dfe1e5)!important;color:#191b1f!important;border:1px solid #c5c8cd!important}.btn-uninstall{background:linear-gradient(145deg,#3b3e44,#17191b)!important;color:#fff!important}.btn-block{background:linear-gradient(145deg,#30343a,#14161a)!important;color:#fff!important}
+pre{background:#ffffff!important;color:#6b7078!important;border:1px solid #d5d8dc!important;box-shadow:inset 2px 2px 6px rgba(0,0,0,.06),inset -2px -2px 5px rgba(255,255,255,.95)!important;font-family:"JetBrains Mono","Cascadia Code","SFMono-Regular",Consolas,"Liberation Mono",monospace!important;font-size:12px!important;line-height:1.55!important;font-weight:500!important;border-radius:12px!important}
+.smart-dialog,.storage-dialog{background:linear-gradient(145deg,#fff,#f0f1f3)!important;color:#15171b!important;border:1px solid #c9ccd1!important;box-shadow:16px 20px 50px rgba(0,0,0,.25),-5px -5px 15px #fff!important}.smart-dialog::backdrop,.storage-dialog::backdrop{background:rgba(20,22,25,.48)!important;backdrop-filter:blur(5px)}
+.smart-spinner{border-color:#d9dbdf!important;border-top-color:#202328!important}.smart-progress{background:#e0e2e5!important}.smart-progress span{background:#202328!important}.smart-score{background:linear-gradient(145deg,#fff,#e9eaed)!important;border-color:#c8cbd0!important}.smart-score-ring{border-color:#202328!important;box-shadow:0 0 18px rgba(0,0,0,.12)!important}.smart-score-info div{color:#666d76!important}.smart-report-tile{background:linear-gradient(145deg,#fff,#eceef1)!important;border-color:#d0d3d7!important;box-shadow:3px 3px 8px rgba(0,0,0,.10),-2px -2px 5px #fff!important}.smart-report-tile:hover{border-color:#999ea5!important;background:#fff!important}.smart-report-tile .r-label,.smart-report-tile .r-note{color:#686e76!important}.smart-list{background:#f1f2f4!important;border-color:#d1d3d7!important}.smart-list-item{color:#5d636b!important}.smart-list-item b{color:#181a1e}
+.storage-head,.storage-toolbar,.storage-foot{border-color:#d4d6da!important}.storage-note{background:#eceef1!important;color:#5d636b!important;border:1px solid #d2d4d8}.storage-list{background:#fff!important;border-color:#d2d5d9!important}.storage-item{border-color:#e0e1e4!important}.storage-open{color:#1a1c20!important}.storage-open:hover{background:#f0f1f3!important}.storage-meta{color:#777d85!important}.storage-empty{color:#777d85!important}
+.badge{background:#e4e6e9!important;color:#4f555d!important;border:1px solid #d0d2d6}.ok{color:#34383e!important}.warn{color:#44484e!important}.bad{color:#202328!important}
+/* Modern neumorphic controls matching the reference image */
+button,.pill,.selection-count,.select-link,.appicon,.category,input{transition:all .16s cubic-bezier(.2,.8,.2,1)}
+button{min-height:40px}.toolbar-row input{height:42px}.category{height:42px}
+@media(max-width:680px){.wrap{padding:12px}.card{border-radius:18px!important}.manager-bottom{background:rgba(246,247,248,.98)!important}}
+
+.btn-permanent-remove{padding:10px 14px;border:1px solid #c9ccd1;border-radius:12px;background:#fff;color:#8a1831;font-weight:900;box-shadow:5px 5px 10px #0002,-4px -4px 8px #fff;cursor:pointer;white-space:nowrap}
+.btn-permanent-remove:hover{background:#fff5f6;border-color:#b3263e}
+.btn-permanent-remove:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
+
+/* Phone Storage items: white background with gray text */
+.storage-list{background:#fff!important}
+.storage-item{background:#fff!important;color:#666!important;border-color:#e0e1e4!important}
+.storage-item:hover{background:#fff!important}
+.storage-open{background:#fff!important;color:#666!important;border:0!important;box-shadow:none!important;text-shadow:none!important}
+.storage-open:hover{background:#f7f7f7!important;color:#555!important}
+.storage-name{color:#666!important;font-weight:650}
+.storage-meta{color:#888!important}
 </style>
 </head>
 <body>
@@ -50,6 +175,8 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
   <div class="card">
     <div class="row">
       <button id="connect">🔌 CONNECT ADB / OTG</button>
+      <button id="activateLicense" class="secondary">🔑 ACTIVATE LICENSE</button>
+      <span id="licenseStatus" class="license-status">🔒 LICENSE REQUIRED</span>
       <button id="scan" class="secondary" disabled>🔎 SCAN APPS</button>
       <button id="btnSmartScan" class="secondary" disabled>🩺 SMART SCAN</button>
       <button id="btnStorage" class="secondary" disabled>📁 PHONE STORAGE</button>
@@ -134,10 +261,15 @@ pre{background:#070d16;border-radius:12px;padding:12px;overflow:auto;max-height:
       </div>
     </div>
     <div class="selection-row">
-      <button id="selectRisk" class="select-link" disabled>✓ Select all bloat/ads</button>
-      <label><input id="selectPage" type="checkbox" disabled> Select this page</label>
+     <button id="selectRisk" class="select-link" disabled>
+        <span class="select-check">✓</span><span>Select all bloat/ads</span>
+      </button>
+       <label class="select-page-control">
+        <input id="selectPage" type="checkbox" disabled>
+        <span class="page-check" aria-hidden="true"></span>
+        <span>Select this page</span>
+      </label>
       <button id="selectedCount" class="selection-count" type="button" title="Show only selected apps">0 selected</button>
-      <span class="help-link">What do the tags mean?</span>
     </div>
     <div id="apps" class="app-sections"></div>
     <div class="manager-bottom">
@@ -435,6 +567,81 @@ const AdbWebCredentialStore = Ri;
     });
   }
 
+
+  // ===== V2 DEVICE-SERIAL 11-DIGIT LICENSE =====
+  // This mode must match the Key Generator V2 11-digit mode exactly.
+  const LICENSE_MODE = 'JHOELSOFT-V2-11D';
+  const LICENSE_STORAGE_KEY = 'jhoelsoft_v2_11digit_license';
+  let currentSerial = '';
+  let licenseActive = false;
+  let licenseBusy = false;
+
+  function normalizeLicenseSerial(serial){
+    return String(serial||'').trim();
+  }
+  function normalizeLicenseKey(key){
+    return String(key||'').replace(/\s+/g,'').trim();
+  }
+  async function makeLicenseKey(serial){
+    const normalized=normalizeLicenseSerial(serial);
+    if(!normalized) throw new Error('Device serial is required.');
+    const payload=`${LICENSE_MODE}|${normalized}`;
+    const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(payload)));
+    let value=0n;
+    for(const b of digest.slice(0,8)) value=(value<<8n)|BigInt(b);
+    return (value%100000000000n).toString().padStart(11,'0');
+  }
+  async function verifyLicense(key, expectedSerial){
+    const cleanKey=normalizeLicenseKey(key);
+    if(!/^\d{11}$/.test(cleanKey)) throw new Error('License key must contain exactly 11 digits.');
+    const serial=normalizeLicenseSerial(expectedSerial);
+    if(!serial) throw new Error('Device serial is unavailable.');
+    const expected=await makeLicenseKey(serial);
+    if(cleanKey!==expected) throw new Error('License does not match this phone serial.');
+    return {key:cleanKey,serial,mode:LICENSE_MODE};
+  }
+  function setLicenseState(active){
+    licenseActive=!!active;
+    const el=$('licenseStatus');
+    if(el){el.textContent=active?'🔓 LICENSE ACTIVE':'🔒 LICENSE REQUIRED';el.classList.toggle('active',active);}
+  }
+  function openLicenseModal(){
+    $('licenseSerial').textContent=currentSerial||'Not connected';
+    $('licenseInput').value='';
+    $('licenseError').textContent=currentSerial?'':'Connect the phone through ADB first.';
+    $('licenseOverlay').classList.add('show');
+    setTimeout(()=>$('licenseInput')?.focus(),30);
+  }
+  function closeLicenseModal(){ $('licenseOverlay').classList.remove('show'); }
+  function requireLicense(){
+    if(licenseActive) return true;
+    if(!connected){ status('Connect the Android phone through ADB first.','warn'); return false; }
+    openLicenseModal();
+    return false;
+  }
+  async function activateLicense(){
+    if(licenseBusy)return;
+    if(!connected || !currentSerial){ $('licenseError').textContent='Connect the Android phone through ADB first.'; return; }
+    const key=$('licenseInput').value.trim();
+    if(!key){$('licenseError').textContent='Paste a license key first.';return;}
+    licenseBusy=true; $('licenseActivate').disabled=true; $('licenseError').textContent='Verifying license…';
+    try{
+      const lic=await verifyLicense(key,currentSerial);
+      localStorage.setItem(LICENSE_STORAGE_KEY,JSON.stringify({key:lic.key,serial:lic.serial,mode:lic.mode}));
+      setLicenseState(true); closeLicenseModal(); status('✅ LICENSE ACTIVATED FOR THIS DEVICE','ok'); updateButtons();
+    }catch(e){
+      setLicenseState(false); $('licenseError').textContent=errText(e); status('❌ License activation failed: '+errText(e),'bad');
+    }finally{licenseBusy=false;$('licenseActivate').disabled=false;}
+  }
+  async function restoreStoredLicense(){
+    if(!currentSerial)return false;
+    try{
+      const saved=JSON.parse(localStorage.getItem(LICENSE_STORAGE_KEY)||'null');
+      if(!saved?.key)return false;
+      await verifyLicense(saved.key,currentSerial); setLicenseState(true); return true;
+    }catch(_){ localStorage.removeItem(LICENSE_STORAGE_KEY); setLicenseState(false); return false; }
+  }
+
   function resetSelection(){
     packages.forEach(x=>x.selected=false);
     selectedOnly=false;
@@ -527,22 +734,22 @@ const AdbWebCredentialStore = Ri;
     const canDisable=chosen.some(x=>x.system&&!x.removed&&x.state!=='disabled'&&(!isProtected(x)||isOptionalPreinstalled(x)));
     const canEnable=chosen.some(x=>x.state==='disabled'&&!x.removed);
     const canUninstall=chosen.some(x=>!x.system&&!x.removed&&!isProtected(x));
-    $('uninstall').disabled=!connected||!canUninstall;
-    $('disableSelected').disabled=!connected||!canDisable;
-    $('enableSelected').disabled=!connected||!canEnable;
-    $('recoverSelected').disabled=!connected||!canRecover;
-    $('blockSelected').disabled=!connected||!chosen.some(x=>!x.removed);
-    $('clearData').disabled=!connected||!packages.some(x=>x.selected&&!x.removed);
+    $('uninstall').disabled=!connected||!licenseActive||!canUninstall;
+    $('disableSelected').disabled=!connected||!licenseActive||!canDisable;
+    $('enableSelected').disabled=!connected||!licenseActive||!canEnable;
+    $('recoverSelected').disabled=!connected||!licenseActive||!canRecover;
+    $('blockSelected').disabled=!connected||!licenseActive||!chosen.some(x=>!x.removed);
+    $('clearData').disabled=!connected||!licenseActive||!packages.some(x=>x.selected&&!x.removed);
     $('selectRisk').disabled=!connected||!packages.length;
     $('selectPage').disabled=!packages.length;
     $('selectedCount').textContent=`${chosen.length} selected`;
     $('selectedCount').classList.toggle('active', selectedOnly && chosen.length>0);
     $('selectedCount').title=selectedOnly ? 'Show all apps' : 'Show only selected apps';
-    $('scan').disabled=!connected;
-    $('btnSmartScan').disabled=!connected;
-    $('btnStorage').disabled=!connected;
+    $('scan').disabled=!connected||!licenseActive;
+    $('btnSmartScan').disabled=!connected||!licenseActive;
+    $('btnStorage').disabled=!connected||!licenseActive;
     $('storageDelete').disabled=true;
-    $('installApk').disabled=!connected;
+    $('installApk').disabled=!connected||!licenseActive;
   }
 
   async function shell(command) {
@@ -810,6 +1017,12 @@ const AdbWebCredentialStore = Ri;
           '<br><b>Model:</b> '+escapeHtml(model||'—')+
           '<br><b>Android:</b> '+escapeHtml(android||'—')+
           '<br><b>Serial:</b> '+escapeHtml(serial || device.serial || '—');
+        currentSerial = serial || device.serial || '';
+        $('licenseSerial').textContent = currentSerial || 'Unknown';
+        setLicenseState(false);
+        const restored = await restoreStoredLicense();
+        if(!restored){ openLicenseModal(); }
+        updateButtons();
 
       } catch (e) {
         connected = false;
@@ -855,6 +1068,7 @@ const AdbWebCredentialStore = Ri;
     $('disconnect').disabled = true;
     $('scan').disabled = true;
     packages = [];
+    currentSerial=''; setLicenseState(false);
     $('apps').innerHTML = '';
     $('deviceInfo').textContent = 'Not connected.';
     updateButtons();
@@ -1086,6 +1300,7 @@ const AdbWebCredentialStore = Ri;
     }
   }
 
+  
   async function blockPopups(x){
     if(!x||x.removed)return;
     try{status('Blocking pop-ups for '+x.label+'…');const r=await shell(`appops set --user 0 ${x.pkg} SYSTEM_ALERT_WINDOW deny`);log(r||'(no output)');x.overlay=false;renderApps();status(`🚫 Pop-ups blocked: ${x.label}`)}catch(e){status('❌ Block pop-ups failed: '+errText(e),'bad')}
@@ -1317,6 +1532,25 @@ const AdbWebCredentialStore = Ri;
     renderApps();
     status(`✅ Clear Data finished for ${eligible.length} selected app(s). Apps were not uninstalled.`,'ok');
   };
+
+  // License gate: after ADB connects, functional controls require activation.
+  document.addEventListener('click', e=>{
+    const el=e.target.closest('button,[role="button"]');
+    if(!el || !el.id) return;
+    const exempt=new Set(['connect','disconnect','activateLicense','licenseActivate','licenseClose']);
+    if(exempt.has(el.id)) return;
+    if(!connected || licenseActive) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    openLicenseModal();
+  }, true);
+
+  $('activateLicense').onclick = openLicenseModal;
+  $('licenseClose').onclick = closeLicenseModal;
+  $('licenseActivate').onclick = activateLicense;
+  $('licenseInput').addEventListener('input',e=>{
+    e.target.value=e.target.value.replace(/\D/g,'').slice(0,11);
+  });
+  $('licenseInput').addEventListener('keydown',e=>{if(e.key==='Enter')activateLicense();});
   $('btnStorage').onclick = openStorage;
   $('storageClose').onclick = () => $('storageDialog').close();
   $('storageUp').onclick = async () => { if(storagePath==='/storage/emulated/0') return; try{await listStorage(storageParent(storagePath));}catch(e){status('❌ Storage browse failed: '+errText(e),'bad');} };
@@ -1435,5 +1669,21 @@ const AdbWebCredentialStore = Ri;
   });
 })();
 </script>
+
+<div id="licenseOverlay" class="license-overlay" aria-modal="true" role="dialog">
+  <div class="license-card">
+    <h2>🔑 Activate JHOELSOFT License</h2>
+    <p>This device must be connected through ADB before the app can be activated.</p>
+    <div class="license-device"><span>Device Serial</span><br><b id="licenseSerial">Not connected</b></div>
+    <input id="licenseInput" class="license-input" autocomplete="off" inputmode="numeric" maxlength="11" pattern="[0-9]{11}" placeholder="Enter 11-digit license key">
+    <div id="licenseError" class="license-error"></div>
+    <div class="license-actions">
+      <button id="licenseClose" type="button">Close</button>
+      <button id="licenseActivate" type="button" class="primary">Activate</button>
+    </div>
+    <p class="license-note">License mode: <b>JHOELSOFT-V2-11D</b> • Exactly 11 digits • Tied to this Android device serial.</p>
+  </div>
+</div>
+
 </body>
-</html>
+</html>s
