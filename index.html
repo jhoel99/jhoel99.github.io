@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="jhoelsoft-loader-version" content="v9-https-final">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Permissions-Policy" content="usb=(self)">
 <title>JHOELSOFT v7 — Pop-up Ads Cleaner</title>
@@ -2052,6 +2053,10 @@ button{
 </div>
 
 <script type="module">
+/* ============================================================
+   JHOELSOFT v7 — INLINE WebUSB ADB TRANSPORT
+   FCXI5MAF.js is embedded below so this is a ONE-FILE build.
+   ============================================================ */
 var pt=Object.defineProperty,yt=(e,t)=>{for(var r in t)pt(e,r,{get:t[r],enumerable:!0})},v=class{#e;get promise(){return this.#e}#t;#r;#i="running";get state(){return this.#i}constructor(){this.#e=new Promise((e,t)=>{this.#t=e,this.#r=t})}resolve=e=>{this.#t(e),this.#i="resolved"};reject=e=>{this.#r(e),this.#i="rejected"}},gt=class{nextId;pendingResolvers=new Map;constructor(e=0){this.nextId=e}add(){let e=this.nextId++,t=new v;return this.pendingResolvers.set(e,t),[e,t.promise]}getResolver(e){if(!this.pendingResolvers.has(e))return null;let t=this.pendingResolvers.get(e);return this.pendingResolvers.delete(e),t}resolve(e,t){let r=this.getResolver(e);return r!==null?(r.resolve(t),!0):!1}reject(e,t){let r=this.getResolver(e);return r!==null?(r.reject(t),!0):!1}};function bt(e){return new Promise(t=>{globalThis.setTimeout(()=>t(),e)})}function M(e){return typeof e=="object"&&e!==null&&"then"in e}function de(e,t){for(;;){let{done:r,value:i}=e.next(t);if(r)return i;if(M(i))return i.then(n=>de(e,{resolved:n}),n=>de(e,{error:n}));t=i}}function ve(e,t){function r(...i){let n=e.call(this,function*(s){if(M(s)){let a=yield s;if("resolved"in a)return a.resolved;throw a.error}return s},...i);return de(n,void 0)}return t?r.bind(t):r}function mt(e){return(t,r)=>{if("buffer"in r){let i=e(t,r);return r.buffer.set(i,r.index),i.length}else return e(t,r)}}function vt(e,t){return(r,i)=>{if("buffer"in i)return i.index??=0,t(r,i),e;{let n=new Uint8Array(e);return t(r,{buffer:n,index:0,littleEndian:i.littleEndian}),n}}}function Et(e,t,r,i,n){let s={size:e,type:t,serialize:t==="default"?mt(r):vt(e,r),deserialize:ve(i),omitInit:n?.omitInit};return n?.init&&(s.init=n.init),s}var V=Et,g=new Uint8Array(0);function xt(e,t,r,i){t.length<i?(e.set(t,r),e.fill(0,r+t.length,r+i)):t.length===i?e.set(t,r):e.set(t.subarray(0,i),r)}function $(e,t){if(typeof e=="number"){let n,s,a;return e===0?(n=()=>{},t?s=function*(){return t.convert(g)}:s=function*(){return g}):(n=(o,{buffer:l,index:c})=>xt(l,o,c,e),t?(s=function*(o,l){let c=l.readExactly(e);return t.convert(yield*o(c))},a=o=>t.back(o)):s=function*(o,l){return l.readExactly(e)}),V(e,"byob",n,s,{init:a})}if((typeof e=="object"||typeof e=="function")&&"serialize"in e){let n,s;return t?(n=function*(a,o,l){let c=yield*a(e.deserialize(o,l)),d=c!==0?o.readExactly(c):g;return t.convert(yield*a(d))},s=a=>t.back(a)):n=function*(a,o,l){let c=yield*a(e.deserialize(o,l));return c!==0?o.readExactly(c):g},V(e.size,"default",(a,{littleEndian:o})=>{if(e.type==="default"){let l=e.serialize(a.length,{littleEndian:o});if(a.length===0)return l;let c=new Uint8Array(l.length+a.length);return c.set(l,0),c.set(a,l.length),c}else{let l=new Uint8Array(e.size+a.length);return e.serialize(a.length,{buffer:l,index:0,littleEndian:o}),l.set(a,e.size),l}},n,{init:s})}if(typeof e=="string"){let n,s;return t?(n=function*(a,o,{dependencies:l}){let c=l[e],d=c!==0?o.readExactly(c):g;return t.convert(yield*a(d))},s=(a,o)=>{let l=t.back(a);return o[e]=l.length,l}):(n=function*(a,o,{dependencies:l}){let c=l[e];return c!==0?o.readExactly(c):g},s=(a,o)=>{let l=a;return o[e]=l.length,l}),V(0,"default",a=>a,n,{init:s})}let r,i;return t?(r=function*(n,s,{dependencies:a}){let o=a[e.field],l=e.convert(o),c=l!==0?s.readExactly(l):g;return t.convert(yield*n(c))},i=(n,s)=>{let a=t.back(n);return s[e.field]=e.back(a.length),a}):(r=function*(n,s,{dependencies:a}){let o=a[e.field],l=e.convert(o);return l!==0?s.readExactly(l):g},i=(n,s)=>{let a=n;return s[e.field]=e.back(a.length),a}),V(0,"default",n=>n,r,{init:i})}var ie=class extends Error{constructor(){super("ExactReadable ended")}},kt=class{#e;#t;get position(){return this.#t}constructor(e){this.#e=e,this.#t=0}readExactly(e){if(this.#t+e>this.#e.length)throw new ie;let t=this.#e.subarray(this.#t,this.#t+e);return this.#t+=e,t}},_e=class extends Error{constructor(e){super(e)}},St=class extends _e{constructor(){super("The underlying readable was ended before the struct was fully deserialized")}},Ee=class extends _e{constructor(){super("The underlying readable doesn't contain any more struct")}};function k(e,t){let r=Object.entries(e),i=0,n=!0;for(let[,o]of r)i+=o.size,n&&o.type!=="byob"&&(n=!1);let s=t.littleEndian,a=t.extra?Object.getOwnPropertyDescriptors(t.extra):void 0;return{littleEndian:s,fields:e,extra:t.extra,type:n?"byob":"default",size:i,serialize(o,l){let c={...o};for(let[x,f]of r)if(x in c&&"init"in f){let R=f.init?.(c[x],c);c[x]=R}let d=new Array(r.length),S=new Array(r.length);{let x={littleEndian:s};for(let[f,[R,ce]]of r.entries())ce.type==="byob"?d[f]=ce.size:(S[f]=ce.serialize(c[R],x),d[f]=S[f].length)}let h=d.reduce((x,f)=>x+f,0),E,b,B;if(l instanceof Uint8Array){if(l.length<h)throw new Error("Buffer too small");E=!0,b=l,B=0}else if(typeof l=="object"&&"buffer"in l){if(E=!0,b=l.buffer,B=l.index??0,b.length-B<h)throw new Error("Buffer too small")}else E=!1,b=new Uint8Array(h),B=0;let L={buffer:b,index:B,littleEndian:s};for(let[x,[f,R]]of r.entries())S[x]?b.set(S[x],L.index):R.serialize(c[f],L),L.index+=d[x];return E?h:b},deserialize:ve(function*(o,l){let c=l.position,d={},S={dependencies:d,littleEndian:s};try{for(let[h,E]of r)d[h]=yield*o(E.deserialize(l,S))}catch(h){throw h instanceof ie?l.position===c?new Ee:new St:h}return a&&Object.defineProperties(d,a),t.postDeserialize?t.postDeserialize.call(d,d):d})}}function ne(e,t,r){return k(Object.assign({},e.fields,t),{littleEndian:r?.littleEndian??e.littleEndian,extra:e.extra,postDeserialize:r?.postDeserialize})}function At(e,t,r){return r?e[t]|e[t+1]<<8|e[t+2]<<16|e[t+3]<<24:e[t]<<24|e[t+1]<<16|e[t+2]<<8|e[t+3]}function Tt(e,t,r,i){i?(e[t]=r,e[t+1]=r>>8,e[t+2]=r>>16,e[t+3]=r>>24):(e[t]=r>>24,e[t+1]=r>>16,e[t+2]=r>>8,e[t+3]=r)}function It(e,t,r){e[t]=Number(r&0xffn),e[t+1]=Number(r>>8n&0xffn),e[t+2]=Number(r>>16n&0xffn),e[t+3]=Number(r>>24n&0xffn),e[t+4]=Number(r>>32n&0xffn),e[t+5]=Number(r>>40n&0xffn),e[t+6]=Number(r>>48n&0xffn),e[t+7]=Number(r>>56n&0xffn)}function zt(e,t,r){e[t]=Number(r>>56n&0xffn),e[t+1]=Number(r>>48n&0xffn),e[t+2]=Number(r>>40n&0xffn),e[t+3]=Number(r>>32n&0xffn),e[t+4]=Number(r>>24n&0xffn),e[t+5]=Number(r>>16n&0xffn),e[t+6]=Number(r>>8n&0xffn),e[t+7]=Number(r&0xffn)}function se(e,t){return(e[t]|e[t+1]<<8|e[t+2]<<16|e[t+3]<<24)>>>0}function Nt(e,t,r){return r?(e[t]|e[t+1]<<8|e[t+2]<<16|e[t+3]<<24)>>>0:(e[t]<<24|e[t+1]<<16|e[t+2]<<8|e[t+3])>>>0}function Ct(e,t,r){e[t]=r,e[t+1]=r>>8,e[t+2]=r>>16,e[t+3]=r>>24}function Dt(e,t,r,i){i?(e[t]=r,e[t+1]=r>>8,e[t+2]=r>>16,e[t+3]=r>>24):(e[t]=r>>24,e[t+1]=r>>16,e[t+2]=r>>8,e[t+3]=r)}function Wt(e,t){return BigInt(e[t])<<56n|BigInt(e[t+1])<<48n|BigInt(e[t+2])<<40n|BigInt(e[t+3])<<32n|BigInt(e[t+4])<<24n|BigInt(e[t+5])<<16n|BigInt(e[t+6])<<8n|BigInt(e[t+7])}function Bt(e,t,r){return r?BigInt(e[t])|BigInt(e[t+1])<<8n|BigInt(e[t+2])<<16n|BigInt(e[t+3])<<24n|BigInt(e[t+4])<<32n|BigInt(e[t+5])<<40n|BigInt(e[t+6])<<48n|BigInt(e[t+7])<<56n:BigInt(e[t])<<56n|BigInt(e[t+1])<<48n|BigInt(e[t+2])<<40n|BigInt(e[t+3])<<32n|BigInt(e[t+4])<<24n|BigInt(e[t+5])<<16n|BigInt(e[t+6])<<8n|BigInt(e[t+7])}function Pt(e,t,r,i){i?(e[t]=Number(r&0xffn),e[t+1]=Number(r>>8n&0xffn),e[t+2]=Number(r>>16n&0xffn),e[t+3]=Number(r>>24n&0xffn),e[t+4]=Number(r>>32n&0xffn),e[t+5]=Number(r>>40n&0xffn),e[t+6]=Number(r>>48n&0xffn),e[t+7]=Number(r>>56n&0xffn)):(e[t]=Number(r>>56n&0xffn),e[t+1]=Number(r>>48n&0xffn),e[t+2]=Number(r>>40n&0xffn),e[t+3]=Number(r>>32n&0xffn),e[t+4]=Number(r>>24n&0xffn),e[t+5]=Number(r>>16n&0xffn),e[t+6]=Number(r>>8n&0xffn),e[t+7]=Number(r&0xffn))}function ae(e,t,r){let i=(()=>i);return Object.assign(i,V(e,"byob",t,r)),i}var Lt=ae(1,(e,{buffer:t,index:r})=>{t[r]=e},function*(e,t){return(yield*e(t.readExactly(1)))[0]}),u=ae(4,(e,{buffer:t,index:r,littleEndian:i})=>{Dt(t,r,e,i)},function*(e,t,{littleEndian:r}){let i=yield*e(t.readExactly(4));return Nt(i,0,r)}),Rt=ae(4,(e,{buffer:t,index:r,littleEndian:i})=>{Tt(t,r,e,i)},function*(e,t,{littleEndian:r}){let i=yield*e(t.readExactly(4));return At(i,0,r)}),_=ae(8,(e,{buffer:t,index:r,littleEndian:i})=>{Pt(t,r,e,i)},function*(e,t,{littleEndian:r}){let i=yield*e(t.readExactly(8));return Bt(i,0,r)}),{TextEncoder:Ot,TextDecoder:Ut}=globalThis,_t=new Ot,jt=new Ut;function U(e){return _t.encode(e)}function G(e){return jt.decode(e)}var K=(e=>{let t=$(e,{convert:G,back:U});return t.as=()=>t,t}),{AbortController:oe}=globalThis,W=(()=>{let{ReadableStream:e}=globalThis;return e.from||(e.from=function(t){let r=Symbol.asyncIterator in t?t[Symbol.asyncIterator]():t[Symbol.iterator]();return new e({async pull(i){let n=await r.next();if(n.done){i.close();return}i.enqueue(n.value)},async cancel(i){await r.return?.(i)}})}),(!e.prototype[Symbol.asyncIterator]||!e.prototype.values)&&(e.prototype.values=async function*(t){let r=this.getReader();try{for(;;){let{done:i,value:n}=await r.read();if(i)return;yield n}}finally{t?.preventCancel||await r.cancel(),r.releaseLock()}},e.prototype[Symbol.asyncIterator]=e.prototype.values),e})(),{WritableStream:T,TransformStream:je}=globalThis,qt=class{#e;#t=!1;enqueue(e,t=!1){if(this.#t)throw new Error("TaskQueue is disposed");if(!this.#e)try{let i=e();return M(i)&&(this.#e=i.then(()=>{},n=>{if(t)throw n})),i}catch(i){if(t){let n=Promise.reject(i);n.catch(()=>{}),this.#e=n}throw i}let r=this.#e.then(()=>{if(this.#t)throw new Error("TaskQueue is disposed");return e()});return this.#e=r.then(()=>{},i=>{if(t||this.#t)throw i}),r}dispose(){this.#t=!0}},F=class extends W{constructor(e,t,r){let i,n=new qt,s=!1,a,o=new oe,l=!1,c=h=>{if(r?.({source:"producer",operation:"enqueue",value:h,phase:"start"}),o.signal.aborted)return r?.({source:"producer",operation:"enqueue",value:h,phase:"ignored"}),!1;if(i.desiredSize===null)throw i.enqueue(h),new Error("unreachable");return s?(s=!1,i.enqueue(h),r?.({source:"producer",operation:"enqueue",value:h,phase:"complete"}),!0):i.desiredSize<=0?(r?.({source:"producer",operation:"enqueue",value:h,phase:"waiting"}),a=new v,a.promise.then(()=>(i.enqueue(h),r?.({source:"producer",operation:"enqueue",value:h,phase:"complete"}),!0),()=>(r?.({source:"producer",operation:"enqueue",value:h,phase:"ignored"}),!1))):(i.enqueue(h),r?.({source:"producer",operation:"enqueue",value:h,phase:"complete"}),!0)},d=h=>{if(r?.({source:"producer",operation:"close",explicit:h,phase:"start"}),o.signal.aborted||l&&!h){r?.({source:"producer",operation:"close",explicit:h,phase:"ignored"});return}i.close(),l=!0,a?.reject(),r?.({source:"producer",operation:"close",explicit:h,phase:"complete"})},S=(h,E)=>{r?.({source:"producer",operation:"error",explicit:E,phase:"start"}),l=!0,i.error(h),a?.reject(),r?.({source:"producer",operation:"error",explicit:E,phase:"complete"})};super({start:h=>{i=h;let E=e({abortSignal:o.signal,enqueue:async b=>await n.enqueue(()=>c(b)),close(){d(!0)},error(b){S(b,!0)}});!l&&M(E)&&E.then(()=>d(!1),b=>S(b,!1))},pull:()=>{r?.({source:"consumer",operation:"pull",phase:"start"}),a?(a.resolve(void 0),a=void 0):t?.highWaterMark===0&&(s=!0),r?.({source:"consumer",operation:"pull",phase:"complete"})},cancel:h=>{r?.({source:"consumer",operation:"cancel",phase:"start"}),l=!0,o.abort(h),a?.reject(),r?.({source:"consumer",operation:"cancel",phase:"complete"})}},t)}};function Ft(e){try{let t=e.close();return M(t)?t.then(()=>!0,()=>!1):!0}catch{return!1}}async function Mt(e){try{return await e.cancel(),!0}catch{return!1}}var le=class{#e;#t=0;#r=0;#i=0;get position(){return this.#i}stream;reader;constructor(e){this.stream=e,this.reader=e.getReader()}#n(e){if(!this.#e)return;let t=this.#e.subarray(this.#t,this.#t+e);return this.#r>e?(this.#i+=e,this.#t+=e,this.#r-=e,t):(this.#i+=this.#r,this.#e=void 0,this.#t=0,this.#r=0,t)}async#s(e){let{done:t,value:r}=await this.reader.read();if(t)throw new ie;return r.length>e?(this.#e=r,this.#t=e,this.#r=r.length-e,this.#i+=e,r.subarray(0,e)):(this.#i+=r.length,r)}iterateExactly(e){let t=this.#e?0:1;return{next:()=>{switch(t){case 0:{let r=this.#n(e);return r.length===e?t=2:(e-=r.length,t=1),{done:!1,value:r}}case 1:return t=3,{done:!1,value:this.#s(e).then(r=>(r.length===e?t=2:(e-=r.length,t=1),r))};case 2:return{done:!0,value:void 0};case 3:throw new Error("Can't call `next` before previous Promise resolves");default:throw new Error("unreachable")}}}}readExactly=ve(function*(e,t){let r,i=0,n=this.#n(t);if(n){if(n.length===t)return n;r=new Uint8Array(t),r.set(n,i),i+=n.length,t-=n.length}else r=new Uint8Array(t);for(;t>0;){let s=yield*e(this.#s(t));r.set(s,i),i+=s.length,t-=s.length}return r});release(){return this.#r>0?new F(async e=>{let t=this.#e.subarray(this.#t);for(await e.enqueue(t),e.abortSignal.addEventListener("abort",()=>{Mt(this.reader)});;){let{done:r,value:i}=await this.reader.read();if(r)return;await e.enqueue(i)}}):(this.reader.releaseLock(),this.stream)}async cancel(e){await this.reader.cancel(e)}},$t=class{#e;get readable(){return this.#e}#t;get writable(){return this.#t}constructor(e){let t,r,i=new le(new F(n=>{t=n}));this.#e=new W({async pull(n){try{let s=await e(i);n.enqueue(s)}catch(s){if(s instanceof Ee){n.close();return}throw s}},cancel:n=>r.error(n)}),this.#t=new T({start(n){r=n},async write(n){await t.enqueue(n)},abort(){t.close()},close(){t.close()}})}},Q=class{#e="";#t=new v;#r=new T({write:e=>{this.#e+=e},close:()=>{this.#t.resolve(this.#e),this.#i.enqueue(this.#e),this.#i.close()},abort:e=>{this.#t.reject(e),this.#i.error(e)}});get writable(){return this.#r}#i;#n=new W({start:e=>{this.#i=e}});get readable(){return this.#n}constructor(){Object.defineProperties(this.#n,{then:{get:()=>this.#t.promise.then.bind(this.#t.promise)},catch:{get:()=>this.#t.promise.catch.bind(this.#t.promise)},finally:{get:()=>this.#t.promise.finally.bind(this.#t.promise)}})}},fe=class{#e=[];#t=new v;#r=new T({write:e=>{this.#e.push(e)},close:()=>{let e,t=0;switch(this.#e.length){case 0:e=g;break;case 1:e=this.#e[0];break;default:e=new Uint8Array(this.#e.reduce((r,i)=>r+i.length,0));for(let r of this.#e)e.set(r,t),t+=r.length;break}this.#t.resolve(e),this.#i.enqueue(e),this.#i.close()},abort:e=>{this.#t.reject(e),this.#i.error(e)}});get writable(){return this.#r}#i;#n=new W({start:e=>{this.#i=e}});get readable(){return this.#n}constructor(){Object.defineProperties(this.#n,{then:{get:()=>this.#t.promise.then.bind(this.#t.promise)},catch:{get:()=>this.#t.promise.catch.bind(this.#t.promise)},finally:{get:()=>this.#t.promise.finally.bind(this.#t.promise)}})}},qe=class Fe extends W{static async enqueue(t,r){let i=new A(r);t.enqueue(i),await i.consumed}constructor(t,r){let i,n;r&&(n={},"highWaterMark"in r&&(n.highWaterMark=r.highWaterMark),"size"in r&&(n.size=s=>r.size(s.value))),super({start(s){return i={enqueue(a){return Fe.enqueue(s,a)},close(){s.close()},error(a){s.error(a)}},t.start?.(i)},pull(){return t.pull?.(i)},cancel(s){return t.cancel?.(s)}},n)}},Vt=class extends W{constructor(e,t,r){let i=e.getReader({mode:"byob"}),n=new Uint8Array(t);super({async pull(s){let{done:a,value:o}=await i.read(n,{min:r});if(a){s.close();return}await qe.enqueue(s,o),n=new Uint8Array(o.buffer)},cancel(s){return i.cancel(s)}})}},Kt=class extends T{constructor(e){let t=e.getWriter();super({write(r){return r.tryConsume(i=>t.write(i))},abort(r){return t.abort(r)},close(){return t.close()}})}},Gt=class extends T{static async write(e,t){let r=new A(t);await e.write(r),await r.consumed}constructor(e,t){let r;t&&(r={},"highWaterMark"in t&&(r.highWaterMark=t.highWaterMark),"size"in t&&(r.size=i=>t.size(i instanceof A?i.value:i))),super({start(i){return e.start?.(i)},write(i,n){return i.tryConsume(s=>e.write?.(s,n))},abort(i){return e.abort?.(i)},close(){return e.close?.()}},r)}},{console:Te}=globalThis,Yt=Te?.createTask?.bind(Te)??(()=>({run(e){return e()}})),A=class{static WritableStream=Gt;static WrapWritableStream=Kt;static ReadableStream=qe;static WrapByteReadableStream=Vt;#e;#t;value;consumed;constructor(e){this.#e=Yt("Consumable"),this.value=e,this.#t=new v,this.consumed=this.#t.promise}consume(){this.#t.resolve()}error(e){this.#t.reject(e)}tryConsume(e){try{let t=this.#e.run(()=>e(this.value));return M(t)?t=t.then(r=>(this.#t.resolve(),r),r=>{throw this.#t.reject(r),r}):this.#t.resolve(),t}catch(t){throw this.#t.reject(t),t}}},P={};yt(P,{WrapWritableStream:()=>Qt,WritableStream:()=>Xt,getValue:()=>Ht,tryConsume:()=>xe});function Ht(e){return e instanceof A?e.value:e}function xe(e,t){return e instanceof A?e.tryConsume(t):t(e)}var Qt=class extends T{constructor(e){let t=e.getWriter();super({write(r){return xe(r,i=>t.write(i))},abort(r){return t.abort(r)},close(){return t.close()}})}},Xt=class extends T{constructor(e,t){let r;t&&(r={},"highWaterMark"in t&&(r.highWaterMark=t.highWaterMark),"size"in t&&(r.size=i=>t.size(i instanceof A?i.value:i))),super({start(i){return e.start?.(i)},write(i,n){return xe(i,s=>e.write?.(s,n))},abort(i){return e.abort?.(i)},close(){return e.close?.()}},r)}},Me=class{#e;#t;#r;#i;constructor(e){this.#e=e,this.#t=new Uint8Array(e),this.#r=0,this.#i=e}*push(e){let t=0,r=e.length;if(this.#r!==0)if(r>=this.#i){if(this.#t.set(e.subarray(0,this.#i),this.#r),t+=this.#i,r-=this.#i,yield this.#t,this.#r=0,this.#i=this.#e,r===0)return}else{this.#t.set(e,this.#r),this.#r+=r,this.#i-=r;return}for(;r>=this.#e;){let i=t+this.#e;yield e.subarray(t,i),t=i,r-=this.#e}r>0&&(this.#t.set(e.subarray(t),this.#r),this.#r+=r,this.#i-=r)}flush(){if(this.#r===0)return;let e=this.#t.subarray(0,this.#r);return this.#r=0,this.#i=this.#e,e}},Zt=class extends je{constructor(e,t=!1){let r=t?new Me(e):void 0;super({async transform(i,n){await P.tryConsume(i,async s=>{if(r)for(let a of r.push(s))await A.ReadableStream.enqueue(n,a);else{let a=0,o=s.length;for(;o>0;){let l=a+e;await A.ReadableStream.enqueue(n,s.subarray(a,l)),a=l,o-=e}}})},flush(i){if(r){let n=r.flush();n&&i.enqueue(n)}}})}};function Jt(e,t){return"start"in e?e.start(t):typeof e=="function"?e(t):e}var er=class extends W{readable;#e;constructor(e,t){super({start:async r=>{let i=await Jt(e,r);this.readable=i,this.#e=this.readable.getReader()},pull:async r=>{let{done:i,value:n}=await this.#e.read().catch(s=>{throw"error"in e&&e.error(s),s});i?(r.close(),"close"in e&&await e.close?.()):r.enqueue(n)},cancel:async r=>{await this.#e.cancel(r),"cancel"in e&&await e.cancel?.(r)}},t)}},Ie=()=>{},tr=class{#e=[];#t=[];#r=!1;get writableClosed(){return this.#r}#i=new v;get closed(){return this.#i.promise}#n;constructor(e){this.#n=e??{}}wrapReadable(e,t){return new er({start:r=>(this.#e.push(r),e),cancel:async()=>{await this.close()},close:async()=>{await this.dispose()}},t)}createWritable(e){let t=e.getWriter();return this.#t.push(t),new T({write:async r=>{await t.write(r)},abort:async r=>{await t.abort(r),await this.close()},close:async()=>{await t.close().catch(Ie),await this.close()}})}async close(){if(!this.#r){this.#r=!0,await this.#n.close?.()!==!1&&await this.dispose();for(let e of this.#t)e.close().catch(Ie)}}async dispose(){this.#r=!0,this.#i.resolve();for(let e of this.#e)Ft(e);await this.#n.dispose?.()}},$e=globalThis,X=$e.TextDecoderStream,Ci=$e.TextEncoderStream;function rr(e,t){let r=t.writable.getWriter(),i=t.readable.pipeTo(e);return new T({async write(n){await r.write(n)},async close(){await r.close(),await i}})}var Ve=class extends $t{constructor(e){super(t=>e.deserialize(t))}},ir=class{#e=[];constructor(){this.dispose=this.dispose.bind(this)}addDisposable(e){return this.#e.push(e),e}dispose(){for(let e of this.#e)e.dispose();this.#e=[]}},we=class{listeners=[];constructor(){this.event=this.event.bind(this)}addEventListener(e){this.listeners.push(e);let t=()=>{let r=this.listeners.indexOf(e);r!==-1&&this.listeners.splice(r,1)};return t.dispose=t,t}event=(e,t,...r)=>{let i={listener:e,thisArg:t,args:r};return this.addEventListener(i)};fire(e){for(let t of this.listeners.slice())t.listener.call(t.thisArg,e,...t.args)}dispose(){this.listeners.length=0}},ze=Symbol("undefined"),nr=class extends we{#e=ze;addEventListener(e){return this.#e!==ze&&e.listener.call(e.thisArg,this.#e,...e.args),super.addEventListener(e)}fire(e){this.#e=e,super.fire(e)}},ke=class extends ir{#e;get adb(){return this.#e}constructor(e){super(),this.#e=e}},sr=k({version:u},{littleEndian:!0}),ar=k({bpp:u,size:u,width:u,height:u,red_offset:u,red_length:u,blue_offset:u,blue_length:u,green_offset:u,green_length:u,alpha_offset:u,alpha_length:u,data:$("size")},{littleEndian:!0}),or=k({bpp:u,colorSpace:u,size:u,width:u,height:u,red_offset:u,red_length:u,blue_offset:u,blue_length:u,green_offset:u,green_length:u,alpha_offset:u,alpha_length:u,data:$("size")},{littleEndian:!0}),Ke=class extends Error{constructor(e,t){super(e,t)}},lr=class extends Ke{constructor(e){super(`Unsupported FrameBuffer version ${e}`)}},cr=class extends Ke{constructor(){super("FrameBuffer is disabled by current app")}};async function ur(e){let t=await e.createSocket("framebuffer:"),r=new le(t.readable),i;try{({version:i}=await sr.deserialize(r))}catch(n){throw n instanceof Ee?new cr:n}switch(i){case 1:return await ar.deserialize(r);case 2:return await or.deserialize(r);default:throw new lr(i)}}var hr=class extends ke{reboot(e=""){return this.adb.createSocketAndWait(`reboot:${e}`)}bootloader(){return this.reboot("bootloader")}fastboot(){return this.reboot("fastboot")}recovery(){return this.reboot("recovery")}sideload(){return this.reboot("sideload")}qualcommEdlMode(){return this.reboot("edl")}powerOff(){return this.adb.subprocess.noneProtocol.spawnWaitText(["reboot","-p"])}powerButton(e=!1){let t=["input","keyevent"];return e&&t.push("--longpress"),t.push("POWER"),this.adb.subprocess.noneProtocol.spawnWaitText(t)}samsungOdin(){return this.reboot("download")}};function dr(e){if(e.buffer instanceof ArrayBuffer)return e;let t=new Uint8Array(e.length);return t.set(e),t}var Ge=class{#e;#t=[];constructor(e=!1){this.#e=e}wait(){if(!this.#e&&(this.#e=!0,this.#t.length===0))return Promise.resolve();let e=new v;return this.#t.push(e),e.promise}notifyOne(){this.#t.length!==0?this.#t.pop().resolve():this.#e=!1}dispose(){for(let e of this.#t)e.reject(new Error("The AutoResetEvent has been disposed"));this.#t.length=0}},[Di,y,j]=(()=>{let e=[],t=[];function r(i,n){let s=i.charCodeAt(0),a=n.charCodeAt(0);for(let o=s;o<=a;o+=1)e[o]=t.length,t.push(o)}return r("A","Z"),r("a","z"),r("0","9"),r("+","+"),r("/","/"),[e,t,61]})();function Ye(e){let t=e%3,r=t!==0?3-t:0;return[(e+r)/3*4,r]}function fr(e,t){let[r,i]=Ye(e.length);if(t){if(t.length<r)throw new TypeError("output buffer is too small");if(t=t.subarray(0,r),e.buffer!==t.buffer)ue(e,t,i);else if(t.byteOffset+t.length-(i+1)<=e.byteOffset+e.length)ue(e,t,i);else if(t.byteOffset>=e.byteOffset-1)wr(e,t,i);else throw new TypeError("input and output cannot overlap");return r}else return t=new Uint8Array(r),ue(e,t,i),t}function ue(e,t,r){let i=0,n=0;for(;i<e.length-2;){let s=e[i];i+=1;let a=e[i];i+=1;let o=e[i];i+=1,t[n]=y[s>>2],n+=1,t[n]=y[(s&3)<<4|a>>4],n+=1,t[n]=y[(a&15)<<2|o>>6],n+=1,t[n]=y[o&63],n+=1}if(r===2){let s=e[i];t[n]=y[s>>2],n+=1,t[n]=y[(s&3)<<4],n+=1,t[n]=j,n+=1,t[n]=j}else if(r===1){let s=e[i];i+=1;let a=e[i];t[n]=y[s>>2],n+=1,t[n]=y[(s&3)<<4|a>>4],n+=1,t[n]=y[(a&15)<<2],n+=1,t[n]=j}}function wr(e,t,r){let i=e.length-1,n=t.length-1;if(r===2){let s=e[i];i-=1,t[n]=j,n-=1,t[n]=j,n-=1,t[n]=y[(s&3)<<4],n-=1,t[n]=y[s>>2],n-=1}else if(r===1){let s=e[i];i-=1;let a=e[i];i-=1,t[n]=j,n-=1,t[n]=y[(s&15)<<2],n-=1,t[n]=y[(a&3)<<4|s>>4],n-=1,t[n]=y[a>>2],n-=1}for(;i>=0;){let s=e[i];i-=1;let a=e[i];i-=1;let o=e[i];i-=1,t[n]=y[s&63],n-=1,t[n]=y[(a&15)<<2|s>>6],n-=1,t[n]=y[(o&3)<<4|a>>4],n-=1,t[n]=y[o>>2],n-=1}}function pr(e){if(e<48)throw new TypeError(`Invalid hex char ${e}`);if(e<58)return e-48;if(e<65)throw new TypeError(`Invalid hex char ${e}`);if(e<71)return e-55;if(e<97)throw new TypeError(`Invalid hex char ${e}`);if(e<103)return e-87;throw new TypeError(`Invalid hex char ${e}`)}function yr(e){let t=0;for(let r=0;r<e.length;r+=1)t=t<<4|pr(e[r]);return t}var gr=()=>{};function He(...e){throw new Error(`Unreachable. Arguments:
 `+e.join(`
 `))}function br(e,t){if(e.length!==t.length)return!1;for(let r=0;r<e.length;r+=1)if(e[r]!==t[r])return!1;return!0}var Qe=k({length:K(4),content:K({field:"length",convert(e){return Number.parseInt(e,16)},back(e){return e.toString(16).padStart(4,"0")}})},{littleEndian:!0}),Xe=class extends Error{constructor(e){super(e)}},mr=class extends Xe{constructor(){super("ADB reverse tunnel is not supported on this device when connected wirelessly.")}},vr=ne(Qe,{},{postDeserialize(e){throw e.content==="more than one device/emulator"?new mr:new Xe(e.content)}});function Er(e){let t=0;for(let r of e){if(r<48||r>57)return t;t=t*10+r-48}return t}var xr=U("OKAY"),kr=class extends ke{#e=new Map;async createBufferedStream(e){let t=await this.adb.createSocket(e);return new le(t.readable)}async sendRequest(e){let t=await this.createBufferedStream(e),r=await t.readExactly(4);return br(r,xr)||await vr.deserialize(t),t}async list(){let e=await this.createBufferedStream("reverse:list-forward");return(await Qe.deserialize(e)).content.split(`
@@ -2065,9 +2070,13 @@ const Adb = Wi;
 const AdbDaemonTransport = Pi;
 const AdbDaemonWebUsbDeviceManager = Li;
 const AdbWebCredentialStore = Ri;
-const LICENSE_API = atob('aHR0cHM6Ly9hcGkuZ3NtY29kZXBoLWFkcy5zaXRlL2Fkcy9saWNlbnNlLWFwaQ==');
+
+
+/* JHOELSOFT secure connect + license loader */
+//const LICENSE_API = 'http://107.152.37.75/ads/license-api';
+const LICENSE_API = 'https://api.gsmcodeph-ads.site/ads/license-api';
 const APP_URL = `${LICENSE_API}/api/app`;
-const SESSION_KEY = 'jhoelsoft_license_session_v1';
+const SESSION_KEY = 'jhoelsoft_license_session_v2';
 
 let selectedUsb = null;
 let currentSerial = '';
@@ -2090,21 +2099,80 @@ function setState(active, mode=''){
   else if(active){e.classList.add('active');e.title='License: active';}
   else e.title='License: not activated';
 }
-async function request(path, body, token=''){
-  const h={'Content-Type':'application/json'};
-  if(token) h.Authorization='Bearer '+token;
+async function request(path, body={}, token=''){
+  const url=LICENSE_API+path;
+  const payload={...(body||{})};
+
+  // HTTPS/CORS FIX:
+  // - Keep the request CORS-simple (no Authorization header).
+  // - Send the JWT in the JSON body.
+  // - text/plain is a CORS-safelisted Content-Type, so no OPTIONS
+  //   preflight is required.
+  if(token) payload.token=token;
+
+  console.info('[JHOELSOFT API] POST',url,{
+    path,
+    hasToken:!!payload.token,
+    serial:payload.serial||''
+  });
+
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),15000);
+
   let r;
+  let raw='';
+
   try{
-    r=await fetch(LICENSE_API+path,{method:'POST',headers:h,body:JSON.stringify(body||{}),cache:'no-store'});
+    r=await fetch(url,{
+      method:'POST',
+      headers:{
+        'Content-Type':'text/plain;charset=UTF-8'
+      },
+      body:JSON.stringify(payload),
+      cache:'no-store',
+      credentials:'omit',
+      mode:'cors',
+      signal:controller.signal
+    });
+
+    raw=await r.text();
   }catch(e){
-    throw new Error('License server cannot be reached. Check API URL, HTTPS/mixed-content, CORS, and network connection.');
+    clearTimeout(timer);
+    console.error('[JHOELSOFT API NETWORK ERROR]',e);
+
+    if(e?.name==='AbortError'){
+      throw new Error(
+        'License API timed out after 15 seconds. Check the HTTPS API server.'
+      );
+    }
+
+    throw new Error(
+      'HTTPS License API could not be read by this page. '+
+      'Check the API HTTPS response CORS header and SSL certificate.'
+    );
   }
-  let d={}; try{d=await r.json();}catch(_){}
-  if(!r.ok || !d.ok) throw new Error(d.error||`Server error (${r.status})`);
+
+  clearTimeout(timer);
+
+  console.info('[JHOELSOFT API] response',r.status,raw.slice(0,500));
+
+  let d={};
+  try{
+    d=JSON.parse(raw||'{}');
+  }catch(_){
+    throw new Error(
+      `License API returned non-JSON data (HTTP ${r.status}).`
+    );
+  }
+
+  if(!r.ok || !d.ok){
+    throw new Error(d.error||`Server error (${r.status})`);
+  }
+
   return d;
 }
 function saveSession(d){
-  licenseToken=d.token||'';
+  licenseToken=d.token||d.sessionToken||d.session_id||d.access_token||d.session||'';
   localStorage.setItem(SESSION_KEY,JSON.stringify({
     token:licenseToken,serial:d.serial||currentSerial,expiresAt:d.expiresAt||null,license:d.license||''
   }));
@@ -2163,21 +2231,43 @@ async function activateLicense(){
 
 async function loadApp(){
   if(appLoaded)return;
-  const d=await request('/api/app',{},licenseToken);
-  if(!d.code)throw new Error('Application code was not returned by server.');
+
+  msg('License verified. Downloading application…','ok');
+
+  let d;
+  try{
+    if(!licenseToken){
+      throw new Error('No active license session is available. Activate the license again.');
+    }
+
+    d=await request('/api/app',{serial:currentSerial},licenseToken);
+  }catch(e){
+    console.error('[JHOELSOFT /api/app ERROR]',e);
+    throw new Error('Application download failed: '+(e.message||String(e)));
+  }
+
+  if(!d || typeof d.code!=='string' || !d.code.trim()){
+    throw new Error('Application code was not returned by the HTTPS license server. Check /api/app response JSON and server CORS.');
+  }
+
+  msg(`License verified. Application received (${d.code.length.toLocaleString()} bytes). Starting…`,'ok');
+
   const blob=new Blob([d.code+'\n//# sourceURL=JHOELSOFT-ADS-APP.js'],{type:'text/javascript'});
   const url=URL.createObjectURL(blob);
   try{
-    await import(url);
+    try{
+      await import(url);
+    }catch(e){
+      console.error('[JHOELSOFT APP IMPORT ERROR]',e);
+      throw new Error('Downloaded application contains a JavaScript runtime/import error: '+(e.message||String(e)));
+    }
 
-    // The protected module installs its public bridge on window.
-    // Do not continue silently if the bridge was not initialized.
-    const deadline=Date.now()+3000;
+    const deadline=Date.now()+5000;
     while(typeof window.__JHOELSOFT_SET_LICENSE__!=='function' && Date.now()<deadline){
       await new Promise(r=>setTimeout(r,50));
     }
     if(typeof window.__JHOELSOFT_SET_LICENSE__!=='function'){
-      throw new Error('Application loaded, but its command bridge did not initialize. Check the downloaded JS for a runtime error.');
+      throw new Error('Application downloaded, but its command bridge did not initialize. Check the JS application for a runtime error.');
     }
   }finally{
     setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -2244,7 +2334,14 @@ async function startAfterLicense(){
     console.error('[JHOELSOFT APP PROMISE ERROR]',e.reason||'');
   }, {once:false});
 
-  await loadApp();
+  try{
+    await loadApp();
+  }catch(e){
+    setState(false,'error');
+    msg('❌ '+(e.message||String(e)),'bad');
+    console.error('[JHOELSOFT LOAD ERROR]',e);
+    throw e;
+  }
 
   // The protected app is now in memory. Unlock its command buttons first.
   if(typeof window.__JHOELSOFT_SET_LICENSE__==='function'){
