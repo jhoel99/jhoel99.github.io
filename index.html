@@ -1378,7 +1378,8 @@ pre{
   }
 }
 .license-status{
-  display:inline-flex;
+  display:none!important;
+  align-items:center;
   align-items:center;
   gap:7px;
   padding:8px 12px;
@@ -1393,6 +1394,32 @@ pre{
 .license-status.active{
   background:linear-gradient(145deg,#f5f5f5,#d2d4d8);
   color:#111;
+}
+
+.header-license-dot{
+  position:absolute;
+  top:18px;
+  right:20px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#c9cdd2;
+  border:3px solid #fff;
+  box-shadow:0 0 0 1px #b8bcc2, 0 4px 10px #0002;
+  cursor:default;
+  transition:all .2s ease;
+}
+.header-license-dot.checking{
+  background:#f0ad3d;
+  box-shadow:0 0 0 1px #d79a2e, 0 0 12px #f0ad3d88;
+}
+.header-license-dot.active{
+  background:#31a85b;
+  box-shadow:0 0 0 1px #278a49, 0 0 12px #31a85b88;
+}
+.header-license-dot.error{
+  background:#e05b64;
+  box-shadow:0 0 0 1px #bd4149, 0 0 12px #e05b6488;
 }
 .license-overlay{
   position:fixed;
@@ -1893,7 +1920,8 @@ button{
 </head>
 <body>
 <div class="wrap">
-  <div class="card">
+  <div class="card" style="position:relative">
+    <span id="licenseDot" class="header-license-dot" title="License: not checked" aria-label="License status"></span>
     <h1>🧹 JHOELSOFT v7</h1>
     <div class="sub">Android Pop-up Ads Cleaner • modern WebUSB ADB • OTG phone-to-phone</div>
   </div>
@@ -1901,12 +1929,10 @@ button{
   <div class="card">
     <div class="row">
       <button id="connect">🔌 CONNECT ADB / OTG</button>
-      <button id="activateLicense" class="secondary">🔑 ACTIVATE LICENSE</button>
-      <span id="licenseStatus" class="license-status">🔒 LICENSE REQUIRED</span>
       <button id="scan" class="secondary" disabled>🔎 SCAN APPS</button>
       <button id="btnSmartScan" class="secondary" disabled>🩺 SMART SCAN</button>
       <button id="btnStorage" class="secondary" disabled>📁 PHONE STORAGE</button>
-      <button id="diag" class="secondary">USB DIAGNOSTICS</button>
+      <button id="diag" class="secondary" disabled>USB DIAGNOSTICS</button>
       <button id="disconnect" class="disc" disabled>DISCONNECT</button>
       <button id="installApk" class="secondary" disabled>📦 INSTALL APK VIA ADB</button>
       <input id="apkFile" type="file" accept=".apk,application/vnd.android.package-archive" hidden>
@@ -2026,10 +2052,6 @@ button{
 </div>
 
 <script type="module">
-/* ============================================================
-   JHOELSOFT v7 — INLINE WebUSB ADB TRANSPORT
-   FCXI5MAF.js is embedded below so this is a ONE-FILE build.
-   ============================================================ */
 var pt=Object.defineProperty,yt=(e,t)=>{for(var r in t)pt(e,r,{get:t[r],enumerable:!0})},v=class{#e;get promise(){return this.#e}#t;#r;#i="running";get state(){return this.#i}constructor(){this.#e=new Promise((e,t)=>{this.#t=e,this.#r=t})}resolve=e=>{this.#t(e),this.#i="resolved"};reject=e=>{this.#r(e),this.#i="rejected"}},gt=class{nextId;pendingResolvers=new Map;constructor(e=0){this.nextId=e}add(){let e=this.nextId++,t=new v;return this.pendingResolvers.set(e,t),[e,t.promise]}getResolver(e){if(!this.pendingResolvers.has(e))return null;let t=this.pendingResolvers.get(e);return this.pendingResolvers.delete(e),t}resolve(e,t){let r=this.getResolver(e);return r!==null?(r.resolve(t),!0):!1}reject(e,t){let r=this.getResolver(e);return r!==null?(r.reject(t),!0):!1}};function bt(e){return new Promise(t=>{globalThis.setTimeout(()=>t(),e)})}function M(e){return typeof e=="object"&&e!==null&&"then"in e}function de(e,t){for(;;){let{done:r,value:i}=e.next(t);if(r)return i;if(M(i))return i.then(n=>de(e,{resolved:n}),n=>de(e,{error:n}));t=i}}function ve(e,t){function r(...i){let n=e.call(this,function*(s){if(M(s)){let a=yield s;if("resolved"in a)return a.resolved;throw a.error}return s},...i);return de(n,void 0)}return t?r.bind(t):r}function mt(e){return(t,r)=>{if("buffer"in r){let i=e(t,r);return r.buffer.set(i,r.index),i.length}else return e(t,r)}}function vt(e,t){return(r,i)=>{if("buffer"in i)return i.index??=0,t(r,i),e;{let n=new Uint8Array(e);return t(r,{buffer:n,index:0,littleEndian:i.littleEndian}),n}}}function Et(e,t,r,i,n){let s={size:e,type:t,serialize:t==="default"?mt(r):vt(e,r),deserialize:ve(i),omitInit:n?.omitInit};return n?.init&&(s.init=n.init),s}var V=Et,g=new Uint8Array(0);function xt(e,t,r,i){t.length<i?(e.set(t,r),e.fill(0,r+t.length,r+i)):t.length===i?e.set(t,r):e.set(t.subarray(0,i),r)}function $(e,t){if(typeof e=="number"){let n,s,a;return e===0?(n=()=>{},t?s=function*(){return t.convert(g)}:s=function*(){return g}):(n=(o,{buffer:l,index:c})=>xt(l,o,c,e),t?(s=function*(o,l){let c=l.readExactly(e);return t.convert(yield*o(c))},a=o=>t.back(o)):s=function*(o,l){return l.readExactly(e)}),V(e,"byob",n,s,{init:a})}if((typeof e=="object"||typeof e=="function")&&"serialize"in e){let n,s;return t?(n=function*(a,o,l){let c=yield*a(e.deserialize(o,l)),d=c!==0?o.readExactly(c):g;return t.convert(yield*a(d))},s=a=>t.back(a)):n=function*(a,o,l){let c=yield*a(e.deserialize(o,l));return c!==0?o.readExactly(c):g},V(e.size,"default",(a,{littleEndian:o})=>{if(e.type==="default"){let l=e.serialize(a.length,{littleEndian:o});if(a.length===0)return l;let c=new Uint8Array(l.length+a.length);return c.set(l,0),c.set(a,l.length),c}else{let l=new Uint8Array(e.size+a.length);return e.serialize(a.length,{buffer:l,index:0,littleEndian:o}),l.set(a,e.size),l}},n,{init:s})}if(typeof e=="string"){let n,s;return t?(n=function*(a,o,{dependencies:l}){let c=l[e],d=c!==0?o.readExactly(c):g;return t.convert(yield*a(d))},s=(a,o)=>{let l=t.back(a);return o[e]=l.length,l}):(n=function*(a,o,{dependencies:l}){let c=l[e];return c!==0?o.readExactly(c):g},s=(a,o)=>{let l=a;return o[e]=l.length,l}),V(0,"default",a=>a,n,{init:s})}let r,i;return t?(r=function*(n,s,{dependencies:a}){let o=a[e.field],l=e.convert(o),c=l!==0?s.readExactly(l):g;return t.convert(yield*n(c))},i=(n,s)=>{let a=t.back(n);return s[e.field]=e.back(a.length),a}):(r=function*(n,s,{dependencies:a}){let o=a[e.field],l=e.convert(o);return l!==0?s.readExactly(l):g},i=(n,s)=>{let a=n;return s[e.field]=e.back(a.length),a}),V(0,"default",n=>n,r,{init:i})}var ie=class extends Error{constructor(){super("ExactReadable ended")}},kt=class{#e;#t;get position(){return this.#t}constructor(e){this.#e=e,this.#t=0}readExactly(e){if(this.#t+e>this.#e.length)throw new ie;let t=this.#e.subarray(this.#t,this.#t+e);return this.#t+=e,t}},_e=class extends Error{constructor(e){super(e)}},St=class extends _e{constructor(){super("The underlying readable was ended before the struct was fully deserialized")}},Ee=class extends _e{constructor(){super("The underlying readable doesn't contain any more struct")}};function k(e,t){let r=Object.entries(e),i=0,n=!0;for(let[,o]of r)i+=o.size,n&&o.type!=="byob"&&(n=!1);let s=t.littleEndian,a=t.extra?Object.getOwnPropertyDescriptors(t.extra):void 0;return{littleEndian:s,fields:e,extra:t.extra,type:n?"byob":"default",size:i,serialize(o,l){let c={...o};for(let[x,f]of r)if(x in c&&"init"in f){let R=f.init?.(c[x],c);c[x]=R}let d=new Array(r.length),S=new Array(r.length);{let x={littleEndian:s};for(let[f,[R,ce]]of r.entries())ce.type==="byob"?d[f]=ce.size:(S[f]=ce.serialize(c[R],x),d[f]=S[f].length)}let h=d.reduce((x,f)=>x+f,0),E,b,B;if(l instanceof Uint8Array){if(l.length<h)throw new Error("Buffer too small");E=!0,b=l,B=0}else if(typeof l=="object"&&"buffer"in l){if(E=!0,b=l.buffer,B=l.index??0,b.length-B<h)throw new Error("Buffer too small")}else E=!1,b=new Uint8Array(h),B=0;let L={buffer:b,index:B,littleEndian:s};for(let[x,[f,R]]of r.entries())S[x]?b.set(S[x],L.index):R.serialize(c[f],L),L.index+=d[x];return E?h:b},deserialize:ve(function*(o,l){let c=l.position,d={},S={dependencies:d,littleEndian:s};try{for(let[h,E]of r)d[h]=yield*o(E.deserialize(l,S))}catch(h){throw h instanceof ie?l.position===c?new Ee:new St:h}return a&&Object.defineProperties(d,a),t.postDeserialize?t.postDeserialize.call(d,d):d})}}function ne(e,t,r){return k(Object.assign({},e.fields,t),{littleEndian:r?.littleEndian??e.littleEndian,extra:e.extra,postDeserialize:r?.postDeserialize})}function At(e,t,r){return r?e[t]|e[t+1]<<8|e[t+2]<<16|e[t+3]<<24:e[t]<<24|e[t+1]<<16|e[t+2]<<8|e[t+3]}function Tt(e,t,r,i){i?(e[t]=r,e[t+1]=r>>8,e[t+2]=r>>16,e[t+3]=r>>24):(e[t]=r>>24,e[t+1]=r>>16,e[t+2]=r>>8,e[t+3]=r)}function It(e,t,r){e[t]=Number(r&0xffn),e[t+1]=Number(r>>8n&0xffn),e[t+2]=Number(r>>16n&0xffn),e[t+3]=Number(r>>24n&0xffn),e[t+4]=Number(r>>32n&0xffn),e[t+5]=Number(r>>40n&0xffn),e[t+6]=Number(r>>48n&0xffn),e[t+7]=Number(r>>56n&0xffn)}function zt(e,t,r){e[t]=Number(r>>56n&0xffn),e[t+1]=Number(r>>48n&0xffn),e[t+2]=Number(r>>40n&0xffn),e[t+3]=Number(r>>32n&0xffn),e[t+4]=Number(r>>24n&0xffn),e[t+5]=Number(r>>16n&0xffn),e[t+6]=Number(r>>8n&0xffn),e[t+7]=Number(r&0xffn)}function se(e,t){return(e[t]|e[t+1]<<8|e[t+2]<<16|e[t+3]<<24)>>>0}function Nt(e,t,r){return r?(e[t]|e[t+1]<<8|e[t+2]<<16|e[t+3]<<24)>>>0:(e[t]<<24|e[t+1]<<16|e[t+2]<<8|e[t+3])>>>0}function Ct(e,t,r){e[t]=r,e[t+1]=r>>8,e[t+2]=r>>16,e[t+3]=r>>24}function Dt(e,t,r,i){i?(e[t]=r,e[t+1]=r>>8,e[t+2]=r>>16,e[t+3]=r>>24):(e[t]=r>>24,e[t+1]=r>>16,e[t+2]=r>>8,e[t+3]=r)}function Wt(e,t){return BigInt(e[t])<<56n|BigInt(e[t+1])<<48n|BigInt(e[t+2])<<40n|BigInt(e[t+3])<<32n|BigInt(e[t+4])<<24n|BigInt(e[t+5])<<16n|BigInt(e[t+6])<<8n|BigInt(e[t+7])}function Bt(e,t,r){return r?BigInt(e[t])|BigInt(e[t+1])<<8n|BigInt(e[t+2])<<16n|BigInt(e[t+3])<<24n|BigInt(e[t+4])<<32n|BigInt(e[t+5])<<40n|BigInt(e[t+6])<<48n|BigInt(e[t+7])<<56n:BigInt(e[t])<<56n|BigInt(e[t+1])<<48n|BigInt(e[t+2])<<40n|BigInt(e[t+3])<<32n|BigInt(e[t+4])<<24n|BigInt(e[t+5])<<16n|BigInt(e[t+6])<<8n|BigInt(e[t+7])}function Pt(e,t,r,i){i?(e[t]=Number(r&0xffn),e[t+1]=Number(r>>8n&0xffn),e[t+2]=Number(r>>16n&0xffn),e[t+3]=Number(r>>24n&0xffn),e[t+4]=Number(r>>32n&0xffn),e[t+5]=Number(r>>40n&0xffn),e[t+6]=Number(r>>48n&0xffn),e[t+7]=Number(r>>56n&0xffn)):(e[t]=Number(r>>56n&0xffn),e[t+1]=Number(r>>48n&0xffn),e[t+2]=Number(r>>40n&0xffn),e[t+3]=Number(r>>32n&0xffn),e[t+4]=Number(r>>24n&0xffn),e[t+5]=Number(r>>16n&0xffn),e[t+6]=Number(r>>8n&0xffn),e[t+7]=Number(r&0xffn))}function ae(e,t,r){let i=(()=>i);return Object.assign(i,V(e,"byob",t,r)),i}var Lt=ae(1,(e,{buffer:t,index:r})=>{t[r]=e},function*(e,t){return(yield*e(t.readExactly(1)))[0]}),u=ae(4,(e,{buffer:t,index:r,littleEndian:i})=>{Dt(t,r,e,i)},function*(e,t,{littleEndian:r}){let i=yield*e(t.readExactly(4));return Nt(i,0,r)}),Rt=ae(4,(e,{buffer:t,index:r,littleEndian:i})=>{Tt(t,r,e,i)},function*(e,t,{littleEndian:r}){let i=yield*e(t.readExactly(4));return At(i,0,r)}),_=ae(8,(e,{buffer:t,index:r,littleEndian:i})=>{Pt(t,r,e,i)},function*(e,t,{littleEndian:r}){let i=yield*e(t.readExactly(8));return Bt(i,0,r)}),{TextEncoder:Ot,TextDecoder:Ut}=globalThis,_t=new Ot,jt=new Ut;function U(e){return _t.encode(e)}function G(e){return jt.decode(e)}var K=(e=>{let t=$(e,{convert:G,back:U});return t.as=()=>t,t}),{AbortController:oe}=globalThis,W=(()=>{let{ReadableStream:e}=globalThis;return e.from||(e.from=function(t){let r=Symbol.asyncIterator in t?t[Symbol.asyncIterator]():t[Symbol.iterator]();return new e({async pull(i){let n=await r.next();if(n.done){i.close();return}i.enqueue(n.value)},async cancel(i){await r.return?.(i)}})}),(!e.prototype[Symbol.asyncIterator]||!e.prototype.values)&&(e.prototype.values=async function*(t){let r=this.getReader();try{for(;;){let{done:i,value:n}=await r.read();if(i)return;yield n}}finally{t?.preventCancel||await r.cancel(),r.releaseLock()}},e.prototype[Symbol.asyncIterator]=e.prototype.values),e})(),{WritableStream:T,TransformStream:je}=globalThis,qt=class{#e;#t=!1;enqueue(e,t=!1){if(this.#t)throw new Error("TaskQueue is disposed");if(!this.#e)try{let i=e();return M(i)&&(this.#e=i.then(()=>{},n=>{if(t)throw n})),i}catch(i){if(t){let n=Promise.reject(i);n.catch(()=>{}),this.#e=n}throw i}let r=this.#e.then(()=>{if(this.#t)throw new Error("TaskQueue is disposed");return e()});return this.#e=r.then(()=>{},i=>{if(t||this.#t)throw i}),r}dispose(){this.#t=!0}},F=class extends W{constructor(e,t,r){let i,n=new qt,s=!1,a,o=new oe,l=!1,c=h=>{if(r?.({source:"producer",operation:"enqueue",value:h,phase:"start"}),o.signal.aborted)return r?.({source:"producer",operation:"enqueue",value:h,phase:"ignored"}),!1;if(i.desiredSize===null)throw i.enqueue(h),new Error("unreachable");return s?(s=!1,i.enqueue(h),r?.({source:"producer",operation:"enqueue",value:h,phase:"complete"}),!0):i.desiredSize<=0?(r?.({source:"producer",operation:"enqueue",value:h,phase:"waiting"}),a=new v,a.promise.then(()=>(i.enqueue(h),r?.({source:"producer",operation:"enqueue",value:h,phase:"complete"}),!0),()=>(r?.({source:"producer",operation:"enqueue",value:h,phase:"ignored"}),!1))):(i.enqueue(h),r?.({source:"producer",operation:"enqueue",value:h,phase:"complete"}),!0)},d=h=>{if(r?.({source:"producer",operation:"close",explicit:h,phase:"start"}),o.signal.aborted||l&&!h){r?.({source:"producer",operation:"close",explicit:h,phase:"ignored"});return}i.close(),l=!0,a?.reject(),r?.({source:"producer",operation:"close",explicit:h,phase:"complete"})},S=(h,E)=>{r?.({source:"producer",operation:"error",explicit:E,phase:"start"}),l=!0,i.error(h),a?.reject(),r?.({source:"producer",operation:"error",explicit:E,phase:"complete"})};super({start:h=>{i=h;let E=e({abortSignal:o.signal,enqueue:async b=>await n.enqueue(()=>c(b)),close(){d(!0)},error(b){S(b,!0)}});!l&&M(E)&&E.then(()=>d(!1),b=>S(b,!1))},pull:()=>{r?.({source:"consumer",operation:"pull",phase:"start"}),a?(a.resolve(void 0),a=void 0):t?.highWaterMark===0&&(s=!0),r?.({source:"consumer",operation:"pull",phase:"complete"})},cancel:h=>{r?.({source:"consumer",operation:"cancel",phase:"start"}),l=!0,o.abort(h),a?.reject(),r?.({source:"consumer",operation:"cancel",phase:"complete"})}},t)}};function Ft(e){try{let t=e.close();return M(t)?t.then(()=>!0,()=>!1):!0}catch{return!1}}async function Mt(e){try{return await e.cancel(),!0}catch{return!1}}var le=class{#e;#t=0;#r=0;#i=0;get position(){return this.#i}stream;reader;constructor(e){this.stream=e,this.reader=e.getReader()}#n(e){if(!this.#e)return;let t=this.#e.subarray(this.#t,this.#t+e);return this.#r>e?(this.#i+=e,this.#t+=e,this.#r-=e,t):(this.#i+=this.#r,this.#e=void 0,this.#t=0,this.#r=0,t)}async#s(e){let{done:t,value:r}=await this.reader.read();if(t)throw new ie;return r.length>e?(this.#e=r,this.#t=e,this.#r=r.length-e,this.#i+=e,r.subarray(0,e)):(this.#i+=r.length,r)}iterateExactly(e){let t=this.#e?0:1;return{next:()=>{switch(t){case 0:{let r=this.#n(e);return r.length===e?t=2:(e-=r.length,t=1),{done:!1,value:r}}case 1:return t=3,{done:!1,value:this.#s(e).then(r=>(r.length===e?t=2:(e-=r.length,t=1),r))};case 2:return{done:!0,value:void 0};case 3:throw new Error("Can't call `next` before previous Promise resolves");default:throw new Error("unreachable")}}}}readExactly=ve(function*(e,t){let r,i=0,n=this.#n(t);if(n){if(n.length===t)return n;r=new Uint8Array(t),r.set(n,i),i+=n.length,t-=n.length}else r=new Uint8Array(t);for(;t>0;){let s=yield*e(this.#s(t));r.set(s,i),i+=s.length,t-=s.length}return r});release(){return this.#r>0?new F(async e=>{let t=this.#e.subarray(this.#t);for(await e.enqueue(t),e.abortSignal.addEventListener("abort",()=>{Mt(this.reader)});;){let{done:r,value:i}=await this.reader.read();if(r)return;await e.enqueue(i)}}):(this.reader.releaseLock(),this.stream)}async cancel(e){await this.reader.cancel(e)}},$t=class{#e;get readable(){return this.#e}#t;get writable(){return this.#t}constructor(e){let t,r,i=new le(new F(n=>{t=n}));this.#e=new W({async pull(n){try{let s=await e(i);n.enqueue(s)}catch(s){if(s instanceof Ee){n.close();return}throw s}},cancel:n=>r.error(n)}),this.#t=new T({start(n){r=n},async write(n){await t.enqueue(n)},abort(){t.close()},close(){t.close()}})}},Q=class{#e="";#t=new v;#r=new T({write:e=>{this.#e+=e},close:()=>{this.#t.resolve(this.#e),this.#i.enqueue(this.#e),this.#i.close()},abort:e=>{this.#t.reject(e),this.#i.error(e)}});get writable(){return this.#r}#i;#n=new W({start:e=>{this.#i=e}});get readable(){return this.#n}constructor(){Object.defineProperties(this.#n,{then:{get:()=>this.#t.promise.then.bind(this.#t.promise)},catch:{get:()=>this.#t.promise.catch.bind(this.#t.promise)},finally:{get:()=>this.#t.promise.finally.bind(this.#t.promise)}})}},fe=class{#e=[];#t=new v;#r=new T({write:e=>{this.#e.push(e)},close:()=>{let e,t=0;switch(this.#e.length){case 0:e=g;break;case 1:e=this.#e[0];break;default:e=new Uint8Array(this.#e.reduce((r,i)=>r+i.length,0));for(let r of this.#e)e.set(r,t),t+=r.length;break}this.#t.resolve(e),this.#i.enqueue(e),this.#i.close()},abort:e=>{this.#t.reject(e),this.#i.error(e)}});get writable(){return this.#r}#i;#n=new W({start:e=>{this.#i=e}});get readable(){return this.#n}constructor(){Object.defineProperties(this.#n,{then:{get:()=>this.#t.promise.then.bind(this.#t.promise)},catch:{get:()=>this.#t.promise.catch.bind(this.#t.promise)},finally:{get:()=>this.#t.promise.finally.bind(this.#t.promise)}})}},qe=class Fe extends W{static async enqueue(t,r){let i=new A(r);t.enqueue(i),await i.consumed}constructor(t,r){let i,n;r&&(n={},"highWaterMark"in r&&(n.highWaterMark=r.highWaterMark),"size"in r&&(n.size=s=>r.size(s.value))),super({start(s){return i={enqueue(a){return Fe.enqueue(s,a)},close(){s.close()},error(a){s.error(a)}},t.start?.(i)},pull(){return t.pull?.(i)},cancel(s){return t.cancel?.(s)}},n)}},Vt=class extends W{constructor(e,t,r){let i=e.getReader({mode:"byob"}),n=new Uint8Array(t);super({async pull(s){let{done:a,value:o}=await i.read(n,{min:r});if(a){s.close();return}await qe.enqueue(s,o),n=new Uint8Array(o.buffer)},cancel(s){return i.cancel(s)}})}},Kt=class extends T{constructor(e){let t=e.getWriter();super({write(r){return r.tryConsume(i=>t.write(i))},abort(r){return t.abort(r)},close(){return t.close()}})}},Gt=class extends T{static async write(e,t){let r=new A(t);await e.write(r),await r.consumed}constructor(e,t){let r;t&&(r={},"highWaterMark"in t&&(r.highWaterMark=t.highWaterMark),"size"in t&&(r.size=i=>t.size(i instanceof A?i.value:i))),super({start(i){return e.start?.(i)},write(i,n){return i.tryConsume(s=>e.write?.(s,n))},abort(i){return e.abort?.(i)},close(){return e.close?.()}},r)}},{console:Te}=globalThis,Yt=Te?.createTask?.bind(Te)??(()=>({run(e){return e()}})),A=class{static WritableStream=Gt;static WrapWritableStream=Kt;static ReadableStream=qe;static WrapByteReadableStream=Vt;#e;#t;value;consumed;constructor(e){this.#e=Yt("Consumable"),this.value=e,this.#t=new v,this.consumed=this.#t.promise}consume(){this.#t.resolve()}error(e){this.#t.reject(e)}tryConsume(e){try{let t=this.#e.run(()=>e(this.value));return M(t)?t=t.then(r=>(this.#t.resolve(),r),r=>{throw this.#t.reject(r),r}):this.#t.resolve(),t}catch(t){throw this.#t.reject(t),t}}},P={};yt(P,{WrapWritableStream:()=>Qt,WritableStream:()=>Xt,getValue:()=>Ht,tryConsume:()=>xe});function Ht(e){return e instanceof A?e.value:e}function xe(e,t){return e instanceof A?e.tryConsume(t):t(e)}var Qt=class extends T{constructor(e){let t=e.getWriter();super({write(r){return xe(r,i=>t.write(i))},abort(r){return t.abort(r)},close(){return t.close()}})}},Xt=class extends T{constructor(e,t){let r;t&&(r={},"highWaterMark"in t&&(r.highWaterMark=t.highWaterMark),"size"in t&&(r.size=i=>t.size(i instanceof A?i.value:i))),super({start(i){return e.start?.(i)},write(i,n){return xe(i,s=>e.write?.(s,n))},abort(i){return e.abort?.(i)},close(){return e.close?.()}},r)}},Me=class{#e;#t;#r;#i;constructor(e){this.#e=e,this.#t=new Uint8Array(e),this.#r=0,this.#i=e}*push(e){let t=0,r=e.length;if(this.#r!==0)if(r>=this.#i){if(this.#t.set(e.subarray(0,this.#i),this.#r),t+=this.#i,r-=this.#i,yield this.#t,this.#r=0,this.#i=this.#e,r===0)return}else{this.#t.set(e,this.#r),this.#r+=r,this.#i-=r;return}for(;r>=this.#e;){let i=t+this.#e;yield e.subarray(t,i),t=i,r-=this.#e}r>0&&(this.#t.set(e.subarray(t),this.#r),this.#r+=r,this.#i-=r)}flush(){if(this.#r===0)return;let e=this.#t.subarray(0,this.#r);return this.#r=0,this.#i=this.#e,e}},Zt=class extends je{constructor(e,t=!1){let r=t?new Me(e):void 0;super({async transform(i,n){await P.tryConsume(i,async s=>{if(r)for(let a of r.push(s))await A.ReadableStream.enqueue(n,a);else{let a=0,o=s.length;for(;o>0;){let l=a+e;await A.ReadableStream.enqueue(n,s.subarray(a,l)),a=l,o-=e}}})},flush(i){if(r){let n=r.flush();n&&i.enqueue(n)}}})}};function Jt(e,t){return"start"in e?e.start(t):typeof e=="function"?e(t):e}var er=class extends W{readable;#e;constructor(e,t){super({start:async r=>{let i=await Jt(e,r);this.readable=i,this.#e=this.readable.getReader()},pull:async r=>{let{done:i,value:n}=await this.#e.read().catch(s=>{throw"error"in e&&e.error(s),s});i?(r.close(),"close"in e&&await e.close?.()):r.enqueue(n)},cancel:async r=>{await this.#e.cancel(r),"cancel"in e&&await e.cancel?.(r)}},t)}},Ie=()=>{},tr=class{#e=[];#t=[];#r=!1;get writableClosed(){return this.#r}#i=new v;get closed(){return this.#i.promise}#n;constructor(e){this.#n=e??{}}wrapReadable(e,t){return new er({start:r=>(this.#e.push(r),e),cancel:async()=>{await this.close()},close:async()=>{await this.dispose()}},t)}createWritable(e){let t=e.getWriter();return this.#t.push(t),new T({write:async r=>{await t.write(r)},abort:async r=>{await t.abort(r),await this.close()},close:async()=>{await t.close().catch(Ie),await this.close()}})}async close(){if(!this.#r){this.#r=!0,await this.#n.close?.()!==!1&&await this.dispose();for(let e of this.#t)e.close().catch(Ie)}}async dispose(){this.#r=!0,this.#i.resolve();for(let e of this.#e)Ft(e);await this.#n.dispose?.()}},$e=globalThis,X=$e.TextDecoderStream,Ci=$e.TextEncoderStream;function rr(e,t){let r=t.writable.getWriter(),i=t.readable.pipeTo(e);return new T({async write(n){await r.write(n)},async close(){await r.close(),await i}})}var Ve=class extends $t{constructor(e){super(t=>e.deserialize(t))}},ir=class{#e=[];constructor(){this.dispose=this.dispose.bind(this)}addDisposable(e){return this.#e.push(e),e}dispose(){for(let e of this.#e)e.dispose();this.#e=[]}},we=class{listeners=[];constructor(){this.event=this.event.bind(this)}addEventListener(e){this.listeners.push(e);let t=()=>{let r=this.listeners.indexOf(e);r!==-1&&this.listeners.splice(r,1)};return t.dispose=t,t}event=(e,t,...r)=>{let i={listener:e,thisArg:t,args:r};return this.addEventListener(i)};fire(e){for(let t of this.listeners.slice())t.listener.call(t.thisArg,e,...t.args)}dispose(){this.listeners.length=0}},ze=Symbol("undefined"),nr=class extends we{#e=ze;addEventListener(e){return this.#e!==ze&&e.listener.call(e.thisArg,this.#e,...e.args),super.addEventListener(e)}fire(e){this.#e=e,super.fire(e)}},ke=class extends ir{#e;get adb(){return this.#e}constructor(e){super(),this.#e=e}},sr=k({version:u},{littleEndian:!0}),ar=k({bpp:u,size:u,width:u,height:u,red_offset:u,red_length:u,blue_offset:u,blue_length:u,green_offset:u,green_length:u,alpha_offset:u,alpha_length:u,data:$("size")},{littleEndian:!0}),or=k({bpp:u,colorSpace:u,size:u,width:u,height:u,red_offset:u,red_length:u,blue_offset:u,blue_length:u,green_offset:u,green_length:u,alpha_offset:u,alpha_length:u,data:$("size")},{littleEndian:!0}),Ke=class extends Error{constructor(e,t){super(e,t)}},lr=class extends Ke{constructor(e){super(`Unsupported FrameBuffer version ${e}`)}},cr=class extends Ke{constructor(){super("FrameBuffer is disabled by current app")}};async function ur(e){let t=await e.createSocket("framebuffer:"),r=new le(t.readable),i;try{({version:i}=await sr.deserialize(r))}catch(n){throw n instanceof Ee?new cr:n}switch(i){case 1:return await ar.deserialize(r);case 2:return await or.deserialize(r);default:throw new lr(i)}}var hr=class extends ke{reboot(e=""){return this.adb.createSocketAndWait(`reboot:${e}`)}bootloader(){return this.reboot("bootloader")}fastboot(){return this.reboot("fastboot")}recovery(){return this.reboot("recovery")}sideload(){return this.reboot("sideload")}qualcommEdlMode(){return this.reboot("edl")}powerOff(){return this.adb.subprocess.noneProtocol.spawnWaitText(["reboot","-p"])}powerButton(e=!1){let t=["input","keyevent"];return e&&t.push("--longpress"),t.push("POWER"),this.adb.subprocess.noneProtocol.spawnWaitText(t)}samsungOdin(){return this.reboot("download")}};function dr(e){if(e.buffer instanceof ArrayBuffer)return e;let t=new Uint8Array(e.length);return t.set(e),t}var Ge=class{#e;#t=[];constructor(e=!1){this.#e=e}wait(){if(!this.#e&&(this.#e=!0,this.#t.length===0))return Promise.resolve();let e=new v;return this.#t.push(e),e.promise}notifyOne(){this.#t.length!==0?this.#t.pop().resolve():this.#e=!1}dispose(){for(let e of this.#t)e.reject(new Error("The AutoResetEvent has been disposed"));this.#t.length=0}},[Di,y,j]=(()=>{let e=[],t=[];function r(i,n){let s=i.charCodeAt(0),a=n.charCodeAt(0);for(let o=s;o<=a;o+=1)e[o]=t.length,t.push(o)}return r("A","Z"),r("a","z"),r("0","9"),r("+","+"),r("/","/"),[e,t,61]})();function Ye(e){let t=e%3,r=t!==0?3-t:0;return[(e+r)/3*4,r]}function fr(e,t){let[r,i]=Ye(e.length);if(t){if(t.length<r)throw new TypeError("output buffer is too small");if(t=t.subarray(0,r),e.buffer!==t.buffer)ue(e,t,i);else if(t.byteOffset+t.length-(i+1)<=e.byteOffset+e.length)ue(e,t,i);else if(t.byteOffset>=e.byteOffset-1)wr(e,t,i);else throw new TypeError("input and output cannot overlap");return r}else return t=new Uint8Array(r),ue(e,t,i),t}function ue(e,t,r){let i=0,n=0;for(;i<e.length-2;){let s=e[i];i+=1;let a=e[i];i+=1;let o=e[i];i+=1,t[n]=y[s>>2],n+=1,t[n]=y[(s&3)<<4|a>>4],n+=1,t[n]=y[(a&15)<<2|o>>6],n+=1,t[n]=y[o&63],n+=1}if(r===2){let s=e[i];t[n]=y[s>>2],n+=1,t[n]=y[(s&3)<<4],n+=1,t[n]=j,n+=1,t[n]=j}else if(r===1){let s=e[i];i+=1;let a=e[i];t[n]=y[s>>2],n+=1,t[n]=y[(s&3)<<4|a>>4],n+=1,t[n]=y[(a&15)<<2],n+=1,t[n]=j}}function wr(e,t,r){let i=e.length-1,n=t.length-1;if(r===2){let s=e[i];i-=1,t[n]=j,n-=1,t[n]=j,n-=1,t[n]=y[(s&3)<<4],n-=1,t[n]=y[s>>2],n-=1}else if(r===1){let s=e[i];i-=1;let a=e[i];i-=1,t[n]=j,n-=1,t[n]=y[(s&15)<<2],n-=1,t[n]=y[(a&3)<<4|s>>4],n-=1,t[n]=y[a>>2],n-=1}for(;i>=0;){let s=e[i];i-=1;let a=e[i];i-=1;let o=e[i];i-=1,t[n]=y[s&63],n-=1,t[n]=y[(a&15)<<2|s>>6],n-=1,t[n]=y[(o&3)<<4|a>>4],n-=1,t[n]=y[o>>2],n-=1}}function pr(e){if(e<48)throw new TypeError(`Invalid hex char ${e}`);if(e<58)return e-48;if(e<65)throw new TypeError(`Invalid hex char ${e}`);if(e<71)return e-55;if(e<97)throw new TypeError(`Invalid hex char ${e}`);if(e<103)return e-87;throw new TypeError(`Invalid hex char ${e}`)}function yr(e){let t=0;for(let r=0;r<e.length;r+=1)t=t<<4|pr(e[r]);return t}var gr=()=>{};function He(...e){throw new Error(`Unreachable. Arguments:
 `+e.join(`
 `))}function br(e,t){if(e.length!==t.length)return!1;for(let r=0;r<e.length;r+=1)if(e[r]!==t[r])return!1;return!0}var Qe=k({length:K(4),content:K({field:"length",convert(e){return Number.parseInt(e,16)},back(e){return e.toString(16).padStart(4,"0")}})},{littleEndian:!0}),Xe=class extends Error{constructor(e){super(e)}},mr=class extends Xe{constructor(){super("ADB reverse tunnel is not supported on this device when connected wirelessly.")}},vr=ne(Qe,{},{postDeserialize(e){throw e.content==="more than one device/emulator"?new mr:new Xe(e.content)}});function Er(e){let t=0;for(let r of e){if(r<48||r>57)return t;t=t*10+r-48}return t}var xr=U("OKAY"),kr=class extends ke{#e=new Map;async createBufferedStream(e){let t=await this.adb.createSocket(e);return new le(t.readable)}async sendRequest(e){let t=await this.createBufferedStream(e),r=await t.readExactly(4);return br(r,xr)||await vr.deserialize(t),t}async list(){let e=await this.createBufferedStream("reverse:list-forward");return(await Qe.deserialize(e)).content.split(`
@@ -2043,1425 +2065,285 @@ const Adb = Wi;
 const AdbDaemonTransport = Pi;
 const AdbDaemonWebUsbDeviceManager = Li;
 const AdbWebCredentialStore = Ri;
+const LICENSE_API = atob('aHR0cHM6Ly9hcGkuZ3NtY29kZXBoLWFkcy5zaXRlLy9hZHMvbGljZW5zZS1hcGk=');
+const APP_URL = `${LICENSE_API}/api/app`;
+const SESSION_KEY = 'jhoelsoft_license_session_v1';
 
-(() => {
-  let adb = null;
-  let usbDevice = null;
-  let connected = false;
-  let packages = [];
-  let connectPromise = null;
-  let disconnectHandler = null;
-  let heartbeatTimer = null;
+let selectedUsb = null;
+let currentSerial = '';
+let licenseToken = '';
+let busy = false;
+let appLoaded = false;
 
-  const $ = id => document.getElementById(id);
-
-  function status(s, cls='') {
-    $('status').className = 'status ' + cls;
-    $('status').textContent = s;
+const el = id => document.getElementById(id);
+function msg(t, kind=''){
+  const e=el('status');
+  if(e){ e.textContent=t; e.className='status '+kind; }
+}
+function normalize(v){ return String(v||'').replace(/\s+/g,'').trim(); }
+function setState(active, mode=''){
+  const e=el('licenseDot');
+  if(!e)return;
+  e.classList.remove('checking','active','error');
+  if(mode==='checking'){e.classList.add('checking');e.title='License: checking…';}
+  else if(mode==='error'){e.classList.add('error');e.title='License: error';}
+  else if(active){e.classList.add('active');e.title='License: active';}
+  else e.title='License: not activated';
+}
+async function request(path, body, token=''){
+  const h={'Content-Type':'application/json'};
+  if(token) h.Authorization='Bearer '+token;
+  let r;
+  try{
+    r=await fetch(LICENSE_API+path,{method:'POST',headers:h,body:JSON.stringify(body||{}),cache:'no-store'});
+  }catch(e){
+    throw new Error('License server cannot be reached. Check API URL, HTTPS/mixed-content, CORS, and network connection.');
   }
-
-  function log(s) {
-    const p = $('console');
-    p.textContent = (p.textContent === 'No ADB commands yet.' ? '' : p.textContent) + s + '\n';
-    p.scrollTop = p.scrollHeight;
-  }
-
-  function errText(e) {
-    return e && (e.message || e.name || String(e)) || 'Unknown error';
-  }
-
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  function isBusyError(e) {
-    return !!e && (
-      e.name === 'DeviceBusyError' ||
-      /busy|claim|access denied|unable to claim|in use|operation that changes the device state is in progress/i.test(errText(e))
-    );
-  }
-
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[c]));
-  }
-
-  const knownLabels = {
-    'com.android.chrome':'Google Chrome','com.google.android.youtube':'YouTube','com.google.android.apps.maps':'Google Maps',
-    'com.google.android.gm':'Gmail','com.google.android.googlequicksearchbox':'Google','com.google.android.apps.photos':'Google Photos',
-    'com.android.settings':'Settings','com.android.contacts':'Contacts','com.android.dialer':'Phone','com.android.mms':'Messages',
-    'com.android.camera2':'Camera','com.android.calculator2':'Calculator','com.android.calendar':'Calendar',
-    'com.facebook.katana':'Facebook','com.facebook.orca':'Messenger','com.instagram.android':'Instagram',
-    'com.zhiliaoapp.musically':'TikTok','com.ss.android.ugc.trill':'TikTok','com.spotify.music':'Spotify','com.whatsapp':'WhatsApp',
-    'com.freereels.app':'FreeReels','com.lenovo.anyshare.gps':'SHAREit','com.shopee.ph':'Shopee PH',
-    'com.google.android.safetycore':'Android System SafetyCore','com.google.android.verifier':'Android Developer Verifier'
-  };
-
-  // Known native/icon URLs from the reference UI. When an APK icon URL is
-  // unavailable, the renderer keeps a local fallback instead of pretending
-  // that a generic icon is the APK's real icon.
-  const knownIconUrls = {
-    // Google Play CDN icon URLs resolved from the app's Google Play listing.
-    'com.google.android.verifier':'https://play-lh.googleusercontent.com/zBtyRmGC0sI5x8aBQuSC7mY8uSGerOnkoJuD2G6yMCbvwT8vtgq4Y1w3Xmo0Sg9_dUi4HuCOGS4sknTjfVO20w=w240-h480',
-    'com.freereels.app':'https://play-lh.googleusercontent.com/1ybMEp7xw4kTY-K7ocih3vcbTEyCEqaxerVB6tDT8WcE3k5zCRR-jhKwS6Ct0UXIorczCIat3wTV0QLiuoLPdbY%3Dw240-h480',
-    'com.google.android.safetycore':'https://play-lh.googleusercontent.com/OQJdV4VWvNPvHAYGNc2CwDsa6EBiEMWmsJCwimjjhJYRwAsnB-XEwdG3C-p7PPeUX33su_DaSV-Szq1mHAs80tE=w240-h480',
-    'com.lenovo.anyshare.gps':'https://play-lh.googleusercontent.com/zKUMxAmGnz1F1lq8dZACrvuWiEHX5ZBAJbIOFMMLtm-9ey6ZAVrvP5Yg132BdPGP8-hvVGSwNBL7my4pcLOn=w240-h480',
-    'com.shopee.ph':'https://play-lh.googleusercontent.com/QqWQeYePb4rdV_aPUwj7VlOl4OsAiKJL3uE3_IKxSudihDGxQ85BORXeEsoNsElyEw=w240-h480',
-    'com.ss.android.ugc.trill':'https://play-lh.googleusercontent.com/Ui_-OW6UJI147ySDX9guWWDiCPSq1vtxoC-xG17BU2FpU0Fi6qkWwuLdpddmT9fqrA=w240-h480'
-  };
-
-  // Prefer an icon URL returned by the scanner over the catalog above.
-  // The catalog is only a fallback for packages whose Google Play icon URL
-  // is already known; it does not invent an icon for an unknown package.
-  function iconUrlFor(x){
-    return (x && x.iconUrl) || knownIconUrls[x && x.pkg] || '';
-  }
-
-  // Automatic Play Store icon resolver. This fills icons for packages that
-  // have a public Google Play listing, so the HTML does not need a huge
-  // hand-maintained icon URL table. Packages that are not on Play Store keep
-  // their native/fallback icon.
-  const ICON_API = 'https://play.rajkumaar.co.in/json?id=';
-  const iconLookupCache = new Map();
-  try {
-    const saved = JSON.parse(localStorage.getItem('appIconLookupCache') || '{}');
-    Object.entries(saved).forEach(([k,v])=>{ if(typeof v==='string' && v) iconLookupCache.set(k,v); });
-  } catch(_) {}
-
-  function saveIconCache(){
-    try{
-      const o={}; iconLookupCache.forEach((v,k)=>o[k]=v);
-      localStorage.setItem('appIconLookupCache',JSON.stringify(o));
-    }catch(_){}
-  }
-
-  async function lookupPlayIcon(pkg){
-    if(!pkg) return '';
-    if(knownIconUrls[pkg]) return knownIconUrls[pkg];
-    if(iconLookupCache.has(pkg)) return iconLookupCache.get(pkg);
-    try{
-      const c=new AbortController();
-      const timer=setTimeout(()=>c.abort(),7000);
-      const r=await fetch(ICON_API+encodeURIComponent(pkg),{signal:c.signal,cache:'force-cache'});
-      clearTimeout(timer);
-      if(!r.ok) return '';
-      const d=await r.json();
-      const icon=d?.logo || d?.icon || d?.icon_url || '';
-      if(typeof icon==='string' && /^https?:\/\//i.test(icon)){
-        iconLookupCache.set(pkg,icon);
-        return icon;
-      }
-    }catch(_){}
-    return '';
-  }
-
-  async function hydratePlayIcons(){
-    const missing=packages.filter(x=>!iconUrlFor(x));
-    if(!missing.length) return;
-    log(`Resolving Play Store icons for ${missing.length} apps…`);
-    let found=0;
-    for(let i=0;i<missing.length;i+=8){
-      const batch=missing.slice(i,i+8);
-      const results=await Promise.all(batch.map(async x=>[x,await lookupPlayIcon(x.pkg)]));
-      for(const [x,url] of results){
-        if(url){ x.iconUrl=url; found++; }
-      }
-      renderApps();
-    }
-    saveIconCache();
-    log(`Automatic icon lookup complete: ${found}/${missing.length} icons resolved.`);
-  }
-
-  function friendlyName(pkg) {
-    if (knownLabels[pkg]) return knownLabels[pkg];
-    const tail = pkg.split('.').pop() || pkg;
-    return tail.replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-  }
-
-  // Heuristic only: this detects likely ad/bloat indicators.
-  // It must NEVER classify Android/system packages as removable bloat.
-  function classify(pkg, raw='', overlay=false) {
-    const s = (pkg + ' ' + raw).toLowerCase();
-    let score=0,tags=[];
-    if (/admob|adsdk|applovin|appodeal|unityads|facebook\.ads/.test(s)){score+=3;tags.push('ADS-SDK')}
-    if (overlay || /overlay|draw_over|system_alert_window/.test(s)){score+=3;tags.push('OVERLAY')}
-    if (/cleaner|booster|wallpaper|lockscreen|freevpn|vpn\.free/.test(s)){score+=1;tags.push('HEURISTIC')}
-    if (/adware|popup|pop-up|pushads|notificationads/.test(s)){score+=4;tags.push('ADWARE-NAME')}
-    return {score,tags};
-  }
-
-  function protectedPackage(pkg){
-    return /^(com\.android\.(systemui|settings|permissioncontroller|packageinstaller)|com\.google\.android\.permissioncontroller|com\.android\.providers\.|com\.google\.android\.gms|com\.samsung\.android\.dialer)/i.test(pkg);
-  }
-
-  // System apps that do not expose a normal launcher icon are treated as
-  // protected. This is intentionally conservative to reduce the chance of
-  // disabling a background/service/provider required by Android.
-  function isProtected(x){
-    return !!(x && (x.protected || protectedPackage(x.pkg)));
-  }
-
-  function isOptionalPreinstalled(x){
-    if(!x || !x.system) return false;
-    const p=(x.pkg||'').toLowerCase();
-    const label=(x.label||'').toLowerCase();
-    // User-requested exception: YouTube and common pre-installed browsers may be selected for Disable.
-    return /(^|\.)youtube($|\.)/.test(p) || p==='com.google.android.youtube' ||
-      /(chrome|browser|internet)/.test(p) || /(youtube|chrome|browser|internet)/.test(label);
-  }
-
-
-  function isBloatCandidate(x){
-    if(!x || x.removed || x.system || isProtected(x)) return false;
-    const info=classify(x.pkg,x.raw,x.overlay);
-    return info.score>=3;
-  }
-
-  // Apps with a normal Android launcher entry that are not protected and are currently enabled.
-  // These are the launcher-visible apps that the tool considers eligible for Disable.
-  function isLauncherDisableCandidate(x){
-    return !!(x && x.launcherVisible && !x.removed && x.state!=='disabled' && !isProtected(x));
-  }
-
-  function isPopupCandidate(x){
-    if(!x || x.removed || x.system || isProtected(x)) return false;
-    const info=classify(x.pkg,x.raw,x.overlay);
-    return info.tags.includes('OVERLAY') || info.tags.includes('ADWARE-NAME');
-  }
-
-  function fallbackIcon(pkg, system){
-    const p=pkg.toLowerCase();
-    if(p.includes('chrome'))return '🌐'; if(p.includes('youtube'))return '▶'; if(p.includes('facebook'))return 'f';
-    if(p.includes('instagram'))return '◎'; if(p.includes('messenger'))return '💬'; if(p.includes('tiktok'))return '♪';
-    if(p.includes('spotify'))return '♫'; if(p.includes('whatsapp'))return '☎'; if(p.includes('camera'))return '📷';
-    if(p.includes('settings'))return '⚙'; if(p.includes('dialer')||p.includes('phone'))return '☎';
-    if(p.includes('message')||p.includes('mms'))return '✉'; if(p.includes('maps'))return '📍';
-    if(p.includes('calendar'))return '📅'; if(p.includes('calculator'))return '🧮';
-    return system?'⚙':'▦';
-  }
-
-  function appIconMarkup(x){
-    const url = iconUrlFor(x);
-    const emoji = fallbackIcon(x.pkg,x.system);
-    if(url){
-      return `<span class="appicon ${x.system?'sys':''}" title="${escapeHtml(x.label||friendlyName(x.pkg))}" data-emoji="${escapeHtml(emoji)}"><img class="appimg" src="${escapeHtml(url)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove();this.parentElement.classList.add('icon-failed')"></span>`;
-    }
-    return `<span class="appicon ${x.system?'sys':''}" title="${escapeHtml(x.label||friendlyName(x.pkg))}" data-emoji="${escapeHtml(emoji)}"><span class="appicon-fallback">${escapeHtml(emoji)}</span></span>`;
-  }
-
-  function renderSection(title,list){
-    const rows=list.map(x=>{
-      const prot=x.protected||protectedPackage(x.pkg);
-      const optionalPre=isOptionalPreinstalled(x);
-      const lockedSystem=x.system&&!optionalPre;
-      const label=x.label||friendlyName(x.pkg);
-      let badges='';
-      if(isBloatCandidate(x)) badges+='<span class="tag bloat">BLOAT/ADS</span>';
-      if(x.system) badges+='<span class="tag system">📱 PRE-INSTALLED</span>';
-      if(optionalPre) badges+='<span class="tag" style="background:#173b31;color:#8ee8ba">CAN DISABLE</span>';
-      if(x.removed) badges+='<span class="tag removed">REMOVED</span>';
-      if(prot&&!optionalPre) badges+='<span class="tag protected">PROTECTED</span>';
-      if(x.state==='disabled') badges+='<span class="tag disabled">DISABLED</span>';
-      return `<div class="approw ${x.selected&&!lockedSystem?'selected':''}" data-row="${escapeHtml(x.pkg)}">
-        ${lockedSystem ? '<span class="app-lock" title="Pre-installed app — selection locked" aria-label="Pre-installed app locked">🔒</span>' : '<span class="app-lock empty" aria-hidden="true"></span>'}
-        <input class="app-check" type="checkbox" data-pkg="${escapeHtml(x.pkg)}" ${x.selected&&!lockedSystem?'checked':''} ${lockedSystem?'disabled':''} aria-label="${lockedSystem?'Pre-installed app locked: ':'Select '}${escapeHtml(label)}">
-        ${appIconMarkup(x)}
-        <div class="meta"><div class="name">${escapeHtml(label)}</div><div class="pkg">${escapeHtml(x.pkg)}</div><div class="tags">${badges}</div></div>
-      </div>`;
-    }).join('');
-    return `<div class="section-title"><h3>${title}</h3><span class="count">${list.length}</span></div><div class="app-list">${rows||'<div class="empty">No apps in this section.</div>'}</div>`;
-  }
-
-  function filteredPackages(){
-    const q=$('filter').value.toLowerCase().trim(), cat=$('category').value;
-    return packages.filter(x=>{
-      if(selectedOnly && !x.selected) return false;
-      const label=(x.label||friendlyName(x.pkg)).toLowerCase();
-      const info=classify(x.pkg,x.raw,x.overlay);
-      const match=!q||x.pkg.toLowerCase().includes(q)||label.includes(q);
-      let category=true;
-      if(cat==='system') category=x.system&&!x.removed;
-      if(cat==='user') category=!x.system&&!x.removed;
-      if(cat==='disabled') category=x.state==='disabled'&&!x.removed;
-      if(cat==='removed') category=!!x.removed;
-      if(cat==='bloat') category=isBloatCandidate(x);
-      if(cat==='popup') category=isPopupCandidate(x);
-      if(cat==='protected') category=isProtected(x)&&!x.removed;
-      if(cat==='launcher') category=isLauncherDisableCandidate(x);
-      return match&&category;
-    });
-  }
-
-
-  // ===== SERVER-SIDE LICENSE ACTIVATION =====
-  // License authority is handled by the PHP + MySQL API.
-  // IMPORTANT: replace this HTTP URL with your HTTPS license API URL
-  // before deploying this HTML to GitHub Pages.
-  const LICENSE_API = 'http://107.152.37.75/ads/license-api';
-  const LICENSE_STORAGE_KEY = 'jhoelsoft_license_session_v1';
-
-  let currentSerial = '';
-  let licenseActive = false;
-  let licenseBusy = false;
-  let licenseToken = '';
-
-  function normalizeLicenseSerial(serial){
-    return String(serial||'').trim();
-  }
-  function normalizeLicenseKey(key){
-    return String(key||'').replace(/\s+/g,'').trim();
-  }
-  function setLicenseState(active){
-    licenseActive=!!active;
-    const el=$('licenseStatus');
-    if(el){
-      el.textContent=active?'🔓 LICENSE ACTIVE':'🔒 LICENSE REQUIRED';
-      el.classList.toggle('active',active);
-    }
-  }
-  function clearLicenseSession(){
-    licenseToken='';
-    localStorage.removeItem(LICENSE_STORAGE_KEY);
-    setLicenseState(false);
-  }
-  async function licenseRequest(path, body, token=''){
-    const headers={'Content-Type':'application/json'};
-    if(token) headers.Authorization='Bearer '+token;
-    let response;
-    try{
-      response=await fetch(`${LICENSE_API}${path}`,{
-        method:'POST',
-        headers,
-        body:JSON.stringify(body||{}),
-        cache:'no-store'
-      });
-    }catch(e){
-      throw new Error('Unable to reach the license server. Check the API URL, HTTPS and network connection.');
-    }
-    let data={};
-    try{ data=await response.json(); }catch(_){ }
-    if(!response.ok || !data.ok){
-      throw new Error(data.error || `License server error (${response.status})`);
-    }
-    return data;
-  }
-  function saveLicenseSession(data){
-    licenseToken=data.token||'';
-    localStorage.setItem(LICENSE_STORAGE_KEY,JSON.stringify({
-      token:licenseToken,
-      expiresAt:data.expiresAt||null,
-      serial:data.serial||currentSerial,
-      license:data.license||''
-    }));
-  }
-  function openLicenseModal(){
-    $('licenseSerial').textContent=currentSerial||'Not connected';
-    $('licenseInput').value='';
-    $('licenseError').textContent=currentSerial?'':'Connect the phone through ADB first.';
-    $('licenseOverlay').classList.add('show');
-    setTimeout(()=>$('licenseInput')?.focus(),30);
-  }
-  function closeLicenseModal(){ $('licenseOverlay').classList.remove('show'); }
-  function requireLicense(){
-    if(licenseActive) return true;
-    if(!connected){ status('Connect the Android phone through ADB first.','warn'); return false; }
-    openLicenseModal();
+  let d={}; try{d=await r.json();}catch(_){}
+  if(!r.ok || !d.ok) throw new Error(d.error||`Server error (${r.status})`);
+  return d;
+}
+function saveSession(d){
+  licenseToken=d.token||'';
+  localStorage.setItem(SESSION_KEY,JSON.stringify({
+    token:licenseToken,serial:d.serial||currentSerial,expiresAt:d.expiresAt||null,license:d.license||''
+  }));
+}
+function clearSession(){
+  licenseToken='';
+  localStorage.removeItem(SESSION_KEY);
+  setState(false);
+}
+async function validateStored(){
+  let s=null;
+  try{s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');}catch(_){}
+  if(!s?.token || !s?.serial || normalize(s.serial)!==normalize(currentSerial)) return false;
+  try{
+    await request('/api/validate',{serial:currentSerial},s.token);
+    licenseToken=s.token;
+    return true;
+  }catch(_){
+    clearSession();
     return false;
   }
-  async function activateLicense(){
-    if(licenseBusy)return;
-    if(!connected || !currentSerial){
-      $('licenseError').textContent='Connect the Android phone through ADB first.';
-      return;
-    }
-    const key=normalizeLicenseKey($('licenseInput').value);
-    if(!/^\d{11}$/.test(key)){
-      $('licenseError').textContent='License key must contain exactly 11 digits.';
-      return;
-    }
-    licenseBusy=true;
-    $('licenseActivate').disabled=true;
-    $('licenseError').textContent='Contacting license server…';
-    try{
-      const data=await licenseRequest('/api/activate',{
-        license:key,
-        serial:normalizeLicenseSerial(currentSerial)
-      });
-      saveLicenseSession(data);
-      setLicenseState(true);
-      closeLicenseModal();
-      const expiry=data.expiresAt ? ` (expires ${data.expiresAt})` : ' (no expiration)';
-      status(`✅ LICENSE ACTIVATED FOR THIS DEVICE${expiry}`,'ok');
-      updateButtons();
-    }catch(e){
-      clearLicenseSession();
-      $('licenseError').textContent=errText(e);
-      status('❌ License activation failed: '+errText(e),'bad');
-    }finally{
-      licenseBusy=false;
-      $('licenseActivate').disabled=false;
-    }
+}
+function openLicense(){
+  const serial=el('licenseSerial');
+  const input=el('licenseInput');
+  const err=el('licenseError');
+  if(serial)serial.textContent=currentSerial||'Not connected';
+  if(input)input.value='';
+  if(err)err.textContent='';
+  el('licenseOverlay')?.classList.add('show');
+  setTimeout(()=>input?.focus(),30);
+}
+function closeLicense(){ el('licenseOverlay')?.classList.remove('show'); }
+
+async function activateLicense(){
+  if(busy)return;
+  const key=normalize(el('licenseInput')?.value);
+  if(!/^\d{11}$/.test(key)){
+    el('licenseError').textContent='License key must contain exactly 11 digits.';
+    return;
   }
-  async function restoreStoredLicense(){
-    if(!currentSerial)return false;
-    try{
-      const saved=JSON.parse(localStorage.getItem(LICENSE_STORAGE_KEY)||'null');
-      if(!saved?.token)return false;
-      if(saved.serial && normalizeLicenseSerial(saved.serial)!==normalizeLicenseSerial(currentSerial)){
-        clearLicenseSession();
-        return false;
+  busy=true;
+  el('licenseError').textContent='Checking license…';
+  try{
+    const d=await request('/api/activate',{license:key,serial:currentSerial});
+    saveSession(d);
+    closeLicense();
+    await startAfterLicense();
+  }catch(e){
+    clearSession();
+    el('licenseError').textContent=e.message||String(e);
+  }finally{
+    busy=false;
+  }
+}
+
+async function loadApp(){
+  if(appLoaded)return;
+  const d=await request('/api/app',{},licenseToken);
+  if(!d.code)throw new Error('Application code was not returned by server.');
+  const blob=new Blob([d.code+'\n//# sourceURL=JHOELSOFT-ADS-APP.js'],{type:'text/javascript'});
+  const url=URL.createObjectURL(blob);
+  try{
+    await import(url);
+
+    // The protected module installs its public bridge on window.
+    // Do not continue silently if the bridge was not initialized.
+    const deadline=Date.now()+3000;
+    while(typeof window.__JHOELSOFT_SET_LICENSE__!=='function' && Date.now()<deadline){
+      await new Promise(r=>setTimeout(r,50));
+    }
+    if(typeof window.__JHOELSOFT_SET_LICENSE__!=='function'){
+      throw new Error('Application loaded, but its command bridge did not initialize. Check the downloaded JS for a runtime error.');
+    }
+  }finally{
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  appLoaded=true;
+}
+
+async function authenticateDevice(device){
+  let connection;
+  try{
+    connection=await device.connect();
+  }catch(e){
+    if(!/busy|claim|access denied|unable to claim|in use|operation that changes the device state is in progress/i.test(String(e?.message||e))){
+      throw e;
+    }
+    try{await device.raw.close();}catch(_){}
+    await new Promise(r=>setTimeout(r,600));
+    connection=await device.connect();
+  }
+
+  msg('License verified. Starting ADB authentication…\nUnlock TARGET and tap “Allow USB debugging?”.','ok');
+
+  const store=new AdbWebCredentialStore('JHOELSOFT APK Cleaner');
+  let showedAuth=false;
+  const credentialStore={
+    generateKey:()=>store.generateKey(),
+    iterateKeys:()=>{
+      if(!showedAuth){
+        showedAuth=true;
+        msg('⏳ ADB AUTHORIZATION WAITING\n\nUnlock TARGET and accept “Allow USB debugging?”.\nTick “Always allow from this computer” if shown.','');
       }
-      await licenseRequest('/api/validate',{
-        serial:normalizeLicenseSerial(currentSerial)
-      },saved.token);
-      licenseToken=saved.token;
-      setLicenseState(true);
-      return true;
-    }catch(_){
-      clearLicenseSession();
-      return false;
+      return store.iterateKeys();
     }
-  }
-  async function validateLicenseOnline(){
-    if(!currentSerial || !licenseToken) return false;
-    try{
-      await licenseRequest('/api/validate',{
-        serial:normalizeLicenseSerial(currentSerial)
-      },licenseToken);
-      return true;
-    }catch(_){
-      clearLicenseSession();
-      return false;
-    }
-  }
+  };
+  const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error(
+    'ADB authorization timed out. Unlock TARGET and accept the USB debugging prompt.'
+  )),45000));
 
-  function resetSelection(){
-    packages.forEach(x=>x.selected=false);
-    selectedOnly=false;
-    const sp=$('selectPage'); if(sp)sp.checked=false;
-  }
-
-  function setFilter(cat){
-    resetSelection();
-    // Every category/filter change starts a fresh selection context.
-    // This prevents checks from another category (e.g. Pre-installed)
-    // from carrying over into Bloat/Ads, Pop-up, Disabled, etc.
-    packages.forEach(x=>x.selected=false);
-    selectedOnly=false;
-    $('selectedCount').classList.remove('active');
-    $('category').value=cat;
-
-    // Bloat/Ads is a filter only. It must NOT auto-check apps.
-    // Users must manually tick the checkboxes (or explicitly use
-    // “Select all bloat/ads”).
-
-    document.querySelectorAll('#filterPills .pill').forEach(btn=>btn.classList.toggle('active',btn.dataset.filter===cat));
-    renderApps();
-  }
-
-  function renderApps(){
-    const list=filteredPackages();
-    const cat=$('category').value;
-    let html='';
-
-    if(cat==='all'){
-      const system=list.filter(x=>x.system&&!x.removed);
-      const user=list.filter(x=>!x.system&&!x.removed);
-      if(system.length) html+=renderSection('⚙️ System Apps',system);
-      if(user.length) html+=renderSection('📦 Apps You Can Uninstall',user);
-    }else if(cat==='system'){
-      html+=renderSection('⚙️ System Apps',list.filter(x=>x.system&&!x.removed));
-    }else if(cat==='user'){
-      html+=renderSection('📦 Apps You Can Uninstall',list.filter(x=>!x.system&&!x.removed));
-    }else if(cat==='bloat'){
-      html+=renderSection('🟢 Bloat / Ads Detected',list);
-    }else if(cat==='popup'){
-      html+=renderSection('🟠 Pop-up / Overlay Apps Detected',list);
-    }else if(cat==='disabled'){
-      html+=renderSection('⏸ Disabled Apps',list);
-    }else if(cat==='removed'){
-      html+=renderSection('♻ Removed / Recoverable Apps',list);
-    }else if(cat==='protected'){
-      html+=renderSection('🔴 Protected Apps',list);
-    }else if(cat==='launcher'){
-      html+=renderSection('🚀 Launcher Apps — Can Disable',list);
-    }
-
-    if(!html) html='<div class="empty">No apps found.</div>';
-    $('apps').innerHTML=html;
-
-    $('apps').querySelectorAll('.app-check').forEach(cb=>{
-      cb.addEventListener('change',()=>{
-        const x=packages.find(p=>p.pkg===cb.dataset.pkg);
-        if(x && (!x.system || isOptionalPreinstalled(x))) x.selected=cb.checked;
-        else if(x) x.selected=false;
-        updateButtons();
-      });
-    });
-
-    const selectableVisible=list.filter(x=>!x.system||isOptionalPreinstalled(x));
-    $('selectPage').checked=selectableVisible.length>0 && selectableVisible.every(x=>x.selected);
-    updateButtons();
-    updateCounters();
-    document.querySelectorAll('#filterPills .pill').forEach(btn=>{
-      btn.classList.toggle('active',btn.dataset.filter===$('category').value);
-    });
-  }
-
-  function updateCounters(){
-    const bloat=packages.filter(isBloatCandidate).length;
-    $('countAll').textContent=packages.filter(x=>!x.removed).length;
-    $('countDownloaded').textContent=packages.filter(x=>!x.system&&!x.removed).length;
-    $('countBloat').textContent=bloat;
-    $('countPopup').textContent=packages.filter(isPopupCandidate).length;
-    $('countPre').textContent=packages.filter(x=>x.system&&!x.removed).length;
-    $('countDisabled').textContent=packages.filter(x=>x.state==='disabled'&&!x.removed).length;
-    $('countRemoved').textContent=packages.filter(x=>x.removed).length;
-    $('countProtected').textContent=packages.filter(x=>isProtected(x)).length;
-    $('countLauncher').textContent=packages.filter(isLauncherDisableCandidate).length;
-  }
-
-  function updateButtons(){
-    const chosen=packages.filter(x=>x.selected);
-    const canRecover=chosen.some(x=>x.removed);
-    const canDisable=chosen.some(x=>x.system&&!x.removed&&x.state!=='disabled'&&(!isProtected(x)||isOptionalPreinstalled(x)));
-    const canEnable=chosen.some(x=>x.state==='disabled'&&!x.removed);
-    const canUninstall=chosen.some(x=>!x.system&&!x.removed&&!isProtected(x));
-    $('uninstall').disabled=!connected||!licenseActive||!canUninstall;
-    $('disableSelected').disabled=!connected||!licenseActive||!canDisable;
-    $('enableSelected').disabled=!connected||!licenseActive||!canEnable;
-    $('recoverSelected').disabled=!connected||!licenseActive||!canRecover;
-    $('blockSelected').disabled=!connected||!licenseActive||!chosen.some(x=>!x.removed);
-    $('clearData').disabled=!connected||!licenseActive||!packages.some(x=>x.selected&&!x.removed);
-    $('selectRisk').disabled=!connected||!packages.length;
-    $('selectPage').disabled=!packages.length;
-    $('selectedCount').textContent=`${chosen.length} selected`;
-    $('selectedCount').classList.toggle('active', selectedOnly && chosen.length>0);
-    $('selectedCount').title=selectedOnly ? 'Show all apps' : 'Show only selected apps';
-    $('scan').disabled=!connected||!licenseActive;
-    $('btnSmartScan').disabled=!connected||!licenseActive;
-    $('btnStorage').disabled=!connected||!licenseActive;
-    $('storageDelete').disabled=true;
-    $('installApk').disabled=!connected||!licenseActive;
-  }
-
-  async function shell(command) {
-    if (!adb) throw new Error('ADB is not connected');
-    log('$ ' + command);
-    return await adb.subprocess.noneProtocol.spawnWaitText(command);
-  }
-
-  let storagePath = '/storage/emulated/0';
-  let storageItems = [];
-  let selectedOnly = false;
-
-  function quoteShellArg(v){
-    return "'" + String(v).replace(/'/g, "'\\''") + "'";
-  }
-
-  function normalizeStoragePath(p){
-    let x=String(p||'/storage/emulated/0').replace(/\\/g,'/');
-    const root='/storage/emulated/0';
-    if(x==='/sdcard') x=root;
-    if(!x.startsWith(root)) x=root;
-    x=x.replace(/\/+/g,'/').replace(/\/\.$/,'');
-    if(x.length>root.length && x.endsWith('/')) x=x.slice(0,-1);
-    return x || root;
-  }
-
-  function storageParent(p){
-    const root='/storage/emulated/0';
-    p=normalizeStoragePath(p);
-    if(p===root) return root;
-    const i=p.lastIndexOf('/');
-    return i<=root.length?root:p.slice(0,i);
-  }
-
-  // Only files in common user download/transfer folders may be deleted.
-  // This deliberately excludes DCIM/Pictures and all Android/app/system folders.
-  function isUserTransferFile(path){
-    const root='/storage/emulated/0/';
-    const rel=String(path||'').replace(/\\/g,'/');
-    if(!rel.startsWith(root)) return false;
-    const parts=rel.slice(root.length).split('/').filter(Boolean);
-    if(parts.length<2) return false;
-    const top=parts[0].toLowerCase();
-    return new Set([
-      'download','downloads','bluetooth','documents','received','transfer','transfers',
-      'shareit','shareit files','xender','nearby share','nearbyshare','zapya','sendanywhere'
-    ]).has(top);
-  }
-
-  async function listStorage(dir=storagePath){
-    if(!adb||!connected) throw new Error('ADB is not connected');
-    storagePath=normalizeStoragePath(dir);
-    $('storagePath').textContent=storagePath;
-    $('storageList').innerHTML='<div class="storage-empty">Loading…</div>';
-    $('storageDelete').disabled=true;
-    $('storageSelected').textContent='0 files selected';
-    const q=quoteShellArg(storagePath);
-    const [dirsRaw,filesRaw]=await Promise.all([
-      shell(`find ${q} -maxdepth 1 -mindepth 1 -type d -print 2>/dev/null`),
-      shell(`find ${q} -maxdepth 1 -mindepth 1 -type f -print 2>/dev/null`)
+  let authenticated;
+  try{
+    authenticated=await Promise.race([
+      AdbDaemonTransport.authenticate({serial:device.serial,connection,credentialStore}),
+      timeout
     ]);
-    const dirs=dirsRaw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(path=>({path,type:'dir',name:path.slice(path.lastIndexOf('/')+1)}));
-    const files=filesRaw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(path=>({path,type:'file',name:path.slice(path.lastIndexOf('/')+1),deletable:isUserTransferFile(path)}));
-    storageItems=[...dirs.sort((a,b)=>a.name.localeCompare(b.name)),...files.sort((a,b)=>a.name.localeCompare(b.name))];
-    $('storageCount').textContent=storageItems.length+' item'+(storageItems.length===1?'':'s');
-    renderStorageItems();
+  }catch(e){
+    try{await device.raw.close();}catch(_){}
+    throw e;
   }
 
-  function renderStorageItems(){
-    const list=$('storageList');
-    if(!storageItems.length){list.innerHTML='<div class="storage-empty">This folder is empty or cannot be read.</div>';return;}
-    list.innerHTML=storageItems.map((item,i)=>{
-      const icon=item.type==='dir'?'📁':'📄';
-      const meta=item.type==='dir'?'Folder':(item.deletable?'Downloaded / transferred file':'Protected from deletion');
-      const checkbox=item.type==='file'&&item.deletable?`<input type="checkbox" class="storage-check" data-index="${i}" aria-label="Select file for deletion">`:'<span style="width:17px;flex:0 0 auto"></span>';
-      return `<div class="storage-item">${checkbox}<span class="storage-icon">${icon}</span><button class="storage-open" data-open="${i}"><div class="storage-name">${escapeHtml(item.name)}</div><div class="storage-meta">${meta}</div></button></div>`;
-    }).join('');
-    list.querySelectorAll('.storage-open').forEach(btn=>btn.onclick=()=>{ const item=storageItems[Number(btn.dataset.open)]; if(item?.type==='dir') listStorage(item.path); });
-    list.querySelectorAll('.storage-check').forEach(ch=>ch.onchange=updateStorageSelection);
+  const adb=new Adb(authenticated);
+  return {adb,usbDevice:device,serial:currentSerial};
+}
+
+async function startAfterLicense(){
+  setState(true);
+  msg('License verified. Downloading application…','ok');
+  window.__JHOELSOFT_BOOTSTRAP__={serial:currentSerial,token:licenseToken,licenseActive:true};
+
+  window.addEventListener('error', e=>{
+    if(e?.message) console.error('[JHOELSOFT APP ERROR]',e.message,e.error||'');
+  }, {once:false});
+
+  window.addEventListener('unhandledrejection', e=>{
+    console.error('[JHOELSOFT APP PROMISE ERROR]',e.reason||'');
+  }, {once:false});
+
+  await loadApp();
+
+  // The protected app is now in memory. Unlock its command buttons first.
+  if(typeof window.__JHOELSOFT_SET_LICENSE__==='function'){
+    window.__JHOELSOFT_SET_LICENSE__(true,currentSerial);
+  }else{
+    throw new Error('Application command module did not expose the license bridge.');
   }
 
-  function updateStorageSelection(){
-    const selected=[...document.querySelectorAll('.storage-check:checked')];
-    $('storageSelected').textContent=selected.length+' file'+(selected.length===1?'':'s')+' selected';
-    $('storageDelete').disabled=!connected||!selected.length;
+  // Explicitly unlock the license-gated toolbar now.
+  // Scan/action buttons that depend on a selection remain disabled by the app itself.
+  ['scan','btnSmartScan','btnStorage','diag','installApk'].forEach(id=>{
+    const b=el(id);
+    if(b) b.disabled=false;
+  });
+
+  msg('✅ License active • Application loaded. Waiting for ADB authorization…','ok');
+
+  // Now, and only now, perform Android RSA/ADB authentication.
+  const session=await authenticateDevice(selectedUsb);
+
+  // Give the authenticated ADB session to the protected command app.
+  if(typeof window.__JHOELSOFT_SET_ADB__!=='function'){
+    throw new Error('Application command module did not initialize correctly.');
   }
-
-  async function deleteSelectedStorageFiles(){
-    const selected=[...document.querySelectorAll('.storage-check:checked')].map(x=>storageItems[Number(x.dataset.index)]).filter(x=>x&&x.type==='file'&&x.deletable&&isUserTransferFile(x.path));
-    if(!selected.length)return;
-    const names=selected.slice(0,5).map(x=>x.name).join('\n');
-    const more=selected.length>5?`\n…and ${selected.length-5} more`:'';
-    if(!confirm(`Delete ${selected.length} selected downloaded/transferred file(s)?\n\n${names}${more}\n\nOnly user transfer/download files are allowed. This cannot be undone.`)) return;
-    $('storageDelete').disabled=true;
-    try{
-      for(const item of selected){
-        const path=normalizeStoragePath(item.path);
-        if(!isUserTransferFile(path)) throw new Error('Blocked: only downloaded/transferred user files can be deleted.');
-        await shell(`rm -f -- ${quoteShellArg(path)}`);
-      }
-      status(`Deleted ${selected.length} downloaded/transferred file(s) from phone storage.`,'ok');
-      await listStorage(storagePath);
-    }catch(e){ status('❌ Delete failed: '+errText(e),'bad'); }
-    finally{ updateStorageSelection(); }
-  }
-
-  async function openStorage(){
-    if(!connected){status('Connect ADB first to access phone storage.','warn');return;}
-    $('storageDialog').showModal();
-    try{await listStorage(storagePath);}catch(e){$('storageList').innerHTML='<div class="storage-empty">Unable to read phone storage: '+escapeHtml(errText(e))+'</div>';}
-  }
-
-  async function closeConnection() {
-    if (heartbeatTimer) {
-      clearInterval(heartbeatTimer);
-      heartbeatTimer = null;
-    }
-
-    if (disconnectHandler && navigator.usb) {
-      navigator.usb.removeEventListener('disconnect', disconnectHandler);
-      disconnectHandler = null;
-    }
-
-    const old = adb;
-    adb = null;
-    usbDevice = null;
-    connected = false;
-
-    if (old) {
-      try { await old.close(); } catch (_) {}
-    }
-  }
-
-  async function connect() {
-    if (connectPromise) return connectPromise;
-
-    connectPromise = (async () => {
-      if (!window.isSecureContext) {
-        status('WebUSB needs HTTPS or localhost.', 'bad');
-        return;
-      }
-      if (!navigator.usb) {
-        status('WebUSB is unavailable. Use Chromium/Chrome.', 'bad');
-        return;
-      }
-      if (!AdbDaemonWebUsbDeviceManager.BROWSER) {
-        status('This browser does not expose the required WebUSB ADB manager.', 'bad');
-        return;
-      }
-
-      $('connect').disabled = true;
-
-      try {
-        // Make sure an old session is completely closed before requesting a new one.
-        await closeConnection();
-
-        status('Opening USB chooser… Select the TARGET Android phone.');
-        const device = await AdbDaemonWebUsbDeviceManager.BROWSER.requestDevice();
-        if (!device) {
-          status('No phone selected.');
-          return;
-        }
-
-        usbDevice = device;
-
-        let connection;
-        try {
-          connection = await device.connect();
-        } catch (e) {
-          if (!isBusyError(e)) throw e;
-
-          log('USB busy detected. Closing raw handle and retrying in 600 ms…');
-          try { await device.raw.close(); } catch (_) {}
-          await sleep(600);
-          connection = await device.connect();
-        }
-
-        status('Phone answered. Starting ADB authentication…\nUnlock TARGET and tap “Allow USB debugging?”.');
-
-        const store = new AdbWebCredentialStore('JHOELSOFT APK Cleaner');
-        let showedAuth = false;
-
-        const credentialStore = {
-          generateKey: () => store.generateKey(),
-          iterateKeys: () => {
-            if (!showedAuth) {
-              showedAuth = true;
-              status('⏳ ADB AUTHORIZATION WAITING\n\nUnlock TARGET and accept “Allow USB debugging?”.\nTick “Always allow from this computer” if shown.');
-            }
-            return store.iterateKeys();
-          }
-        };
-
-        const authTimeout = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error(
-            'ADB authorization timed out. Unlock TARGET and accept the USB debugging prompt.'
-          )), 45000)
-        );
-
-        let authenticated;
-        try {
-          authenticated = await Promise.race([
-            AdbDaemonTransport.authenticate({
-              serial: device.serial,
-              connection,
-              credentialStore
-            }),
-            authTimeout
-          ]);
-        } catch (e) {
-          try { await device.raw.close(); } catch (_) {}
-          throw e;
-        }
-
-        adb = new Adb(authenticated);
-        connected = true;
-
-        disconnectHandler = ev => {
-          if (ev.device === device.raw) {
-            log('USB device disconnected.');
-            closeConnection().catch(() => {});
-            $('disconnect').disabled = true;
-            $('scan').disabled = true; $('btnSmartScan').disabled = true;
-            $('deviceInfo').textContent = 'Not connected.';
-            updateButtons();
-            status('USB disconnected.', 'bad');
-          }
-        };
-
-        navigator.usb.addEventListener('disconnect', disconnectHandler);
-
-        // Same heartbeat strategy as the working implementation.
-        const heartbeatAdb = adb;
-        heartbeatTimer = setInterval(async () => {
-          if (adb !== heartbeatAdb) return;
-          try {
-            await Promise.race([
-              heartbeatAdb.getProp('ro.serialno'),
-              new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('heartbeat timeout')), 15000)
-              )
-            ]);
-          } catch (_) {
-            log('ADB heartbeat failed; closing stale connection.');
-            await closeConnection();
-            $('disconnect').disabled = true;
-            $('scan').disabled = true; $('btnSmartScan').disabled = true;
-            updateButtons();
-            status('ADB connection lost. Reconnect the TARGET phone.', 'bad');
-          }
-        }, 10000);
-
-        status('✅ ADB CONNECTED', 'ok');
-        $('disconnect').disabled = false;
-        $('scan').disabled = false;
-
-        let model='', android='', serial='', brand='';
-        try { brand = (await adb.getProp('ro.product.manufacturer')).trim(); } catch (_) {}
-        try { model = (await adb.getProp('ro.product.model')).trim(); } catch (_) {}
-        try { android = (await adb.getProp('ro.build.version.release')).trim(); } catch (_) {}
-        try { serial = (await adb.getProp('ro.serialno')).trim(); } catch (_) {}
-
-        $('deviceInfo').innerHTML =
-          '<b>Brand:</b> '+escapeHtml(brand||'—')+
-          '<br><b>Model:</b> '+escapeHtml(model||'—')+
-          '<br><b>Android:</b> '+escapeHtml(android||'—')+
-          '<br><b>Serial:</b> '+escapeHtml(serial || device.serial || '—');
-        currentSerial = serial || device.serial || '';
-        $('licenseSerial').textContent = currentSerial || 'Unknown';
-        setLicenseState(false);
-        const restored = await restoreStoredLicense();
-        if(!restored){ openLicenseModal(); }
-        updateButtons();
-
-      } catch (e) {
-        connected = false;
-        const m = errText(e);
-
-        if (isBusyError(e)) {
-          status(
-            '❌ USB IS BUSY\n\n' + m +
-            '\n\nClose adb.exe / Android Studio / other WebADB tabs, then unplug/replug OTG and try again.',
-            'bad'
-          );
-        } else if (/authorization|allow|timed out|AUTH|authentication/i.test(m)) {
-          status(
-            '❌ ADB AUTHORIZATION FAILED\n\n' + m +
-            '\n\nTARGET: unlock → USB debugging ON → accept “Allow USB debugging?” → reconnect.',
-            'bad'
-          );
-        } else {
-          status('❌ ADB CONNECTION FAILED\n\n' + m, 'bad');
-        }
-
-        try {
-          if (usbDevice?.raw) await usbDevice.raw.close();
-        } catch (_) {}
-
-        adb = null;
-        usbDevice = null;
-      } finally {
-        $('connect').disabled = false;
-        updateButtons();
-      }
-    })();
-
-    try {
-      return await connectPromise;
-    } finally {
-      connectPromise = null;
-    }
-  }
-
-  async function disconnect() {
-    await closeConnection();
-    $('disconnect').disabled = true;
-    $('scan').disabled = true;
-    packages = [];
-    currentSerial=''; setLicenseState(false);
-    $('apps').innerHTML = '';
-    $('deviceInfo').textContent = 'Not connected.';
-    updateButtons();
-    status('Disconnected.');
-  }
-
-  function parsePackages(raw) {
-    return new Set(
-      raw.split(/\r?\n/)
-        .map(x => x.trim())
-        .filter(x => x.startsWith('package:'))
-        .map(x => x.slice(8).trim())
-        .filter(Boolean)
-    );
-  }
-
-  async function scan(){
-    if(!adb||!connected)return;
-    $('scan').disabled=true;
-    try{
-      status('Scanning Android packages…');
-      const [systemRaw,userRaw,disabledRaw,installedRaw,allRaw]=await Promise.all([
-        shell('pm list packages -s --user 0'),shell('pm list packages -3 --user 0'),shell('pm list packages -d --user 0'),shell('pm list packages --user 0'),shell('pm list packages -u --user 0')
-      ]);
-      const system=parsePackages(systemRaw),user=parsePackages(userRaw),disabled=parsePackages(disabledRaw),installed=parsePackages(installedRaw),all=parsePackages(allRaw);
-
-      // Ask Android which packages expose a normal launcher entry point.
-      // System packages without a launcher entry are protected.
-      let launcherPackages=new Set();
-      try{
-        const raw=await shell('cmd package query-activities --brief --user 0 -a android.intent.action.MAIN -c android.intent.category.LAUNCHER');
-        raw.split(/\r?\n/).forEach(line=>{
-          const m=line.trim().match(/^([A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)\//);
-          if(m) launcherPackages.add(m[1]);
-        });
-        log(`Launcher-visible packages detected: ${launcherPackages.size}`);
-      }catch(_){
-        log('Launcher visibility query unavailable; using built-in protected system package rules.');
-      }
-
-      let overlays=new Set();
-      try{
-        const raw=await shell('cmd appops query-op --user 0 SYSTEM_ALERT_WINDOW allow');
-        overlays=new Set(raw.split(/\r?\n/).map(x=>x.trim()).filter(x=>/^[A-Za-z0-9_]+(\.[A-Za-z0-9_]+)+$/.test(x)));
-      }catch(_){log('Overlay permission query unavailable; continuing scan.')}
-
-      packages=[...all].map(pkg=>{
-        const systemApp=system.has(pkg);
-        const hiddenSystem=systemApp && launcherPackages.size>0 && !launcherPackages.has(pkg);
-        return {
-          pkg,
-          label:knownLabels[pkg]||friendlyName(pkg),
-          iconUrl:knownIconUrls[pkg]||'',
-          raw:'',
-          overlay:overlays.has(pkg),
-          system:systemApp,
-          state:disabled.has(pkg)?'disabled':'enabled',
-          removed:!installed.has(pkg),
-          protected:protectedPackage(pkg)||hiddenSystem,
-          launcherVisible:launcherPackages.has(pkg),
-          selected:false
-        };
-      }).sort((a,b)=>a.label.localeCompare(b.label));
-      renderApps();
-      status(`✅ Scan complete: ${packages.length} packages.\nInstalled: ${installed.size} • Third-party: ${user.size} • System: ${system.size} • Disabled: ${disabled.size} • Protected: ${packages.filter(x=>isProtected(x)).length} • Removed/recoverable: ${packages.filter(x=>x.removed).length}`);
-      // Resolve real Play Store icons after the list appears, so scanning stays responsive.
-      hydratePlayIcons().catch(e=>log('[ICON LOOKUP] '+errText(e)));
-    }catch(e){status('❌ Scan failed: '+errText(e),'bad');log('[SCAN ERROR] '+errText(e))}
-    finally{$('scan').disabled=!connected;$('btnSmartScan').disabled=!connected;updateButtons()}
-  }
-
-  async function disableSystemApp(x){
-    if(!x||!x.system||x.removed||x.state==='disabled')return;
-    if(isProtected(x) && !isOptionalPreinstalled(x)){alert('Protected system app: '+x.pkg+'\n\nHindi ito idi-disable ng bulk action.');return}
-    if(!confirm(`Disable “${x.label}”?\n\nPackage: ${x.pkg}`))return;
-    try{status('Disabling '+x.label+'…');const r=await shell(`pm disable-user --user 0 ${x.pkg}`);log(r||'(no output)');x.state='disabled';x.selected=false;renderApps();status(`✅ Disabled: ${x.label}\n${x.pkg}`)}catch(e){status('❌ Disable failed: '+errText(e),'bad');log('ERROR '+x.pkg+': '+errText(e))}
-  }
-
-  async function enableApp(x){
-    if(!x||x.removed||x.state!=='disabled')return;
-    try{status('Enabling '+x.label+'…');const r=await shell(`pm enable --user 0 ${x.pkg}`);log(r||'(no output)');x.state='enabled';x.selected=false;renderApps();status(`✅ Enabled: ${x.label}`)}catch(e){status('❌ Enable failed: '+errText(e),'bad')}
-  }
-
-  async function uninstallOne(x){
-    if(!x||x.removed)return;
-    if(isProtected(x)){alert('Protected package. Hindi ito ia-uninstall ng JHOELSOFT.');return}
-    if(!confirm(`Uninstall “${x.label}” for user 0?\n\nPackage: ${x.pkg}`))return;
-    try{status('Uninstalling '+x.label+'…');const r=await shell(`pm uninstall -k --user 0 ${x.pkg}`);log(r||'(no output)');x.removed=true;x.selected=false;x.state='removed';renderApps();status(`✅ Removed: ${x.label}\n♻ Maaari itong i-Recover kung supported ng Android.`)}catch(e){status('❌ Uninstall failed: '+errText(e),'bad');log('ERROR '+x.pkg+': '+errText(e))}
-  }
-
-  async function recoverApp(x){
-    if(!x||!x.removed)return;
-    if(!confirm(`Recover “${x.label}”?\n\nPackage: ${x.pkg}`))return;
-    try{
-      status('Recovering '+x.label+'…');
-      const r=await shell(`cmd package install-existing --user 0 ${x.pkg}`);
-      log(r||'(no output)');
-
-      // install-existing can report success while the package is still disabled
-      // or before the package list has refreshed. Explicitly enable it, then
-      // verify that Android reports it as installed for user 0.
-      try{
-        const en=await shell(`pm enable --user 0 ${x.pkg}`);
-        log(en||'(enable returned no output)');
-      }catch(enErr){
-        log('Enable after recover: '+errText(enErr));
-      }
-
-      // Verify this exact package instead of parsing the entire package list.
-      // This avoids false failures caused by large/truncated shell output.
-      const verifyOne=await shell(`pm list packages --user 0 ${x.pkg}`);
-      let installed=verifyOne.split(/\r?\n/).some(line=>{
-        const t=line.trim();
-        return t===`package:${x.pkg}` || t.startsWith(`package:${x.pkg}\r`) || t.includes(`package:${x.pkg}`);
-      });
-      if(!installed){
-        const verifyOne2=await shell(`cmd package list packages --user 0 ${x.pkg}`);
-        installed=verifyOne2.split(/\r?\n/).some(line=>{
-          const t=line.trim();
-          return t===`package:${x.pkg}` || t.includes(`package:${x.pkg}`);
-        });
-      }
-      if(!installed){
-        // A package can still exist in Android's package database but have no
-        // installed APK for user 0. Check the package record and APK path.
-        let path='';
-        try { path=await shell(`pm path ${x.pkg}`); } catch (_) {}
-        const pathFound=/package:(\/[^\r\n]+)/.test(path||'');
-        if(!pathFound){
-          throw new Error(`Unable to restore ${x.pkg}: no APK path is available on the device. The app must be reinstalled from its APK/source.`);
-        }
-        throw new Error(`Android still does not list ${x.pkg} as installed for user 0, kahit may APK path. Recovery needs a real APK install rather than install-existing.`);
-      }
-
-      // Refresh all package state so launcher visibility, disabled state and
-      // Removed/Recoverable counts are based on Android's current state.
-      x.removed=false;
-      x.state='enabled';
-      x.selected=false;
-      await scan();
-      status(`♻ Recovered: ${x.label}\n${x.pkg}\nThe app is installed and enabled for user 0.`);
-    }catch(e){
-      status('❌ Recover failed: '+errText(e),'bad');
-      log('ERROR '+x.pkg+': '+errText(e));
-      await scan().catch(()=>{});
-    }
-  }
-
-
-  async function installApkViaAdb(file){
-    if(!adb) throw new Error('ADB is not connected');
-    if(!file) return;
-    if(!/\.apk$/i.test(file.name)) throw new Error('Please select a valid APK file.');
-
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-    const remote = `/data/local/tmp/jhoelsoft_${Date.now()}_${safeName}`;
-    let uploaded = false;
-
-    try {
-      status(`Preparing ${file.name} for ADB installation…`);
-      log(`APK: ${file.name} (${file.size} bytes)`);
-      log(`Remote path: ${remote}`);
-
-      // Preferred path: use the WebADB sync service when this build exposes it.
-      if(adb.sync && typeof adb.sync.write === 'function') {
-        status(`Uploading ${file.name} to the target device…`);
-        await adb.sync.write({filename:remote,file:file.stream()});
-        uploaded = true;
-        log('ADB sync upload completed.');
-      } else {
-        // Fallback for WebADB builds without the Sync/file-transfer API.
-        // Transfer the APK through the normal ADB shell using base64 chunks.
-        // This is slower, but does not require adb.sync.
-        status(`Uploading ${file.name} through ADB shell…\nThis fallback is slower for large APK files.`);
-        log('ADB sync API unavailable; using base64 shell-transfer fallback.');
-
-        let decoder = 'base64 -d';
-        try {
-          const probe = await shell('command -v base64');
-          if(!String(probe||'').trim()) decoder = 'toybox base64 -d';
-        } catch(_) {
-          decoder = 'toybox base64 -d';
-        }
-
-        // Create/truncate the destination first.
-        await shell(`: > ${remote}`);
-
-        const bytes = new Uint8Array(await file.arrayBuffer());
-        const CHUNK = 48 * 1024;
-        for(let offset=0; offset<bytes.length; offset+=CHUNK){
-          const part = bytes.subarray(offset, Math.min(offset+CHUNK, bytes.length));
-          let binary='';
-          const STEP=0x8000;
-          for(let i=0;i<part.length;i+=STEP){
-            binary += String.fromCharCode(...part.subarray(i, Math.min(i+STEP, part.length)));
-          }
-          const b64 = btoa(binary);
-          await shell(`printf '%s' '${b64}' | ${decoder} >> ${remote}`);
-          const done=Math.min(offset+part.length,bytes.length);
-          const pct=Math.round(done/bytes.length*100);
-          status(`Uploading ${file.name} through ADB shell… ${pct}%`);
-        }
-        uploaded = true;
-        log('ADB shell upload completed.');
-      }
-
-      if(!uploaded) throw new Error('APK upload did not complete.');
-
-      // Verify that the remote file exists and has a non-zero size before installing.
-      const sizeOut = await shell(`wc -c < ${remote}`);
-      const remoteSize = Number.parseInt(String(sizeOut).trim(),10);
-      if(!Number.isFinite(remoteSize) || remoteSize !== file.size){
-        throw new Error(`APK upload verification failed: expected ${file.size} bytes but the device has ${Number.isFinite(remoteSize)?remoteSize:'unknown'} bytes.`);
-      }
-
-      status(`Installing ${file.name} via ADB…`);
-      const result = await shell(`pm install -r ${remote}`);
-      log(result||'(install returned no output)');
-
-      if(!/Success/i.test(result||'')){
-        throw new Error((result||'Android did not report a successful APK installation.').trim());
-      }
-
-      status(`✅ APK installed successfully: ${file.name}`,'ok');
-      await scan();
-    } finally {
-      // Always remove the temporary APK after the install attempt.
-      try { await shell(`rm -f ${remote}`); } catch(_) {}
-    }
-  }
-
-  
-  async function blockPopups(x){
-    if(!x||x.removed)return;
-    try{status('Blocking pop-ups for '+x.label+'…');const r=await shell(`appops set --user 0 ${x.pkg} SYSTEM_ALERT_WINDOW deny`);log(r||'(no output)');x.overlay=false;renderApps();status(`🚫 Pop-ups blocked: ${x.label}`)}catch(e){status('❌ Block pop-ups failed: '+errText(e),'bad')}
-  }
-
-  async function bulkAction(kind){
-    const chosen=packages.filter(x=>x.selected); if(!chosen.length)return;
-    const eligible=chosen.filter(x=>{
-      if(kind==='recover')return x.removed;
-      if(kind==='disable')return x.system&&!x.removed&&x.state!=='disabled'&&(!isProtected(x)||isOptionalPreinstalled(x));
-      if(kind==='enable')return x.state==='disabled'&&!x.removed;
-      if(kind==='uninstall')return !x.system&&!x.removed&&!isProtected(x);
-      return !x.removed;
-    });
-    if(!eligible.length){alert('Walang eligible na app sa selection.');return}
-    if(!confirm(`${kind.toUpperCase()} ${eligible.length} selected app(s)?\n\n${eligible.map(x=>x.label).join('\n')}`))return;
-    for(const x of eligible){
-      try{
-        let cmd='';
-        if(kind==='recover')cmd=`cmd package install-existing --user 0 ${x.pkg}`;
-        if(kind==='disable')cmd=`pm disable-user --user 0 ${x.pkg}`;
-        if(kind==='enable')cmd=`pm enable --user 0 ${x.pkg}`;
-        if(kind==='uninstall')cmd=`pm uninstall -k --user 0 ${x.pkg}`;
-        const r=await shell(cmd);log(r||'(no output)');
-        if(kind==='recover'){
-          try{const en=await shell(`pm enable --user 0 ${x.pkg}`);log(en||'(enable returned no output)')}catch(enErr){log('Enable after recover: '+errText(enErr))}
-          const verify=await shell(`pm list packages --user 0 ${x.pkg}`);
-          let installed=verify.split(/\r?\n/).some(line=>{
-            const t=line.trim();
-            return t===`package:${x.pkg}` || t.includes(`package:${x.pkg}`);
-          });
-          if(!installed){
-            const verify2=await shell(`cmd package list packages --user 0 ${x.pkg}`);
-            installed=verify2.split(/\r?\n/).some(line=>{
-              const t=line.trim();
-              return t===`package:${x.pkg}` || t.includes(`package:${x.pkg}`);
-            });
-          }
-          if(!installed) {
-            let path='';
-            try { path=await shell(`pm path ${x.pkg}`); } catch (_) {}
-            if(!/package:\/[^\r\n]+/.test(path||'')) {
-              throw new Error(`Unable to restore ${x.pkg}: no APK path is available on the device. The app must be reinstalled from its APK/source.`);
-            }
-            throw new Error(`Android still does not list ${x.pkg} as installed for user 0; install-existing did not actually restore it.`);
-          }
-          x.removed=false;x.state='enabled';
-        }
-        if(kind==='disable')x.state='disabled';
-        if(kind==='enable')x.state='enabled';
-        if(kind==='uninstall'){x.removed=true;x.state='removed'}
-        x.selected=false;
-      }catch(e){log('ERROR '+x.pkg+': '+errText(e))}
-    }
-    renderApps();status(`✅ ${kind} completed for ${eligible.length} app(s).`)
-  }
-
-
-  // SMART SCAN: intentionally uses read-only ADB queries. It does not
-  // uninstall/disable apps or delete files by itself.
-  function parseDf(out){
-    const lines=String(out||'').trim().split(/\r?\n/).filter(Boolean);
-    for(let i=lines.length-1;i>=0;i--){
-      const parts=lines[i].trim().split(/\s+/);
-      if(parts.length>=4 && /^\d+$/.test(parts[1]) && /^\d+$/.test(parts[2])){
-        const total=Number(parts[1]),used=Number(parts[2]);
-        if(total>0)return {totalKB:total,usedKB:used,pct:Math.round(used/total*100)};
-      }
-    }
-    return {totalKB:0,usedKB:0,pct:0};
-  }
-  function kbText(kb){
-    const n=Number(kb)||0;
-    if(n<1024)return `${Math.round(n)} KB`;
-    if(n<1024*1024)return `${(n/1024).toFixed(1)} MB`;
-    if(n<1024*1024*1024)return `${(n/1024/1024).toFixed(2)} GB`;
-    return `${(n/1024/1024/1024).toFixed(2)} TB`;
-  }
-  function firstNumber(text, re){const m=String(text||'').match(re);return m?Number(m[1]):null}
-  function setSmartProgress(p,step){
-    const bar=$('smartProgressBar'); if(bar)bar.style.width=Math.max(0,Math.min(100,p))+'%';
-    if($('smartStep'))$('smartStep').textContent=step;
-  }
-  function smartHealth(r){
-    let score=100;
-    score-=Math.min(25,r.bloat*6);
-    score-=Math.min(20,r.popup*8);
-    if(r.storage.pct>=90)score-=20; else if(r.storage.pct>=80)score-=12; else if(r.storage.pct>=70)score-=6;
-    if(r.battery.level!==null && r.battery.level<20)score-=8;
-    if(r.battery.temp!==null && r.battery.temp>=42)score-=12; else if(r.battery.temp!==null && r.battery.temp>=38)score-=5;
-    return Math.max(0,Math.min(100,Math.round(score)));
-  }
-  function smartTile(title,value,note,kind='good',action=''){return `<div class="smart-report-tile ${kind}" data-smart-action="${escapeHtml(action)}" role="button" tabindex="0" title="Click to open"><div class="r-label">${escapeHtml(title)}</div><div class="r-value">${escapeHtml(value)}</div><div class="r-note">${escapeHtml(note||'')}</div></div>`}
-  function smartDashboardTile(title,value,note,kind='good'){return `<div class="smart-tile ${kind}"><div class="k">${escapeHtml(title)}</div><div class="v">${escapeHtml(value)}</div><div class="d">${escapeHtml(note||'')}</div></div>`}
-
-  async function runSmartScan(){
-    if(!adb||!connected)throw new Error('ADB is not connected. Connect the target phone first.');
-    if(!packages.length){await scan();}
-    setSmartProgress(8,'reading Android packages…');
-    const bloatApps=packages.filter(isBloatCandidate);
-    const popupApps=packages.filter(isPopupCandidate);
-
-    setSmartProgress(24,'reading storage…');
-    let storage=parseDf(await shell('df -k /data 2>/dev/null'));
-    if(!storage.totalKB)storage=parseDf(await shell('df -k /sdcard 2>/dev/null'));
-
-    setSmartProgress(42,'counting files…');
-    let fileCount=0;
-    try{fileCount=firstNumber(await shell('find /sdcard -type f 2>/dev/null | wc -l'),/(\d+)/)||0}catch(_){fileCount=0}
-
-    setSmartProgress(58,'checking photos and videos…');
-    let mediaKB=0,mediaFiles=0;
-    try{
-      const dirs='/sdcard/DCIM /sdcard/Pictures /sdcard/Movies /sdcard/Download';
-      mediaKB=firstNumber(await shell(`du -sk ${dirs} 2>/dev/null | awk '{s+=$1} END{print s+0}'`),/(\d+)/)||0;
-      mediaFiles=firstNumber(await shell(`find ${dirs} -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.mp4' -o -iname '*.mkv' -o -iname '*.mov' \) 2>/dev/null | wc -l`),/(\d+)/)||0;
-    }catch(_){mediaKB=0;mediaFiles=0}
-
-    setSmartProgress(72,'checking temporary files…');
-    let cacheKB=0;
-    try{cacheKB=firstNumber(await shell("du -sk /sdcard/.thumbnails /sdcard/Download 2>/dev/null | awk '{s+=$1} END{print s+0}'"),/(\d+)/)||0}catch(_){cacheKB=0}
-
-    setSmartProgress(84,'checking battery…');
-    let batteryRaw='';try{batteryRaw=await shell('dumpsys battery')}catch(_){batteryRaw=''}
-    const level=firstNumber(batteryRaw,/level:\s*(\d+)/i);
-    const tempRaw=firstNumber(batteryRaw,/temperature:\s*(\d+)/i);
-    const temp=tempRaw===null?null:tempRaw/10;
-    const health=smartHealth({bloat:bloatApps.length,popup:popupApps.length,storage,battery:{level,temp}});
-
-    setSmartProgress(100,'Smart Scan complete.');
-    return {bloat:bloatApps.length,popup:popupApps.length,bloatApps,popupApps,storage,fileCount,mediaKB,mediaFiles,cacheKB,battery:{level,temp},health,device:$('deviceInfo')?.textContent||'Connected device'};
-  }
-
-  function renderSmartReport(r){
-    const scoreKind=r.health>=80?'good':r.health>=60?'warn':'bad';
-    $('smartDeviceName').textContent=r.device;
-    $('smartReportBody').innerHTML=`
-      <div class="smart-score">
-        <div class="smart-score-ring"><div><b>${r.health}</b><span>HEALTH</span></div></div>
-        <div class="smart-score-info"><b>${r.health>=80?'Looks good':r.health>=60?'Needs attention':'Needs cleanup'}</b><div>Heuristic score based on storage, battery and detected app risks. It is not an Android diagnostic.</div></div>
-      </div>
-      <div class="smart-report-grid">
-        ${smartTile('Bloatware & ad apps',`${r.bloat} found`,r.bloat?'Preloaded/junk apps — review before removing':'No likely bloat/ads detected',r.bloat?'bad':'good','bloat')}
-        ${smartTile('Pop-up ad sources',`${r.popup} apps`,r.popup?'Apps allowed to draw over other apps':'No current overlay candidates',r.popup?'warn':'good','popup')}
-        ${smartTile('Storage',`${r.storage.pct}% full`,`${kbText(r.storage.usedKB)} of ${kbText(r.storage.totalKB)} used`,r.storage.pct>=90?'bad':r.storage.pct>=80?'warn':'good','storage')}
-        ${smartTile('Photos & videos',`${r.mediaFiles} files`,r.mediaKB?kbText(r.mediaKB)+' in common media folders':'No media size reported','good','media')}
-        ${smartTile('Cached / temporary',kbText(r.cacheKB),'Thumbnail + Download folders; review before clearing','warn','storage')}
-        ${smartTile('Battery',r.battery.level===null?'Unavailable':`${r.battery.level}%`,r.battery.temp===null?'Temperature unavailable':`${r.battery.temp.toFixed(1)}°C`,(r.battery.level!==null&&r.battery.level<20)||(r.battery.temp!==null&&r.battery.temp>=42)?'bad':'good','battery')}
-      </div>
-      <div class="smart-list"><div class="smart-list-title">📄 Storage files</div><div class="smart-list-item"><b>${r.fileCount.toLocaleString()}</b> files visible under shared storage</div></div>
-      ${r.bloatApps.length?`<div class="smart-list"><div class="smart-list-title">🧹 Review bloat/ad candidates</div>${r.bloatApps.slice(0,8).map(x=>`<div class="smart-list-item">• <b>${escapeHtml(x.label)}</b> <span>(${escapeHtml(x.pkg)})</span></div>`).join('')}</div>`:''}
-      ${r.popupApps.length?`<div class="smart-list"><div class="smart-list-title">🚫 Pop-up candidates</div>${r.popupApps.slice(0,8).map(x=>`<div class="smart-list-item">• <b>${escapeHtml(x.label)}</b> <span>(${escapeHtml(x.pkg)})</span></div>`).join('')}</div>`:''}
-    `;
-  }
-
-  async function smartScan(){
-    if(!adb||!connected){status('Connect ADB first to run Smart Scan.','warn');return}
-    $('smartReport').classList.add('hidden');$('smartLoading').classList.remove('hidden');$('smartDialog').showModal();
-    try{
-      const r=await runSmartScan();
-      window.__lastSmartReport=r;
-      renderSmartReport(r);
-      $('smartLoading').classList.add('hidden');$('smartReport').classList.remove('hidden');
-      status('Smart Scan complete. Review the report before taking any action.','ok');
-    }catch(e){$('smartDialog').close();status('❌ Smart Scan failed: '+errText(e),'bad');log('[SMART SCAN ERROR] '+errText(e));}
-  }
-
-  async function diagnostics() {
-    try {
-      if (!navigator.usb) {
-        status('WebUSB unavailable in this browser.', 'bad');
-        return;
-      }
-
-      const devs = await navigator.usb.getDevices();
-
-      if (!devs.length) {
-        status('No previously-authorized WebUSB devices.\nPress CONNECT to open the chooser.');
-        return;
-      }
-
-      status(
-        'Authorized WebUSB devices:\n' +
-        devs.map(d =>
-          `${d.productName || 'Unknown'} • VID ${d.vendorId.toString(16)} • PID ${d.productId.toString(16)} • opened=${d.opened}`
-        ).join('\n')
-      );
-    } catch (e) {
-      status(
-        'USB diagnostics blocked: ' + errText(e) +
-        '\n\nOpen the HTTPS page directly in Chrome instead of an embedded preview.',
-        'bad'
+  window.__JHOELSOFT_SET_ADB__(session);
+
+  el('disconnect').disabled=false;
+  el('connect').disabled=false;
+  msg('✅ ADB CONNECTED • LICENSE ACTIVE','ok');
+}
+
+async function connectAndVerify(){
+  if(busy)return;
+  busy=true;
+  el('connect').disabled=true;
+  setState(false,'checking');
+
+  try{
+    if(!window.isSecureContext)throw new Error('WebUSB needs HTTPS or localhost.');
+    if(!navigator.usb)throw new Error('WebUSB is unavailable. Use Chrome/Chromium.');
+    if(!AdbDaemonWebUsbDeviceManager.BROWSER)throw new Error('This browser does not expose WebUSB ADB.');
+
+    msg('Opening USB chooser… Select the TARGET Android phone.');
+    selectedUsb=await AdbDaemonWebUsbDeviceManager.BROWSER.requestDevice();
+    if(!selectedUsb)throw new Error('No phone selected.');
+
+    // selectedUsb is the ADB WebUSB wrapper (not the raw USBDevice).
+    // Its serial is exposed by the wrapper as .serial.
+    currentSerial=normalize(selectedUsb.serial || selectedUsb.raw?.serialNumber || '');
+    if(!currentSerial){
+      throw new Error(
+        'TARGET USB device has no readable serial number. ' +
+        'Reconnect the phone and select the ADB interface, then try again.'
       );
     }
-  }
 
-  $('connect').onclick = connect;
-  $('disconnect').onclick = disconnect;
-  $('scan').onclick = scan;
-  $('uninstall').onclick = () => bulkAction('uninstall');
-  $('disableSelected').onclick = () => bulkAction('disable');
-  $('enableSelected').onclick = () => bulkAction('enable');
-  $('recoverSelected').onclick = () => bulkAction('recover');
-  $('blockSelected').onclick = async () => { for(const x of packages.filter(p=>p.selected)) await blockPopups(x); };
-  $('installApk').onclick = () => $('apkFile').click();
-  $('apkFile').onchange = async () => { const file=$('apkFile').files?.[0]; $('apkFile').value=''; if(!file)return; try{ await installApkViaAdb(file); }catch(e){ status('❌ APK install failed: '+errText(e),'bad'); log('ERROR APK INSTALL: '+errText(e)); } };
-  $('clearData').onclick = async () => {
-    if(!connected)return;
-    const chosen=packages.filter(x=>x.selected&&!x.removed);
-    if(!chosen.length){alert('Select at least one app first.');return;}
-    const blocked=chosen.filter(x=>isProtected(x)&&!isOptionalPreinstalled(x));
-    const eligible=chosen.filter(x=>!blocked.includes(x));
-    if(!eligible.length){alert('No selected app is eligible for Clear Data. Protected system apps are locked.');return;}
-    const ok=confirm(
-      `CLEAR DATA for ${eligible.length} selected app(s)?\n\n`+
-      eligible.map(x=>`${x.label}\n${x.pkg}`).join('\n\n')+
-      `\n\nThis resets each app to its default state and removes its local app data, accounts/sessions, settings and saved data. This does NOT uninstall the app.`
+    msg(
+      `USB TARGET detected\\n` +
+      `Serial: ${currentSerial}\\n` +
+      `USB: ${Number(selectedUsb.raw?.vendorId ?? selectedUsb.vendorId).toString(16).padStart(4,'0')}:` +
+      `${Number(selectedUsb.raw?.productId ?? selectedUsb.productId).toString(16).padStart(4,'0')}`,
+      'ok'
     );
-    if(!ok)return;
-    for(const x of eligible){
-      try{
-        status(`Clearing data for ${x.label}…`);
-        const r=await shell(`pm clear --user 0 ${x.pkg}`);
-        log(r||'(no output)');
-        if(!/Success/i.test(r||'')) log(`Clear data result for ${x.pkg}: ${r||'unknown result'}`);
-        x.selected=false;
-      }catch(e){log('ERROR clear data '+x.pkg+': '+errText(e));}
-    }
-    renderApps();
-    status(`✅ Clear Data finished for ${eligible.length} selected app(s). Apps were not uninstalled.`,'ok');
-  };
 
-  // License gate: after ADB connects, functional controls require activation.
-  document.addEventListener('click', e=>{
-    const el=e.target.closest('button,[role="button"]');
-    if(!el || !el.id) return;
-    const exempt=new Set(['connect','disconnect','activateLicense','licenseActivate','licenseClose']);
-    if(exempt.has(el.id)) return;
-    if(!connected || licenseActive) return;
-    e.preventDefault(); e.stopImmediatePropagation();
-    openLicenseModal();
-  }, true);
-
-  $('activateLicense').onclick = openLicenseModal;
-  $('licenseClose').onclick = closeLicenseModal;
-  $('licenseActivate').onclick = activateLicense;
-  $('licenseInput').addEventListener('input',e=>{
-    e.target.value=e.target.value.replace(/\D/g,'').slice(0,11);
-  });
-  $('licenseInput').addEventListener('keydown',e=>{if(e.key==='Enter')activateLicense();});
-  $('btnStorage').onclick = openStorage;
-  $('storageClose').onclick = () => $('storageDialog').close();
-  $('storageUp').onclick = async () => { if(storagePath==='/storage/emulated/0') return; try{await listStorage(storageParent(storagePath));}catch(e){status('❌ Storage browse failed: '+errText(e),'bad');} };
-  $('storageHome').onclick = async () => { try{await listStorage('/storage/emulated/0');}catch(e){status('❌ Storage browse failed: '+errText(e),'bad');} };
-  $('storageRefresh').onclick = async () => { try{await listStorage(storagePath);}catch(e){status('❌ Storage refresh failed: '+errText(e),'bad');} };
-  $('storageDelete').onclick = deleteSelectedStorageFiles;
-  $('storageDialog').addEventListener('click', e => { if(e.target === $('storageDialog')) $('storageDialog').close(); });
-
-  $('btnSmartScan').onclick = smartScan;
-  $('smartReportRescan').onclick = smartScan;
-  $('smartClose').onclick = () => $('smartDialog').close();
-  $('smartDialog').addEventListener('click', e => { if(e.target === $('smartDialog')) $('smartDialog').close(); });
-  $('smartReportBody').addEventListener('click', async e => {
-    const tile=e.target.closest('[data-smart-action]');
-    if(!tile)return;
-    const action=tile.dataset.smartAction;
-    if(action==='storage'||action==='media'){
-      $('smartDialog').close();
-      try{await openStorage();}catch(err){status('❌ Storage open failed: '+errText(err),'bad');}
+    const savedOk=await validateStored();
+    if(!savedOk){
+      setState(false);
+      openLicense();
       return;
     }
-    if(action==='bloat'){
-      $('smartDialog').close();
-      $('category').value='bloat';
-      resetSelection();
-      renderApps();
-      status('Showing Bloat/Ads candidates. Check apps manually before taking action.','warn');
-      return;
-    }
-    if(action==='popup'){
-      $('smartDialog').close();
-      $('category').value='popup';
-      resetSelection();
-      renderApps();
-      status('Showing Pop-up candidates. Check apps manually before taking action.','warn');
-      return;
-    }
-    if(action==='battery'){
-      status('Battery information is shown in Smart Scan. No destructive battery action is performed.','ok');
-    }
-  });
-  $('smartReportBody').addEventListener('keydown', e => {
-    if(e.key==='Enter'||e.key===' '){const tile=e.target.closest('[data-smart-action]');if(tile){e.preventDefault();tile.click();}}
-  });
-  $('smartClean').onclick = () => {
-    const r=window.__lastSmartReport;
-    if(!r){return}
-    $('smartDialog').close();
-    if(r.bloatApps?.length){
-      $('category').value='bloat';
-      r.bloatApps.forEach(x=>x.selected=false);
-      renderApps();
-      status(`Showing ${r.bloatApps.length} detected bloat/ad candidate(s). Please check them manually before uninstalling.` ,'warn');
-    } else if(r.popupApps?.length){
-      $('category').value='popup';renderApps();status('No bloat candidates. Showing pop-up candidates for review.','warn');
-    } else {
-      status('No recommended app cleanup found.','ok');
-    }
-  };
-  $('diag').onclick = diagnostics;
-  $('filter').oninput = renderApps;
-  $('category').onchange = () => { setFilter($('category').value); };
-  document.querySelectorAll('#filterPills .pill').forEach(btn => {
-    btn.addEventListener('click', () => setFilter(btn.dataset.filter));
-  });
-  $('selectRisk').onclick = () => {
-    // Explicit bulk action: reset every previous selection first,
-    // then select only the current Bloat/Ads candidates.
-    packages.forEach(x=>x.selected=false);
-    selectedOnly=false;
-    $('selectedCount').classList.remove('active');
-    $('category').value='bloat';
-    packages.forEach(x=>{
-      x.selected=!x.system && isBloatCandidate(x);
-    });
-    renderApps();
-  };
-  $('selectedCount').onclick = () => {
-    const chosen=packages.filter(x=>x.selected);
-    if(!chosen.length){
-      selectedOnly=false;
-      $('selectedCount').classList.remove('active');
-      renderApps();
-      return;
-    }
-    selectedOnly=!selectedOnly;
-    renderApps();
-    status(selectedOnly
-      ? `Showing only ${chosen.length} selected app(s). Click the selected count again to show all apps.`
-      : 'Showing all apps again.');
-  };
 
-  $('selectPage').onchange = e => {
-    const visible=filteredPackages();
-    // “Select this page” represents the apps currently shown on this page.
-    // Replace the previous selection so the selected counter always matches
-    // the number of checked apps in the current list.
-    packages.forEach(x=>x.selected=false);
-    if(e.target.checked){
-      visible.forEach(x=>{ if(!x.system || isOptionalPreinstalled(x)) x.selected=true; });
-    }
-    selectedOnly=false;
-    $('selectedCount').classList.remove('active');
-    renderApps();
-  };
+    await startAfterLicense();
+  }catch(e){
+    setState(false,'error');
+    msg(e.message||String(e),'bad');
+  }finally{
+    busy=false;
+    el('connect').disabled=false;
+  }
+}
 
-
-  $('btnSmartScan').disabled=!connected; 
-
-  window.addEventListener('error', e => {
-    if (e.message) log('[JS] ' + e.message);
-  });
-
-  window.addEventListener('unhandledrejection', e => {
-    log('[PROMISE] ' + errText(e.reason));
-  });
-})();
+el('connect')?.addEventListener('click',connectAndVerify);
+el('licenseActivate')?.addEventListener('click',activateLicense);
+el('licenseClose')?.addEventListener('click',closeLicense);
+el('licenseInput')?.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();activateLicense();}
+});
+el('licenseInput')?.addEventListener('input',e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,11);
+});
+el('diag')?.addEventListener('click',async()=>{
+  try{
+    const devs=await navigator.usb.getDevices();
+    msg(devs.length
+      ? 'Authorized WebUSB devices:\n'+devs.map(d=>`${d.productName||'Unknown'} • VID ${d.vendorId.toString(16)} • PID ${d.productId.toString(16)} • opened=${d.opened}`).join('\n')
+      : 'No previously-authorized WebUSB devices.\nPress CONNECT to open the chooser.');
+  }catch(e){msg('USB diagnostics blocked: '+(e.message||String(e)),'bad');}
+});
+setState(false);
 </script>
 
 <div id="licenseOverlay" class="license-overlay" aria-modal="true" role="dialog">
