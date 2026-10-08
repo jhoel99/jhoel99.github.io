@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="jhoelsoft-loader-version" content="v9-https-final">
+<meta name="jhoelsoft-loader-version" content="v10-https-final-anti-rightclick">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Permissions-Policy" content="usb=(self)">
 <title>JHOELSOFT v7 — Pop-up Ads Cleaner</title>
@@ -1918,6 +1918,27 @@ button{
 }
   </style>
  
+
+  <script>
+    // JHOELSOFT UI protection: disable common context-menu and copy shortcuts.
+    document.addEventListener('contextmenu', e => e.preventDefault(), {capture:true});
+    document.addEventListener('dragstart', e => e.preventDefault(), {capture:true});
+    document.addEventListener('selectstart', e => {
+      const t = e.target;
+      if (t && /^(INPUT|TEXTAREA)$/.test(t.tagName)) return;
+      e.preventDefault();
+    }, {capture:true});
+    document.addEventListener('keydown', e => {
+      const k = String(e.key || '').toLowerCase();
+      if (k === 'f12' ||
+          (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k)) ||
+          (e.ctrlKey && ['u','s'].includes(k))) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, {capture:true});
+  </script>
+
 </head>
 <body>
 <div class="wrap">
@@ -2071,10 +2092,7 @@ const AdbDaemonTransport = Pi;
 const AdbDaemonWebUsbDeviceManager = Li;
 const AdbWebCredentialStore = Ri;
 
-
-/* JHOELSOFT secure connect + license loader */
-//const LICENSE_API = 'http://107.152.37.75/ads/license-api';
-const LICENSE_API = 'https://api.gsmcodeph-ads.site/ads/license-api';
+const LICENSE_API = atob('aHR0cHM6Ly9hcGkuZ3NtY29kZXBoLWFkcy5zaXRlL2Fkcy9saWNlbnNlLWFwaQ==');
 const APP_URL = `${LICENSE_API}/api/app`;
 const SESSION_KEY = 'jhoelsoft_license_session_v2';
 
@@ -2459,4 +2477,4 @@ setState(false);
 </div>
 
 </body>
-</html>s
+</html>
